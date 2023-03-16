@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<robot name="lidarbot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="use_ros2_control" default="true"/>
+
+    <xacro:include filename="lidarbot_core.xacro"/>
+
+    <xacro:if value="$(arg use_ros2_control)">
+        <xacro:include filename="ros2_control.xacro"/>
+    </xacro:if>
+
+    <xacro:unless value="$(arg use_ros2_control)">
+        <xacro:include filename="gazebo_control.xacro"/>
+    </xacro:unless>
+
+    <xacro:include filename="camera.xacro"/>
+    <xacro:include filename="imu.xacro"/>
+    <xacro:include filename="lidar.xacro"/> 
+
+</robot>
