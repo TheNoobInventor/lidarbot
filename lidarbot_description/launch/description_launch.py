@@ -17,14 +17,13 @@ def generate_launch_description():
     
     # Set the path to different files and folders
     pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
-    rviz_config_path = os.path.join(pkg_path, 'rviz/view_lidarbot.rviz')
+    rviz_config_path = os.path.join(pkg_path, 'rviz/description.rviz')
     urdf_model_path = os.path.join(pkg_path, 'urdf/lidarbot.urdf.xacro')
 
     # Launch configuration variables specific to simulation
-    gui = LaunchConfiguration('gui')
+    gui = LaunchConfiguration('use_gui')
     urdf_model = LaunchConfiguration('urdf_model')
     rviz_config_file = LaunchConfiguration('rviz_config_file')
-    use_rviz = LaunchConfiguration('use_rviz')
     use_sim_time = LaunchConfiguration('use_sim_time')
     
     # Declare the launch arguments  
@@ -38,25 +37,15 @@ def generate_launch_description():
         default_value=rviz_config_path,
         description='Full path to the RVIZ config file to use')
     
-    declare_use_joint_state_publisher_cmd = DeclareLaunchArgument(
-        name='gui',
-        default_value='True',
-        description='Flag to enable joint_state_publisher_gui')
-    
-    declare_use_robot_state_pub_cmd = DeclareLaunchArgument(
-        name='use_robot_state_pub',
-        default_value='True',
-        description='Whether to start the robot state publisher')
-    
-    declare_use_rviz_cmd = DeclareLaunchArgument(
-        name='use_rviz',
-        default_value='True',
-        description='Whether to start RVIZ')
-    
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
         default_value='False',
         description='Use simulation (Gazebo) clock if true')
+
+    declare_use_joint_state_publisher_gui_cmd = DeclareLaunchArgument(
+        name='use_gui',
+        default_value='False',
+        description='Flag to enable joint_state_publisher_gui')
     
     # Specify the actions
     
@@ -81,7 +70,6 @@ def generate_launch_description():
 
     # Launch RViz
     start_rviz_cmd = Node(
-        condition=IfCondition(use_rviz),
         package='rviz2',
         executable='rviz2',
         name='rviz2',
@@ -94,9 +82,7 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_urdf_model_path_cmd)
     ld.add_action(declare_rviz_config_file_cmd)
-    ld.add_action(declare_use_joint_state_publisher_cmd)
-    ld.add_action(declare_use_robot_state_pub_cmd)  
-    ld.add_action(declare_use_rviz_cmd) 
+    ld.add_action(declare_use_joint_state_publisher_gui_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     
     # Add any actions
