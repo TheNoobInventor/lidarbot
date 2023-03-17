@@ -4,7 +4,7 @@
   <name>lidarbot_description</name>
   <version>0.0.0</version>
   <description>Lidarbot Description Package</description>
-  <maintainer email="chineduam@tuta.io">Chinedu</maintainer>
+  <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
