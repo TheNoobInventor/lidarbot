@@ -73,8 +73,8 @@ int main()
     wiringPiISR(RIGHT_WHL_ENCODER, INT_EDGE_FALLING, right_wheel_pulse);
 
     DEBUG("Motor_Run\r\n");
-    // Motor_Run(MOTORA, FORWARD, 50);
-    // Motor_Run(MOTORB, BACKWARD, 50);
+    Motor_Run(MOTORA, FORWARD, 50);
+    Motor_Run(MOTORB, BACKWARD, 50);
 
     // Initialize signal handler for Ctrl+C exception handling
     signal(SIGINT, handler);

@@ -16,6 +16,9 @@
 #include "lidarbot_base/MotorDriver.h"
 #include "lidarbot_base/Debug.h"
 
+UWORD ain1_value, ain2_value; 
+UWORD bin1_value, bin2_value;
+
 /**
  * Motor rotation.
  *
@@ -52,10 +55,14 @@ void Motor_Run(UBYTE motor, DIR dir, UWORD speed)
             DEBUG("forward...\r\n");
             PCA9685_SetLevel(AIN1, 0);
             PCA9685_SetLevel(AIN2, 1);
+            ain1_value = 0;
+            ain2_value = 1;
         } else {
             DEBUG("backward...\r\n");
             PCA9685_SetLevel(AIN1, 1);
             PCA9685_SetLevel(AIN2, 0);
+            ain1_value = 1;
+            ain2_value = 0;
         }
     } else {
         DEBUG("Motor B Speed = %d\r\n", speed);
@@ -64,10 +71,14 @@ void Motor_Run(UBYTE motor, DIR dir, UWORD speed)
             DEBUG("forward...\r\n");
             PCA9685_SetLevel(BIN1, 0);
             PCA9685_SetLevel(BIN2, 1);
+            bin1_value = 0;
+            bin2_value = 1;
         } else {
             DEBUG("backward...\r\n");
             PCA9685_SetLevel(BIN1, 1);
             PCA9685_SetLevel(BIN2, 0);
+            bin1_value = 1;
+            bin2_value = 0;
         }
     }
 }
@@ -87,5 +98,32 @@ void Motor_Stop(UBYTE motor)
         PCA9685_SetPwmDutyCycle(PWMA, 0);
     } else {
         PCA9685_SetPwmDutyCycle(PWMB, 0);
+    }
+}
+
+/**
+* Returns motor direction. 
+*   1 - forward 
+*   0 - backward
+*
+* @param motor: Motor A and Motor B
+*
+* Example:
+* @code
+* Motor_Direction(MOTORA);
+*/
+UBYTE Motor_Direction(UBYTE motor)
+{
+    if(motor == MOTORA) {
+        if(ain1_value == 0 && ain2_value == 1)
+            return 1;
+        else if(ain1_value == 1 && ain2_value == 0)
+            return 0;
+    }
+    else {
+        if(bin1_value == 0 && bin2_value == 1)
+            return 1;
+        else if(bin1_value == 1 && bin2_value == 0)
+            return 0;
     }
 }

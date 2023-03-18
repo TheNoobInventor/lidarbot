@@ -10,7 +10,6 @@ extern "C" {
 #include <signal.h>
 
 #include <time.h>
-#include "DEV_Config.h"
 #include "MotorDriver.h"
 
 void set_motor_speeds();

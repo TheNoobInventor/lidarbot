@@ -30,9 +30,6 @@
 #define MOTORA       0
 #define MOTORB       1
 
-UWORD ain1_value, ain2_value; 
-UWORD bin1_value, bin2_value;
-
 typedef enum {
     FORWARD  = 1,
     BACKWARD  ,
