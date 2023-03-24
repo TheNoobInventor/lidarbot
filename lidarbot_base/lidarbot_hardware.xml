@@ -1,0 +1,9 @@
+<library path="lidarbot_hardware">
+    <class name="lidarbot_base/LidarbotHardware"
+           type="lidarbot_base::LidarbotHardware"
+           base_class_type="hardware_interface::SystemInterface">
+        <description>
+            The ros2_control hardware interface for the lidarbot.
+        </description>
+    </class>
+</library>

@@ -3,7 +3,7 @@
   
   <!-- <ros2_control name='RealRobot' type='system'>
     <hardware>
-      <plugin>diff_drive_pca9685/DiffDrivePCA9685</plugin>
+      <plugin>lidarbot_base/LidarbotHardware</plugin>
       <param name="right_wheel_name">left_wheel_joint</param>
       <param name="left_wheel_name">right_wheel_joint</param>
       <param name="loop_rate">30</param>
@@ -51,7 +51,7 @@
 
   <gazebo>
     <plugin name='gazebo_ros2_control' filename='libgazebo_ros2_control.so'>
-      <parameters>$(find real_lidarbot)/config/my_controllers.yaml</parameters>
+      <parameters>$(find lidarbot_description)/config/controllers.yaml</parameters>
     </plugin>
   </gazebo>
 

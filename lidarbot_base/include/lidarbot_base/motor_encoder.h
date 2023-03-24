@@ -12,6 +12,9 @@ extern "C" {
 #include <time.h>
 #include "MotorDriver.h"
 
+#define LEFT_WHL_ENCODER 25
+#define RIGHT_WHL_ENCODER 24
+
 void set_motor_speeds();
 void read_encoder_values(int left_encoder_value, int right_encoder_value);
 void calculate_encoder_angle();

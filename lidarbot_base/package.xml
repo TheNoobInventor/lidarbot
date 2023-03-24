@@ -3,14 +3,19 @@
 <package format="3">
   <name>lidarbot_base</name>
   <version>0.0.0</version>
-  <description>Lidarbot base package</description>
+  <description>Lidarbot base motor driver package</description>
   <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  
+  <!-- <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend> -->
   
   <!-- TODO: -->
   <!-- <test_depend>ament_add_gmock</test_depend>

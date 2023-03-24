@@ -1,9 +1,6 @@
 #include "lidarbot_base/motor_encoder.h"
 #include <wiringPi.h>
 
-#define LEFT_WHL_ENCODER 25
-#define RIGHT_WHL_ENCODER 24
-
 // Initialize pulse counters
 int left_wheel_pulse_count = 0;
 int right_wheel_pulse_count = 0;
@@ -45,7 +42,7 @@ void right_wheel_pulse()
 
 void handler(int signo)
 {
-    DEBUG("\r\nHandler:Motor Stop\r\n");
+    DEBUG("\r\nHandler: Motor Stop\r\n");
     Motor_Stop(MOTORA);
     Motor_Stop(MOTORB);
 
@@ -84,3 +81,6 @@ int main()
 
     return 0;
 }
+
+// TODO:
+// Create a motor test program
