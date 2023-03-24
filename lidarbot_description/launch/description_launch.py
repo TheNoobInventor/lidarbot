@@ -16,8 +16,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     
     # Set the path to different files and folders
-    pkg_path= FindPackageShare('lidarbot_description')
-    # pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
+    pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     rviz_config_path = os.path.join(pkg_path, 'rviz/description.rviz')
     urdf_model_path = os.path.join(pkg_path, 'urdf/lidarbot.urdf.xacro')
 
