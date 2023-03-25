@@ -7,7 +7,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-
+find_package(controller_manager REQUIRED)
 #
 add_library(lidarbot_hardware SHARED src/lidarbot_hardware.cpp src/MotorDriver.c src/motor_encoder.c src/PCA9685.c src/DEV_Config.c)
 # target_link_libraries(lidarbot_hardware m wiringPi pthread crypt rt)
