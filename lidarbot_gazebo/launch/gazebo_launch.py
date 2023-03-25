@@ -1,5 +1,5 @@
 # Launches the lidarbot in both Gazebo and/or Rviz. There are a number of launch arguments that can be toggled. 
-# Such as using Gazebothe gazebo_ros plugin or the ros2_control plugin, using a joystick or not, using Gazebo's sim time
+# Such as using the gazebo_ros plugin or the ros2_control plugin, using a joystick or not, using Gazebo's sim time
 # or not. 
 # 
 # File adapted from https://automaticaddison.com
@@ -7,10 +7,10 @@
 import os
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.substitutions import LaunchConfiguration, PythonExpression, Command
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -92,6 +92,9 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', rviz_config_file])
     
+    # Delayed RViz launch action
+    start_delayed_rviz_cmd = TimerAction(period=3.0, actions=[start_rviz_cmd])
+
     # Launch Gazebo 
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py')]),
@@ -158,10 +161,10 @@ def generate_launch_description():
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(start_gazebo_cmd)
-    ld.add_action(start_rviz_cmd)
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
+    ld.add_action(start_delayed_rviz_cmd)
     # ld.add_action(start_joy_node_cmd)
     # ld.add_action(start_gazebo_joystick_cmd)
     # ld.add_action(start_ros2_joystick_cmd)
