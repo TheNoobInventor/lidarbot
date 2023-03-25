@@ -16,7 +16,7 @@
         </link>
 
         <joint name="lidar_joint" type="fixed">
-            <parent link="base_link"/>
+            <parent link="chassis_link"/>
             <child link="lidar_link"/>
             <origin xyz="0.0335 0.0095 0.069" rpy="0 0 0"/>
             <axis xyz="0 0 1"/>

@@ -16,21 +16,21 @@
   <!-- Distance between centre of wheel and robot base/chassis -->
   <xacro:property name="wheel_zoff" value="0.0125"/>
 
-  <!-- Robot Base Footprint - the centre of the main robot chassis projected on the ground -->
-  <link name="base_footprint"/>
+   <!-- Base link -->
+   <link name="base_link"/>
 
-  <joint name="base_joint" type="fixed">
-    <parent link="base_footprint"/>
-    <child link="base_link"/>
-    <origin xyz="0 0 ${(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
-  </joint>
-  
-  <!-- Robot Base -->
-  <link name="base_link">
+   <joint name="chassis_joint" type="fixed">
+     <parent link="base_link"/>
+     <child link="chassis_link"/>
+     <origin xyz="0 0 -${(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
+   </joint>
+
+  <!-- Robot Chassis -->
+  <link name="chassis_link">
       <visual>
         <origin xyz="0 0 ${-wheel_zoff}" rpy="0 0 0"/>
           <geometry>
-              <mesh filename="file://$(find lidarbot_description)/meshes/robot_base.dae" />
+              <mesh filename="file://$(find lidarbot_description)/meshes/robot_chassis.dae" />
           </geometry>
       </visual>
       <collision>
@@ -176,7 +176,7 @@
   </link>
 
   <joint name="left_wheel_joint" type="continuous">
-    <parent link="base_link"/>
+    <parent link="chassis_link"/>
     <child link="left_wheel"/>
     <origin xyz="-0.028 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
@@ -202,7 +202,7 @@
   </link>
 
   <joint name="right_wheel_joint" type="continuous">
-    <parent link="base_link"/>
+    <parent link="chassis_link"/>
     <child link="right_wheel"/>
     <origin xyz="-0.028 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
     <axis xyz="0 0 1"/>
@@ -228,7 +228,7 @@
   </link>
 
   <joint name="caster_wheel_joint" type="fixed">
-    <parent link="base_link"/>
+    <parent link="chassis_link"/>
     <child link="caster_wheel"/>
     <origin xyz="0.0925 0 -0.031" rpy="0 0 ${pi/2}"/>
   </joint>

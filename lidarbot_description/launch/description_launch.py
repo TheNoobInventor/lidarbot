@@ -16,8 +16,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     
     # Set the path to different files and folders
-    pkg_path= FindPackageShare('lidarbot_description')
-    # pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
+    pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     rviz_config_path = os.path.join(pkg_path, 'rviz/description.rviz')
     urdf_model_path = os.path.join(pkg_path, 'urdf/lidarbot.urdf.xacro')
 
@@ -47,8 +46,6 @@ def generate_launch_description():
         name='use_gui',
         default_value='False',
         description='Flag to enable joint_state_publisher_gui')
-    
-    # Specify the actions
     
     # Publish the joint state values for the non-fixed joints in the URDF file.
     start_joint_state_publisher_cmd = Node(
