@@ -67,17 +67,17 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        chassis_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         caster_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        chassis_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -112,11 +112,11 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: false
-        chassis_link:
-          Value: false
         camera_link:
           Value: false 
         caster_wheel:
+          Value: false
+        chassis_link:
           Value: false
         imu_link:
           Value: false
@@ -151,7 +151,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: base_footprint 
+    Fixed Frame: base_link 
     Frame Rate: 30
   Name: root
   Tools:

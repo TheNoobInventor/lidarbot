@@ -1,4 +1,4 @@
-controller_manager:
+controller_manager: # Node name
   ros__parameters:
     update_rate: 30 # Has to be an integer otherwise errors are encountered
     # use_sim_time: true # This setting is propagated to the diff_controller below
@@ -12,9 +12,9 @@ controller_manager:
 diff_controller:
   ros__parameters:
     
-    publish_rate: 50.0 # Has to be double otherwise errors are encountered
+    publish_rate: 50.0 # Has to be a double otherwise errors are encountered
 
-    base_frame_id: base_footprint
+    base_frame_id: base_link
 
     left_wheel_names: ['left_wheel_joint']
     right_wheel_names: ['right_wheel_joint']

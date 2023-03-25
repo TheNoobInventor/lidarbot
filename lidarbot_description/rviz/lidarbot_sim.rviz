@@ -62,11 +62,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        chassis_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         camera_link:
           Alpha: 1
           Show Axes: false
@@ -77,6 +72,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         caster_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        chassis_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -116,13 +116,13 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: false
-        chassis_link:
-          Value: false
         camera_link:
           Value: false
         camera_link_optical:
           Value: false
         caster_wheel:
+          Value: false
+        chassis_link:
           Value: false
         imu_link:
           Value: false
