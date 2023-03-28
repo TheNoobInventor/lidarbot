@@ -90,12 +90,16 @@ CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & /*
 
 CallbackReturn LidarbotHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    //
-    RCLCPP_INFO(logger, "Test running motors");
-    Motor_Run(MOTORA, FORWARD, 50);
-    Motor_Run(MOTORB, BACKWARD, 50);
+    RCLCPP_INFO(logger, "Starting controller ...");
 
-    signal(SIGINT, handler);
+    //
+    // RCLCPP_INFO(logger, "Test running motors");
+    // Motor_Run(MOTORA, FORWARD, 50);
+    // Motor_Run(MOTORB, BACKWARD, 50);
+
+    // TODO: How to gracefully shutdown the hardware_interface with Ctrl+C inside one of these functions
+
+    // signal(SIGINT, handler);
 
     return CallbackReturn::SUCCESS;
 }
