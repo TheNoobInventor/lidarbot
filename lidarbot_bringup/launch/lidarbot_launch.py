@@ -82,6 +82,7 @@ def generate_launch_description():
         arguments=['-d', rviz_config_file])
     
     # Delayed RViz launch action
+
     start_delayed_rviz_cmd = TimerAction(period=3.0, actions=[start_rviz_cmd])
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
@@ -94,14 +95,14 @@ def generate_launch_description():
                         controller_params_file])
 
     # Delayed controller manager action   
-    start_delayed_controller_manager = TimerAction(period=3.0, actions=[start_controller_manager_cmd])
+    start_delayed_controller_manager = TimerAction(period=2.0, actions=[start_controller_manager_cmd])
 
     # Spawn diff_controller
     start_diff_controller_cmd = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['diff_controller'])
-    
+
     # Delayed diff_drive_spawner action
     start_delayed_diff_drive_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(

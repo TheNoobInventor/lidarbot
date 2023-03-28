@@ -4,10 +4,10 @@
   <ros2_control name='RealRobot' type='system'>
     <hardware>
       <plugin>lidarbot_base/LidarbotHardware</plugin>
-      <param name="right_wheel_name">left_wheel_joint</param>
-      <param name="left_wheel_name">right_wheel_joint</param>
-      <param name="loop_rate">30</param>
-      <param name="enc_ticks_per_rev">20</param>
+        <param name="left_wheel_name">left_wheel_joint</param>
+        <param name="right_wheel_name">right_wheel_joint</param>
+        <param name="loop_rate">30</param>
+        <param name="enc_ticks_per_rev">20</param>
     </hardware>
     <joint name='left_wheel_joint'>
       <command_interface name='velocity'>
@@ -27,7 +27,7 @@
     </joint>
   </ros2_control>
 
-  <ros2_control name='GazeboSystem' type='system'>
+  <!-- <ros2_control name='GazeboSystem' type='system'>
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
@@ -47,7 +47,7 @@
       <state_interface name='velocity'/>
       <state_interface name='position'/>
     </joint>
-  </ros2_control>
+  </ros2_control> -->
 
   <gazebo>
     <plugin name='gazebo_ros2_control' filename='libgazebo_ros2_control.so'>

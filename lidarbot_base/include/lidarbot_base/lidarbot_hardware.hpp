@@ -30,7 +30,7 @@ namespace lidarbot_base
 class LidarbotHardware : public hardware_interface::SystemInterface
 {
   public:
-    LidarbotHardware(); // confirm this
+    LidarbotHardware(); 
 
     CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 

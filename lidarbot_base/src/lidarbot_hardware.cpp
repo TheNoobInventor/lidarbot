@@ -26,7 +26,7 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
     config.loop_rate = std::stof(info_.hardware_parameters["loop_rate"]);
     config.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
 
-    // Set up weheels
+    // Set up wheels
     left_wheel.setup(config.left_wheel_name, config.enc_ticks_per_rev);
     right_wheel.setup(config.right_wheel_name, config.enc_ticks_per_rev);
 
@@ -38,7 +38,7 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
 
 std::vector<hardware_interface::StateInterface> LidarbotHardware::export_state_interfaces()
 {
-    // Set up a position and a velocity interface for each wheel
+    // Set up a position and velocity interface for each wheel
 
     std::vector<hardware_interface::StateInterface> state_interfaces;
 
