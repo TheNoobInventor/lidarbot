@@ -22,11 +22,13 @@ target_include_directories(lidarbot_hardware PRIVATE include)
 ament_target_dependencies(
   lidarbot_hardware
   hardware_interface
-  # controller_manager
   pluginlib
   rclcpp
   rclcpp_lifecycle
 )
+
+# Link WiringPi library to lidarbot_hardware target
+target_link_libraries(lidarbot_hardware wiringPi)
 
 # Export hardware plugin
 pluginlib_export_plugin_description_file(hardware_interface lidarbot_hardware.xml)
@@ -46,5 +48,23 @@ install(
 
 # EXPORTS 
 ament_export_libraries(lidarbot_hardware)
+
+# SHOULD THIS BE HERE 
+# Motor Tests
+# Include C/Cpp "include" directory
+include_directories(include)
+
+# Create Cpp executable
+add_executable(motor_test src/DEV_Config.c src/PCA9685.c src/MotorDriver.c src/motor_test.c)
+
+# Install Cpp executables
+# Use lines below as a guide
+install(TARGETS
+  motor_test
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Added math, wiringPi and other libraries
+target_link_libraries(motor_test m wiringPi pthread crypt rt)
 
 ament_package()

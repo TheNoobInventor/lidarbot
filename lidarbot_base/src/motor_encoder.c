@@ -1,17 +1,22 @@
 #include "lidarbot_base/motor_encoder.h"
-#include <wiringPi.h>
 
 // Initialize pulse counters
 int left_wheel_pulse_count = 0;
 int right_wheel_pulse_count = 0;
 
+//
 void read_encoder_values(int left_encoder_value, int right_encoder_value)
 {
     left_encoder_value = left_wheel_pulse_count;
     right_encoder_value = right_wheel_pulse_count;
 }
 
+//
 void set_motor_speeds()
+{}
+
+//
+void calculate_encoder_angle()
 {}
 
 // Left wheel callback function
@@ -24,7 +29,6 @@ void left_wheel_pulse()
         left_wheel_pulse_count++;
     else if(Motor_Direction(MOTORA) == 0)
         left_wheel_pulse_count--;
-    DEBUG("Left pulse: %d\n", left_wheel_pulse_count);
 }
 
 // Right wheel callback function
@@ -37,7 +41,6 @@ void right_wheel_pulse()
         right_wheel_pulse_count++;
     else if(Motor_Direction(MOTORB) == 0)
         right_wheel_pulse_count--;
-    DEBUG("Right pulse: %d\n", right_wheel_pulse_count);
 }
 
 void handler(int signo)
@@ -48,39 +51,3 @@ void handler(int signo)
 
     exit(0);
 }
-
-int main()
-{
-    // Motor Initialization
-    Motor_Init();
-
-    // Initialize wiringPi using GPIO BCM pin numbers
-    wiringPiSetupGpio();
-    
-    // Setup GPIO encoder pins
-    pinMode(LEFT_WHL_ENCODER, INPUT);
-    pinMode(RIGHT_WHL_ENCODER, INPUT);
-
-    // Setup pull up resistors on encoder pins
-    pullUpDnControl(LEFT_WHL_ENCODER, PUD_UP);
-    pullUpDnControl(RIGHT_WHL_ENCODER, PUD_UP);
-
-    // Initialize encoder interrupts for falling signal states
-    wiringPiISR(LEFT_WHL_ENCODER, INT_EDGE_FALLING, left_wheel_pulse);
-    wiringPiISR(RIGHT_WHL_ENCODER, INT_EDGE_FALLING, right_wheel_pulse);
-
-    DEBUG("Motor_Run\r\n");
-    Motor_Run(MOTORA, FORWARD, 50);
-    Motor_Run(MOTORB, BACKWARD, 50);
-
-    // Initialize signal handler for Ctrl+C exception handling
-    signal(SIGINT, handler);
-
-    // Keeps program running for the next interrupt
-    while(1) {}
-
-    return 0;
-}
-
-// TODO:
-// Create a motor test program

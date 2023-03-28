@@ -35,7 +35,6 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
     return CallbackReturn::SUCCESS;
 }
 
-
 std::vector<hardware_interface::StateInterface> LidarbotHardware::export_state_interfaces()
 {
     // Set up a position and velocity interface for each wheel
@@ -62,38 +61,59 @@ std::vector<hardware_interface::CommandInterface> LidarbotHardware::export_comma
     return command_interfaces;
 }
 
-//FIXME:Fill up this method or just collapse into on_init() function?
-// CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & previous_state)
 CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    RCLCPP_INFO(logger, "Configuring PCA9685 PWM motor driver..."); // TODO: Change
+    RCLCPP_INFO(logger, "Configuring motor driver and encoders and GPIO pins...");
 
-    // MOTOR ENCODER SETUP
+    // Motor Initialization
+    Motor_Init();
 
-    RCLCPP_INFO(logger, "Successfully configured motors!"); //TODO:
+    // Initialize wiringPi using GPIO BCM pin numbers
+    wiringPiSetupGpio();
+    
+    // Setup GPIO encoder pins
+    pinMode(LEFT_WHL_ENCODER, INPUT);
+    pinMode(RIGHT_WHL_ENCODER, INPUT);
+
+    // Setup pull up resistors on encoder pins
+    pullUpDnControl(LEFT_WHL_ENCODER, PUD_UP);
+    pullUpDnControl(RIGHT_WHL_ENCODER, PUD_UP);
+
+    // Initialize encoder interrupts for falling signal states
+    wiringPiISR(LEFT_WHL_ENCODER, INT_EDGE_FALLING, left_wheel_pulse);
+    wiringPiISR(RIGHT_WHL_ENCODER, INT_EDGE_FALLING, right_wheel_pulse);
+
+    RCLCPP_INFO(logger, "Successfully configured motors and GPIO pins!");
 
     return CallbackReturn::SUCCESS;
 }
 
-// CallbackReturn LidarbotHardware::on_activate(const rclcpp_lifecycle::State & previous_state)
 CallbackReturn LidarbotHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
+    //
+    RCLCPP_INFO(logger, "Test running motors");
+    Motor_Run(MOTORA, FORWARD, 50);
+    Motor_Run(MOTORB, BACKWARD, 50);
+
+    signal(SIGINT, handler);
+
     return CallbackReturn::SUCCESS;
 }
 
-// CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & previous_state)
 CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
-{
+{   
+    // signal(SIGINT, handler); // Uncomment when fill up this function
+
+    RCLCPP_INFO(logger, "Stopping Controller...");
+
     return CallbackReturn::SUCCESS;
 }
 
-// return_type LidarbotHardware::read(const rclcpp::Time & time, const rclcpp::Duration & period)
 return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
     return return_type::OK;
 }
 
-// return_type LidarbotHardware::write(const rclcpp::Time & time, const rclcpp::Duration & period)
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
     return return_type::OK;
@@ -104,4 +124,5 @@ return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp:
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-    lidarbot_base::LidarbotHardware, hardware_interface::SystemInterface)
+    lidarbot_base::LidarbotHardware, 
+    hardware_interface::SystemInterface)
