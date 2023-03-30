@@ -32,7 +32,6 @@ def generate_launch_description():
     use_rviz = LaunchConfiguration('use_rviz')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
-    # use_joystick = LaunchConfiguration('use_joystick')
     
     # Declare the launch arguments  
     declare_urdf_model_path_cmd = DeclareLaunchArgument(
@@ -45,11 +44,6 @@ def generate_launch_description():
         default_value=default_rviz_config_path,
         description='Full path to the RVIZ config file to use')
     
-    # declare_joystick_cmd = DeclareLaunchArgument(
-    #     name='use_joystick',
-    #     default_value='True',
-    #     description='Whether to run joystick node')
-
     declare_use_rviz_cmd = DeclareLaunchArgument(
         name='use_rviz',
         default_value='True',
@@ -82,7 +76,6 @@ def generate_launch_description():
         arguments=['-d', rviz_config_file])
     
     # Delayed RViz launch action
-
     start_delayed_rviz_cmd = TimerAction(period=3.0, actions=[start_rviz_cmd])
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
@@ -122,23 +115,7 @@ def generate_launch_description():
             target_action=start_controller_manager_cmd,
             on_start=[start_joint_broadcaster_cmd]))
     
-    # # Launch the inbuilt ros2 joy node
-    # start_joy_node_cmd = Node(
-    #     condition=IfCondition(use_joystick),
-    #     package='joy',
-    #     executable='joy_node',
-    #     name='joy_node')
- 
-    # # Launch inbuilt teleop_twist_joy node with remappings for diff_controller when using ros2_control plugin
-    # start_ros2_joystick_cmd =  Node(
-    #     condition=IfCondition(
-    #                 PythonExpression(["'", use_joystick, "' and '", use_ros2_control, "'"])),
-    #     package='teleop_twist_joy',
-    #     executable='teleop_node',
-    #     name='teleop_node_ros2_control',
-    #     remappings=[('/cmd_vel', '/diff_controller/cmd_vel_unstamped')])
-    
-        # Create the launch description and populate
+    # Create the launch description and populate
     ld = LaunchDescription()
     
     # Declare the launch options
@@ -147,7 +124,6 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
-    # ld.add_action(declare_joystick_cmd)
     
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
@@ -155,7 +131,5 @@ def generate_launch_description():
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
     ld.add_action(start_delayed_rviz_cmd)
-    # ld.add_action(start_joy_node_cmd)
-    # ld.add_action(start_ros2_joystick_cmd)
     
     return ld

@@ -18,9 +18,8 @@ extern "C" {
 void handler(int signo);
 void left_wheel_pulse();
 void right_wheel_pulse();
-void set_motor_speeds();
+void set_motor_speeds(double left_wheel_command, double right_wheel_command);
 void read_encoder_values(int left_encoder_value, int right_encoder_value);
-void calculate_encoder_angle();
 
 #endif 
 

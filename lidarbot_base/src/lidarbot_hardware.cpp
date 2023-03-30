@@ -23,7 +23,6 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
 
     config.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
     config.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
-    config.loop_rate = std::stof(info_.hardware_parameters["loop_rate"]);
     config.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
 
     // Set up wheels
@@ -92,34 +91,46 @@ CallbackReturn LidarbotHardware::on_activate(const rclcpp_lifecycle::State & /*p
 {
     RCLCPP_INFO(logger, "Starting controller ...");
 
-    //
-    // RCLCPP_INFO(logger, "Test running motors");
-    // Motor_Run(MOTORA, FORWARD, 50);
-    // Motor_Run(MOTORB, BACKWARD, 50);
-
-    // TODO: How to gracefully shutdown the hardware_interface with Ctrl+C inside one of these functions
-
-    // signal(SIGINT, handler);
-
     return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {   
-    // signal(SIGINT, handler); // Uncomment when fill up this function
-
     RCLCPP_INFO(logger, "Stopping Controller...");
+
+    signal(SIGINT, handler);
 
     return CallbackReturn::SUCCESS;
 }
 
 return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
+    // Calculate delta time
+    auto new_time = std::chrono::system_clock::now();
+    std::chrono::duration<double> diff = new_time - time;
+    double delta_secs = diff.count();
+    time = new_time;
+
+    // Obtain encoder values
+    read_encoder_values(left_wheel.encoder_ticks, right_wheel.encoder_ticks);
+
+    // Calculate wheel positions and velocities
+    double previous_position = left_wheel.position;
+    left_wheel.position = left_wheel.calculate_encoder_angle();
+    left_wheel.velocity = (left_wheel.position - previous_position) / delta_secs;
+
+    previous_position = right_wheel.position;
+    right_wheel.position = right_wheel.calculate_encoder_angle();
+    right_wheel.velocity = (right_wheel.position - previous_position) / delta_secs;
+
     return return_type::OK;
 }
 
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
+    // Send commands to motor driver
+    set_motor_speeds(left_wheel.command, right_wheel.command);
+
     return return_type::OK;
 }
 

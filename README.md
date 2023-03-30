@@ -13,10 +13,10 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
 </p>
 
 ## Package Overview
-- lidarbot_base:
-- lidarbot_bringup:
-- lidarbot_description:
-- lidarbot_gazebo:
+- [`lidarbot_base`](./lidarbot_base/) :
+- [`lidarbot_bringup`](./lidarbot_bringup/) :
+- [`lidarbot_description`](./lidarbot_description/) :
+- [`lidarbot_gazebo`](./lidarbot_gazebo/) :
 
 ## Hardware
 ### Part list
