@@ -23,13 +23,10 @@ def generate_launch_description():
     pkg_share = FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     controller_params_file = os.path.join(pkg_share, 'config/controllers.yaml')
-    default_rviz_config_path = os.path.join(pkg_description, 'rviz/lidarbot_sim.rviz')
     default_urdf_model_path = os.path.join(pkg_description, 'urdf/lidarbot.urdf.xacro')
 
     # Launch configuration variables specific to simulation
     urdf_model = LaunchConfiguration('urdf_model')
-    rviz_config_file = LaunchConfiguration('rviz_config_file')
-    use_rviz = LaunchConfiguration('use_rviz')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     
@@ -38,16 +35,6 @@ def generate_launch_description():
         name='urdf_model',
         default_value=default_urdf_model_path, 
         description='Absolute path to robot urdf file')
-    
-    declare_rviz_config_file_cmd = DeclareLaunchArgument(
-        name='rviz_config_file',
-        default_value=default_rviz_config_path,
-        description='Full path to the RVIZ config file to use')
-    
-    declare_use_rviz_cmd = DeclareLaunchArgument(
-        name='use_rviz',
-        default_value='True',
-        description='Whether to start RVIZ')
     
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
@@ -65,18 +52,6 @@ def generate_launch_description():
         launch_arguments={'use_sim_time': use_sim_time, 
                           'urdf_model': urdf_model, 
                           'use_ros2_control': use_ros2_control}.items())
-
-    # Launch RViz
-    start_rviz_cmd = Node(
-        condition=IfCondition(use_rviz),
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', rviz_config_file])
-    
-    # Delayed RViz launch action
-    start_delayed_rviz_cmd = TimerAction(period=3.0, actions=[start_rviz_cmd])
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
     
@@ -120,9 +95,7 @@ def generate_launch_description():
     
     # Declare the launch options
     ld.add_action(declare_urdf_model_path_cmd)
-    ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_use_sim_time_cmd)
-    ld.add_action(declare_use_rviz_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     
     # Add any actions
@@ -130,6 +103,5 @@ def generate_launch_description():
     ld.add_action(start_delayed_controller_manager)
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
-    ld.add_action(start_delayed_rviz_cmd)
     
     return ld

@@ -7,7 +7,7 @@ namespace lidarbot_base
 {
 
 LidarbotHardware::LidarbotHardware()
-    : logger(rclcpp::get_logger("LidarbotHardware"))
+    : logger_(rclcpp::get_logger("LidarbotHardware"))
 {}
 
 CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo & info)
@@ -17,19 +17,19 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
         return CallbackReturn::ERROR;
     }
 
-    RCLCPP_INFO(logger, "Initializing...");
+    RCLCPP_INFO(logger_, "Initializing...");
 
-    time = std::chrono::system_clock::now();
+    time_ = std::chrono::system_clock::now();
 
-    config.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
-    config.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
-    config.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
+    config_.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
+    config_.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
+    config_.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
 
     // Set up wheels
-    left_wheel.setup(config.left_wheel_name, config.enc_ticks_per_rev);
-    right_wheel.setup(config.right_wheel_name, config.enc_ticks_per_rev);
+    left_wheel_.setup(config_.left_wheel_name, config_.enc_ticks_per_rev);
+    right_wheel_.setup(config_.right_wheel_name, config_.enc_ticks_per_rev);
 
-    RCLCPP_INFO(logger, "Finished initialization");
+    RCLCPP_INFO(logger_, "Finished initialization");
 
     return CallbackReturn::SUCCESS;
 }
@@ -40,10 +40,10 @@ std::vector<hardware_interface::StateInterface> LidarbotHardware::export_state_i
 
     std::vector<hardware_interface::StateInterface> state_interfaces;
 
-    state_interfaces.emplace_back(hardware_interface::StateInterface(left_wheel.name, hardware_interface::HW_IF_VELOCITY, &left_wheel.velocity));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(left_wheel.name, hardware_interface::HW_IF_POSITION, &left_wheel.position));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(right_wheel.name, hardware_interface::HW_IF_VELOCITY, &right_wheel.velocity));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(right_wheel.name, hardware_interface::HW_IF_POSITION, &right_wheel.position));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(left_wheel_.name, hardware_interface::HW_IF_VELOCITY, &left_wheel_.velocity));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(left_wheel_.name, hardware_interface::HW_IF_POSITION, &left_wheel_.position));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(right_wheel_.name, hardware_interface::HW_IF_VELOCITY, &right_wheel_.velocity));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(right_wheel_.name, hardware_interface::HW_IF_POSITION, &right_wheel_.position));
 
     return state_interfaces;
 }
@@ -54,15 +54,15 @@ std::vector<hardware_interface::CommandInterface> LidarbotHardware::export_comma
 
     std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(left_wheel.name, hardware_interface::HW_IF_VELOCITY, &left_wheel.command));
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(right_wheel.name, hardware_interface::HW_IF_VELOCITY, &right_wheel.command));
+    command_interfaces.emplace_back(hardware_interface::CommandInterface(left_wheel_.name, hardware_interface::HW_IF_VELOCITY, &left_wheel_.command));
+    command_interfaces.emplace_back(hardware_interface::CommandInterface(right_wheel_.name, hardware_interface::HW_IF_VELOCITY, &right_wheel_.command));
 
     return command_interfaces;
 }
 
 CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    RCLCPP_INFO(logger, "Configuring motor driver and encoders and GPIO pins...");
+    RCLCPP_INFO(logger_, "Configuring motors and encoders...");
 
     // Motor Initialization
     Motor_Init();
@@ -82,21 +82,21 @@ CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & /*
     wiringPiISR(LEFT_WHL_ENCODER, INT_EDGE_FALLING, left_wheel_pulse);
     wiringPiISR(RIGHT_WHL_ENCODER, INT_EDGE_FALLING, right_wheel_pulse);
 
-    RCLCPP_INFO(logger, "Successfully configured motors and GPIO pins!");
+    RCLCPP_INFO(logger_, "Successfully configured motors and encoders!");
 
     return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn LidarbotHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    RCLCPP_INFO(logger, "Starting controller ...");
+    RCLCPP_INFO(logger_, "Starting controller ...");
 
     return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 {   
-    RCLCPP_INFO(logger, "Stopping Controller...");
+    RCLCPP_INFO(logger_, "Stopping Controller...");
 
     signal(SIGINT, handler);
 
@@ -107,21 +107,21 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 {
     // Calculate delta time
     auto new_time = std::chrono::system_clock::now();
-    std::chrono::duration<double> diff = new_time - time;
-    double delta_secs = diff.count();
-    time = new_time;
+    std::chrono::duration<double> difference = new_time - time_;
+    double delta_seconds = difference.count();
+    time_ = new_time;
 
     // Obtain encoder values
-    read_encoder_values(left_wheel.encoder_ticks, right_wheel.encoder_ticks);
+    read_encoder_values(left_wheel_.encoder_ticks, right_wheel_.encoder_ticks);
 
     // Calculate wheel positions and velocities
-    double previous_position = left_wheel.position;
-    left_wheel.position = left_wheel.calculate_encoder_angle();
-    left_wheel.velocity = (left_wheel.position - previous_position) / delta_secs;
+    double previous_position = left_wheel_.position;
+    left_wheel_.position = left_wheel_.calculate_encoder_angle();
+    left_wheel_.velocity = (left_wheel_.position - previous_position) / delta_seconds;
 
-    previous_position = right_wheel.position;
-    right_wheel.position = right_wheel.calculate_encoder_angle();
-    right_wheel.velocity = (right_wheel.position - previous_position) / delta_secs;
+    previous_position = right_wheel_.position;
+    right_wheel_.position = right_wheel_.calculate_encoder_angle();
+    right_wheel_.velocity = (right_wheel_.position - previous_position) / delta_seconds;
 
     return return_type::OK;
 }
@@ -129,7 +129,7 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
     // Send commands to motor driver
-    set_motor_speeds(left_wheel.command, right_wheel.command);
+    set_motor_speeds(left_wheel_.command, right_wheel_.command);
 
     return return_type::OK;
 }

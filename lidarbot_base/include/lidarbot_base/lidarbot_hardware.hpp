@@ -49,14 +49,14 @@ class LidarbotHardware : public hardware_interface::SystemInterface
     return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   private:
-    Config config;
+    Config config_;
 
-    Wheel left_wheel;
-    Wheel right_wheel;
+    Wheel left_wheel_;
+    Wheel right_wheel_;
 
-    rclcpp::Logger logger;
+    rclcpp::Logger logger_;
 
-    std::chrono::time_point<std::chrono::system_clock> time;
+    std::chrono::time_point<std::chrono::system_clock> time_;
 };
 
 }
