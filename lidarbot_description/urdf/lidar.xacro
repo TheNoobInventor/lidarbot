@@ -4,8 +4,8 @@
     <link name="lidar_link">
         <visual>
             <geometry>
-            <mesh filename="file://$(find lidarbot_description)/meshes/rplidar_top.dae"/>
-            <!-- <mesh filename="package://lidarbot_description/meshes/rplidar_top.dae"/> -->
+            <!-- <mesh filename="file://$(find lidarbot_description)/meshes/rplidar_top.dae"/> -->
+            <mesh filename="package://lidarbot_description/meshes/rplidar_top.dae"/>
             </geometry>
         </visual> 
         <collision>

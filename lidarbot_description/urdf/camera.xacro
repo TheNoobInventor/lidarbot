@@ -6,8 +6,8 @@
     <visual>
       <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
       <geometry>
-        <mesh filename="file://$(find lidarbot_description)/meshes/d415.dae"/>
-        <!-- <mesh filename="package://lidarbot_description/meshes/d415.dae"/> -->
+        <!-- <mesh filename="file://$(find lidarbot_description)/meshes/d415.dae"/> -->
+        <mesh filename="package://lidarbot_description/meshes/d415.dae"/>
       </geometry>
     </visual> 
     <collision>
