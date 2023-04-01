@@ -38,7 +38,6 @@ def generate_launch_description():
     #     default_value='True',
     #     description='Whether to run joystick node')
 
-
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
         default_value='True',

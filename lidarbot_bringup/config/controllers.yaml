@@ -1,7 +1,6 @@
 controller_manager: # Node name
   ros__parameters:
     update_rate: 30 # Has to be an integer otherwise errors are encountered
-    # use_sim_time: true # This setting is propagated to the diff_controller below
 
     diff_controller:
       type: diff_drive_controller/DiffDriveController

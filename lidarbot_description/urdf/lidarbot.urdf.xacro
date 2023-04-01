@@ -2,6 +2,7 @@
 <robot name="lidarbot" xmlns:xacro="http://ros.org/wiki/xacro">
 
     <xacro:arg name="use_ros2_control" default="true"/>
+    <xacro:arg name="sim_mode" default="false"/>
 
     <xacro:include filename="lidarbot_core.xacro"/>
 

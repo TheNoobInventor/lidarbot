@@ -17,7 +17,7 @@ def generate_launch_description():
     # Process files
     pkg_path= FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     urdf_model_path = os.path.join(pkg_path, 'urdf/lidarbot.urdf.xacro')
-    robot_description_config = Command(['xacro ', urdf_model_path, ' use_ros2_control:=', use_ros2_control])
+    robot_description_config = Command(['xacro ', urdf_model_path, ' use_ros2_control:=', use_ros2_control, ' sim_mode:=', use_sim_time])
     
     # Declare the launch arguments  
     declare_use_sim_time_cmd = DeclareLaunchArgument(
