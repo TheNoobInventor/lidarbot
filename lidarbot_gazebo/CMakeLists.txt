@@ -10,4 +10,3 @@ install(
 )
 
 ament_package()
-Add omitted folder in lidarbot_gazebo CMakeLists
