@@ -17,6 +17,7 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
 - [`lidarbot_bringup`](./lidarbot_bringup/) :
 - [`lidarbot_description`](./lidarbot_description/) :
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) :
+- [`lidarbot_teleop`](./lidarbot_teleop/) :
 
 ## Hardware
 ### Part list

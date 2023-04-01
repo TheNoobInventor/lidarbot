@@ -18,29 +18,21 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     # TODO: use lidarbot_teleop package for joystick control
-
     # Set the path to different files and folders
-    pkg_share = FindPackageShare(package='lidarbot_gazebo').find('lidarbot_gazebo')
+    pkg_path= FindPackageShare(package='lidarbot_gazebo').find('lidarbot_gazebo')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
-    default_urdf_model_path = os.path.join(pkg_description, 'urdf/lidarbot.urdf.xacro')
-    gazebo_params_file = os.path.join(pkg_share, 'config/gazebo_params.yaml')
+    gazebo_params_file = os.path.join(pkg_path, 'config/gazebo_params.yaml')
     world_filename = 'obstacles.world'
-    world_path = os.path.join(pkg_share, 'worlds', world_filename)
+    world_path = os.path.join(pkg_path, 'worlds', world_filename)
 
     # Launch configuration variables specific to simulation
-    urdf_model = LaunchConfiguration('urdf_model')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     # use_joystick = LaunchConfiguration('use_joystick')
     world = LaunchConfiguration('world')
     
     # Declare the launch arguments  
-    declare_urdf_model_path_cmd = DeclareLaunchArgument(
-        name='urdf_model',
-        default_value=default_urdf_model_path, 
-        description='Absolute path to robot urdf file')
-    
     # declare_joystick_cmd = DeclareLaunchArgument(
     #     name='use_joystick',
     #     default_value='True',
@@ -66,7 +58,6 @@ def generate_launch_description():
     start_robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_description, 'launch', 'robot_state_publisher_launch.py')]), 
         launch_arguments={'use_sim_time': use_sim_time, 
-                          'urdf_model': urdf_model, 
                           'use_ros2_control': use_ros2_control}.items())
 
     # Launch Gazebo 
@@ -124,7 +115,6 @@ def generate_launch_description():
     ld = LaunchDescription()
     
     # Declare the launch options
-    ld.add_action(declare_urdf_model_path_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     ld.add_action(declare_world_cmd)

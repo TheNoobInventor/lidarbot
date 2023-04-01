@@ -30,7 +30,7 @@
       <visual>
         <origin xyz="0 0 ${-wheel_zoff}" rpy="0 0 0"/>
           <geometry>
-              <mesh filename="file://$(find lidarbot_description)/meshes/robot_chassis.dae" />
+              <mesh filename="package://lidarbot_description/meshes/robot_chassis.dae" />
           </geometry>
       </visual>
       <collision>
@@ -43,7 +43,7 @@
       <visual name="caster_mount_visual">
           <origin xyz="0.086 0 -0.0475" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/caster_mount.dae" />
+          <mesh filename="package://lidarbot_description/meshes/caster_mount.dae" />
         </geometry>
       </visual>
       <collision name="caster_mount_collision">
@@ -57,7 +57,7 @@
       <visual name="rpi_4_stand_visual">
         <origin xyz="-0.06 0.015 0.031" rpy="${pi} 0 ${-pi}"/>
           <geometry>
-              <mesh filename="file://$(find lidarbot_description)/meshes/rpi_stand.dae" />
+              <mesh filename="package://lidarbot_description/meshes/rpi_stand.dae" />
           </geometry>
       </visual>
       <collision name="rpi_4_stand_collision">
@@ -71,7 +71,7 @@
       <visual name="rpi_4_visual">
         <origin xyz="-0.059 0.00245 0.033" rpy="0 0 ${pi/2}"/>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/rpi_4.dae"/>
+          <mesh filename="package://lidarbot_description/meshes/rpi_4.dae"/>
         </geometry>
       </visual>
       <collision name="rpi_4_collision">
@@ -85,7 +85,7 @@
       <visual name="power_bank_stand_visual">
         <origin xyz="0.033 0.015 0.031" rpy="${pi} 0 ${pi}"/>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/power_bank_stand.dae"/>
+          <mesh filename="package://lidarbot_description/meshes/power_bank_stand.dae"/>
         </geometry>
       </visual>
       <collision name="power_bank_stand_collision">
@@ -99,7 +99,7 @@
       <visual name="power_bank_visual">
         <origin xyz="0.0635 0.04775 0.015" rpy="0 0 ${pi/2}"/>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/power_bank.dae"/>
+          <mesh filename="package://lidarbot_description/meshes/power_bank.dae"/>
         </geometry>
       </visual>
       <collision name="power_bank_collision">
@@ -113,7 +113,7 @@
       <visual name="rplidar_stand_visual">
         <origin xyz="0.033 0.015 0.017" rpy="0 0 ${-2*pi}"/>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/rplidar_stand.dae"/>
+          <mesh filename="package://lidarbot_description/meshes/rplidar_stand.dae"/>
         </geometry>
       </visual>
       <collision name="rplidar_stand_collision">
@@ -127,7 +127,7 @@
       <visual name="rplidar_base_visual">
         <origin xyz="0.03485 0.0087 0.037" rpy="0 0 ${-pi/2}"/>
           <geometry>
-            <mesh filename="file://$(find lidarbot_description)/meshes/rplidar_base.dae"/>
+            <mesh filename="package://lidarbot_description/meshes/rplidar_base.dae"/>
           </geometry>
         </visual>
       <collision name="rplidar_base_collision">
@@ -160,7 +160,7 @@
   <link name="left_wheel">
     <visual>
         <geometry>
-          <mesh filename="file://$(find lidarbot_description)/meshes/left_wheel.dae" />
+          <mesh filename="package://lidarbot_description/meshes/left_wheel.dae" />
         </geometry>
     </visual>
     <collision>
@@ -186,7 +186,7 @@
   <link name="right_wheel">
     <visual>
       <geometry>
-        <mesh filename="file://$(find lidarbot_description)/meshes/right_wheel.dae"/>
+        <mesh filename="package://lidarbot_description/meshes/right_wheel.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -212,7 +212,7 @@
   <link name="caster_wheel">
     <visual>
       <geometry>
-        <mesh filename="file://$(find lidarbot_description)/meshes/caster_wheel.dae"/>
+        <mesh filename="package://lidarbot_description/meshes/caster_wheel.dae"/>
       </geometry>
     </visual>
     <collision>

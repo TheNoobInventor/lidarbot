@@ -20,22 +20,15 @@ def generate_launch_description():
     # TODO: include camera 
     
     # Set the path to different files and folders
-    pkg_share = FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
+    pkg_path= FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
-    controller_params_file = os.path.join(pkg_share, 'config/controllers.yaml')
-    default_urdf_model_path = os.path.join(pkg_description, 'urdf/lidarbot.urdf.xacro')
+    controller_params_file = os.path.join(pkg_path, 'config/controllers.yaml')
 
     # Launch configuration variables specific to simulation
-    urdf_model = LaunchConfiguration('urdf_model')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     
     # Declare the launch arguments  
-    declare_urdf_model_path_cmd = DeclareLaunchArgument(
-        name='urdf_model',
-        default_value=default_urdf_model_path, 
-        description='Absolute path to robot urdf file')
-    
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
         default_value='False',
@@ -50,7 +43,6 @@ def generate_launch_description():
     start_robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_description, 'launch', 'robot_state_publisher_launch.py')]), 
         launch_arguments={'use_sim_time': use_sim_time, 
-                          'urdf_model': urdf_model, 
                           'use_ros2_control': use_ros2_control}.items())
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
@@ -94,7 +86,7 @@ def generate_launch_description():
     ld = LaunchDescription()
     
     # Declare the launch options
-    ld.add_action(declare_urdf_model_path_cmd)
+    # ld.add_action(declare_urdf_model_path_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     
