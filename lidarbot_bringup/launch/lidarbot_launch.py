@@ -86,7 +86,6 @@ def generate_launch_description():
     ld = LaunchDescription()
     
     # Declare the launch options
-    # ld.add_action(declare_urdf_model_path_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     
