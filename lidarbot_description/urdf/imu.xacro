@@ -5,8 +5,7 @@
   <link name="imu_link">
     <visual name="imu_visual">
       <geometry>
-        <mesh filename="file://$(find lidarbot_description)/meshes/MPU6050.dae"/>
-        <!-- <mesh filename="package://lidarbot_description/meshes/MPU6050.dae"/> -->
+        <mesh filename="package://lidarbot_description/meshes/MPU6050.dae"/>
       </geometry>
     </visual>
   </link>

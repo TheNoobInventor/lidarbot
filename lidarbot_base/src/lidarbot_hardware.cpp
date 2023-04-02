@@ -112,7 +112,7 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
     time_ = new_time;
 
     // Obtain encoder values
-    read_encoder_values(left_wheel_.encoder_ticks, right_wheel_.encoder_ticks);
+    read_encoder_values(&left_wheel_.encoder_ticks, &right_wheel_.encoder_ticks);
 
     // Calculate wheel positions and velocities
     double previous_position = left_wheel_.position;
@@ -127,8 +127,9 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 }
 
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
-{
+{   
     // Send commands to motor driver
+    // set_motor_speeds(left_wheel_.command / left_wheel_.rads_per_tick, right_wheel_.command / right_wheel_.rads_per_tick);
     set_motor_speeds(left_wheel_.command, right_wheel_.command);
 
     return return_type::OK;

@@ -13,10 +13,10 @@ double right_max_rpm = 195.0;
 double wheel_diameter = 0.067;
 
 // Read wheel encoder values
-void read_encoder_values(int left_encoder_value, int right_encoder_value)
+void read_encoder_values(int *left_encoder_value, int *right_encoder_value)
 {
-    left_encoder_value = left_wheel_pulse_count;
-    right_encoder_value = right_wheel_pulse_count;
+    *left_encoder_value = left_wheel_pulse_count;
+    *right_encoder_value = right_wheel_pulse_count;
 }
 
 // Set each motor speed from a respective velocity command interface
@@ -28,8 +28,8 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
 
     // Convert meters/sec into RPM: for each revolution, a wheel travels
     // pi * diameter meters, and each minute has 60 seconds.
-    double left_target_rpm = (left_wheel_command * 60.0) / (M_1_PI * wheel_diameter);
-    double right_target_rpm = (right_wheel_command * 60.0) / (M_1_PI * wheel_diameter);
+    double left_target_rpm = (left_wheel_command * 60.0) / (M_PI * wheel_diameter);
+    double right_target_rpm = (right_wheel_command * 60.0) / (M_PI * wheel_diameter);
 
     // Scale target motor speeds
     double left_motor_speed = (left_target_rpm / left_max_rpm) * 100.0;
