@@ -15,7 +15,6 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     # TODO: include imu
-    # TODO: include lidar 
     # TODO: include camera 
     
     # Set the path to different files and folders
