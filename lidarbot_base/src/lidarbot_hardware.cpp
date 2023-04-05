@@ -24,6 +24,7 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
     config_.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
     config_.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
     config_.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
+    config_.loop_rate = std::stod(info_.hardware_parameters["loop_rate"]);
 
     // Set up wheels
     left_wheel_.setup(config_.left_wheel_name, config_.enc_ticks_per_rev);
@@ -129,8 +130,7 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {   
     // Send commands to motor driver
-    // set_motor_speeds(left_wheel_.command / left_wheel_.rads_per_tick, right_wheel_.command / right_wheel_.rads_per_tick);
-    set_motor_speeds(left_wheel_.command, right_wheel_.command);
+    set_motor_speeds(left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate, right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate);
 
     return return_type::OK;
 }

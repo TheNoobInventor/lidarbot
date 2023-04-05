@@ -5,13 +5,6 @@
 int left_wheel_pulse_count = 0;
 int right_wheel_pulse_count = 0;
 
-// Initialize maximum motor rpm
-double left_max_rpm = 200.0;
-double right_max_rpm = 195.0;
-
-// Wheel diameter
-double wheel_diameter = 0.067;
-
 // Read wheel encoder values
 void read_encoder_values(int *left_encoder_value, int *right_encoder_value)
 {
@@ -26,19 +19,14 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
     DIR left_wheel_direction;
     DIR right_wheel_direction;
 
-    // Convert meters/sec into RPM: for each revolution, a wheel travels
-    // pi * diameter meters, and each minute has 60 seconds.
-    double left_target_rpm = (left_wheel_command * 60.0) / (M_PI * wheel_diameter);
-    double right_target_rpm = (right_wheel_command * 60.0) / (M_PI * wheel_diameter);
+    // Convert wheel commands to percentage values
+    double left_motor_speed = ceil(left_wheel_command * 100.0);
+    double right_motor_speed = ceil(right_wheel_command * 100.0);
 
-    // Scale target motor speeds
-    double left_motor_speed = (left_target_rpm / left_max_rpm) * 100.0;
-    double right_motor_speed = (right_target_rpm / right_max_rpm) * 100.0;
-
-    // Clip speeds to +/- 45%
-    left_motor_speed = fmax(fmin(left_motor_speed, 45.0), -45.0);
-    right_motor_speed = fmax(fmin(right_motor_speed, 45.0), -45.0);
-
+    // Clip speeds to +/- 55%
+    left_motor_speed = fmax(fmin(left_motor_speed, 55.0), -55.0);
+    right_motor_speed = fmax(fmin(right_motor_speed, 55.0), -55.0);
+    
     // Set motor directions
     if(left_motor_speed > 0) 
         left_wheel_direction = FORWARD;

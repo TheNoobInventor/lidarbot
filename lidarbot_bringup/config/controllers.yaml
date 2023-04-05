@@ -11,7 +11,7 @@ controller_manager: # Node name
 diff_controller:
   ros__parameters:
     
-    publish_rate: 50.0 # Has to be a double otherwise errors are encountered
+    publish_rate: 30.0 # Has to be a double otherwise errors are encountered
 
     base_frame_id: base_link
 
