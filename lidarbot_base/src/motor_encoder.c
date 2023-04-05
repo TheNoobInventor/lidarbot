@@ -23,9 +23,9 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
     double left_motor_speed = ceil(left_wheel_command * 100.0);
     double right_motor_speed = ceil(right_wheel_command * 100.0);
 
-    // Clip speeds to +/- 55%
-    left_motor_speed = fmax(fmin(left_motor_speed, 55.0), -55.0);
-    right_motor_speed = fmax(fmin(right_motor_speed, 55.0), -55.0);
+    // Clip speeds to +/- 50%
+    left_motor_speed = fmax(fmin(left_motor_speed, 50.0), -50.0);
+    right_motor_speed = fmax(fmin(right_motor_speed, 50.0), -50.0);
     
     // Set motor directions
     if(left_motor_speed > 0) 

@@ -14,7 +14,6 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    # TODO: use lidarbot_teleop package for joystick control
     # TODO: include imu
     # TODO: include lidar 
     # TODO: include camera 
@@ -22,6 +21,7 @@ def generate_launch_description():
     # Set the path to different files and folders
     pkg_path= FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
+    pkg_teleop= FindPackageShare(package='lidarbot_teleop').find('lidarbot_teleop')
     controller_params_file = os.path.join(pkg_path, 'config/controllers.yaml')
 
     # Launch configuration variables specific to simulation
@@ -81,7 +81,15 @@ def generate_launch_description():
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
             on_start=[start_joint_broadcaster_cmd]))
-    
+
+    # Start joystick node
+    start_joystick_cmd= IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
+
+    # Start rplidar node
+    start_rplidar_cmd= IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'rplidar_launch.py')]))
+
     # Create the launch description and populate
     ld = LaunchDescription()
     
@@ -94,5 +102,7 @@ def generate_launch_description():
     ld.add_action(start_delayed_controller_manager)
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
+    ld.add_action(start_joystick_cmd)
+    ld.add_action(start_rplidar_cmd)
     
     return ld

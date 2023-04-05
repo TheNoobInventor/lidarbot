@@ -1,6 +1,5 @@
-# Launches the lidarbot in Gazebo. There are a number of launch arguments that can be toggled. 
-# Such as using the gazebo_ros plugin or the ros2_control plugin, using a joystick or not, using Gazebo's sim time
-# or not. 
+# Launches the lidarbot in Gazebo to be controlled using a joystick. There are a number of launch arguments that can be toggled. 
+# Such as using the gazebo_ros plugin or the ros2_control plugin, using Gazebo's sim time or not. 
 # 
 # File adapted from https://automaticaddison.com
 
@@ -17,10 +16,10 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    # TODO: use lidarbot_teleop package for joystick control
     # Set the path to different files and folders
     pkg_path= FindPackageShare(package='lidarbot_gazebo').find('lidarbot_gazebo')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
+    pkg_teleop= FindPackageShare(package='lidarbot_teleop').find('lidarbot_teleop')
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
     gazebo_params_file = os.path.join(pkg_path, 'config/gazebo_params.yaml')
     world_filename = 'obstacles.world'
@@ -29,15 +28,8 @@ def generate_launch_description():
     # Launch configuration variables specific to simulation
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
-    # use_joystick = LaunchConfiguration('use_joystick')
     world = LaunchConfiguration('world')
     
-    # Declare the launch arguments  
-    # declare_joystick_cmd = DeclareLaunchArgument(
-    #     name='use_joystick',
-    #     default_value='True',
-    #     description='Whether to run joystick node')
-
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
         default_value='True',
@@ -86,30 +78,10 @@ def generate_launch_description():
         executable='spawner',
         arguments=['joint_broadcaster'])
 
-    # # Launch the inbuilt ros2 joy node
-    # start_joy_node_cmd = Node(
-    #     condition=IfCondition(use_joystick),
-    #     package='joy',
-    #     executable='joy_node',
-    #     name='joy_node')
- 
-    # # Launch inbuilt teleop_twist_joy node with remappings for diff_controller when using ros2_control plugin
-    # start_ros2_joystick_cmd =  Node(
-    #     condition=IfCondition(
-    #                 PythonExpression(["'", use_joystick, "' and '", use_ros2_control, "'"])),
-    #     package='teleop_twist_joy',
-    #     executable='teleop_node',
-    #     name='teleop_node_ros2_control',
-    #     remappings=[('/cmd_vel', '/diff_controller/cmd_vel_unstamped')])
-    
-    # # Launch inbuilt teleop_twist_joy node when using gazebo control plugin (not using ros2_control plugin)
-    # start_gazebo_joystick_cmd =  Node(
-    #     condition=UnlessCondition(
-    #                 PythonExpression(["'", use_joystick, "' and '", use_ros2_control, "'"])),
-    #     package='teleop_twist_joy',
-    #     executable='teleop_node',
-    #     name='teleop_node_gazebo')
-    
+    # Start joystick node for use with ros2_control
+    start_joystick_cmd= IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
+
     # Create the launch description and populate
     ld = LaunchDescription()
     
@@ -117,7 +89,6 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     ld.add_action(declare_world_cmd)
-    # ld.add_action(declare_joystick_cmd)
     
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
@@ -125,10 +96,9 @@ def generate_launch_description():
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
-    # ld.add_action(start_joy_node_cmd)
-    # ld.add_action(start_gazebo_joystick_cmd)
-    # ld.add_action(start_ros2_joystick_cmd)
+    ld.add_action(start_joystick_cmd)
     
     #TODO: sort out imports
+    #TODO: toggle joystick functionality for using ros2_control plugin or gazebo control plugin
 
     return ld
