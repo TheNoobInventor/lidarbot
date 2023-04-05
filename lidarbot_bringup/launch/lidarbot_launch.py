@@ -1,5 +1,3 @@
-# TODO: Launch file summary
-
 import os
 
 from launch import LaunchDescription
@@ -14,9 +12,6 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    # TODO: include imu
-    # TODO: include camera 
-    
     # Set the path to different files and folders
     pkg_path= FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
@@ -105,3 +100,7 @@ def generate_launch_description():
     ld.add_action(start_rplidar_cmd)
     
     return ld
+
+    # TODO: Launch file summary
+    # TODO: include imu
+    # TODO: include camera 
