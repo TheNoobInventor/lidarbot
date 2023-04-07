@@ -40,7 +40,7 @@ The following components were used in this project:
 |11| Powerbank for RPi 4 (minimum output: 5V 3A)|
 |12| 3 Slot 18650 battery holder|
 |13| 3 x 18650 batteries to power Motor Driver HAT|
-|14| Female to Female Dupoint jumper cables|
+|14| Female to Female Dupont jumper cables|
 |15| Spare wires|
 |16| On/Off switch (included in robot chassis kit)|
 
