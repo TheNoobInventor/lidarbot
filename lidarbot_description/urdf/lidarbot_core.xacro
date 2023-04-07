@@ -30,8 +30,7 @@
   <joint name="base_footprint_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_footprint"/>
-    <origin xyz="0 0 ${(wheel_radius+wheel_zoff)" rpy="0 0 0"/>
-	  <!-- <origin xyz="0 0 0" rpy="0 0 0"/> -->
+    <origin xyz="0 0 -${2*(wheel_radius)+wheel_zoff}" rpy="0 0 0"/> 
   </joint>
 	
   <!-- Robot Chassis -->

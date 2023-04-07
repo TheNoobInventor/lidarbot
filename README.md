@@ -17,6 +17,8 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
 - [`lidarbot_bringup`](./lidarbot_bringup/) :
 - [`lidarbot_description`](./lidarbot_description/) :
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) :
+- [`lidarbot_navigation`](./lidarbot_navigation/) :
+- [`lidarbot_slam`](./lidarbot_slam/) :
 - [`lidarbot_teleop`](./lidarbot_teleop/) :
 
 ## Hardware
@@ -66,3 +68,8 @@ The electronic components of the lidarbot are connected as shown below.
 | Gazebo | RViz |
 | :------: | :----: |
 | <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.jpg width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
+
+## SLAM
+
+## Navigation
+
