@@ -28,7 +28,7 @@ UWORD bin1_value, bin2_value;
 void Motor_Init(void)
 {
     PCA9685_Init(0x40);
-    PCA9685_SetPWMFreq(100);
+    PCA9685_SetPWMFreq(50);
 }
 
 /**
