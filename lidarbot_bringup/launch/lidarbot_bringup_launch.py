@@ -84,6 +84,10 @@ def generate_launch_description():
     start_rplidar_cmd= IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'rplidar_launch.py')]))
 
+    # Start camera node
+    start_camera_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'camera_launch.py')]))
+
     # Create the launch description and populate
     ld = LaunchDescription()
     
@@ -98,9 +102,9 @@ def generate_launch_description():
     ld.add_action(start_delayed_joint_broadcaster_spawner)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_rplidar_cmd)
+    ld.add_action(start_camera_cmd)
     
     return ld
 
     # TODO: Launch file summary
     # TODO: include imu
-    # TODO: include camera 
