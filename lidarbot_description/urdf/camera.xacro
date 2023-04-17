@@ -4,23 +4,17 @@
   <!-- Camera -->
   <link name="camera_link">
     <visual>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      <origin xyz="-0.0115 0.0125 0.0052" rpy="1.8745 ${pi} ${pi/2}"/>
       <geometry>
         <mesh filename="package://lidarbot_description/meshes/rpi_camera.dae"/>
       </geometry>
     </visual> 
-    <collision>
-      <origin xyz="-0.012 0 0" rpy="0 0 ${pi/2}"/>
-      <geometry>
-        <box size="0.1 0.025 0.022"/>
-      </geometry>
-    </collision>
   </link>
 
   <joint name="camera_joint" type="fixed">
     <parent link="chassis_link"/>
     <child link="camera_link"/>
-    <origin xyz="0.1 0 0.0425" rpy="0 0 0"/>
+    <origin xyz="0.1 0 0.0425" rpy="0 0 0"/> 
   </joint>
 
   <link name="camera_link_optical"></link>
@@ -35,7 +29,7 @@
 
     <sensor name="camera" type="camera">
         <pose> 0 0 0 0 0 0 </pose>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
         <update_rate>10</update_rate>
         <camera>
             <horizontal_fov>0.934</horizontal_fov>

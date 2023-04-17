@@ -30,7 +30,7 @@
     </ros2_control>
 
 	<!-- Imu sensor broadcaster --> 
-	<ros2_control name='IMUSensorBroadcaster' type='sensor'>
+	<!--<ros2_control name='IMUSensorBroadcaster' type='sensor'>
 	  <hardware>
 		<plugin>imu_sensor_broadcaster/IMUSensorBroadcaster</plugin>
 	  </hardware>
@@ -43,7 +43,7 @@
 		<state_interface name='linear_acceleration.y'/>
 		<state_interface name='linear_acceleration.z'/>  
 	  </sensor>
-	</ros2_control> 
+	</ros2_control> -->
   </xacro:unless>
 
   <!-- Gazebo ros2_control -->

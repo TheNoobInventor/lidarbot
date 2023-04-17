@@ -12,9 +12,13 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
   <img title='Side View' src=docs/images/side_view.jpg width="400">
 </p>
 
+| Gazebo | RViz |
+| :------: | :----: |
+| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
+
 ## Package Overview
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
-- [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar, IMU for use by the real lidarbot.
+- [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and IMU sensor broadcaster for use by the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for Lidarbot, sensors and ros2 control.
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate the lidarbot in Gazebo.
 - [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch and configuration files ***(work in progress)*** .
@@ -63,14 +67,6 @@ The electronic components of the lidarbot are connected as shown below.
 
 ## Installation
 
-## Simulation
-
-| Gazebo | RViz |
-| :------: | :----: |
-| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.jpg width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
-
 ## SLAM
 
 ## Navigation
-
-## Acknowledgments

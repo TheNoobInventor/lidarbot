@@ -5,8 +5,8 @@
       <author>Blender User</author>
       <authoring_tool>Blender 3.2.2 commit date:2022-08-02, commit time:18:15, hash:bcfdb14560e7</authoring_tool>
     </contributor>
-    <created>2023-04-17T19:57:47</created>
-    <modified>2023-04-17T19:57:47</modified>
+    <created>2023-04-17T21:34:04</created>
+    <modified>2023-04-17T21:34:04</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
@@ -48,7 +48,7 @@
   <library_visual_scenes>
     <visual_scene id="Scene" name="Scene">
       <node id="PiCameraMount_v1" name="PiCameraMount_v1" type="NODE">
-        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <matrix sid="transform">0.001 0 0 0 0 0.001 0 0 0 0 0.001 0 0 0 0 1</matrix>
         <instance_geometry url="#PiCameraMount_v1-mesh" name="PiCameraMount_v1"/>
       </node>
     </visual_scene>
