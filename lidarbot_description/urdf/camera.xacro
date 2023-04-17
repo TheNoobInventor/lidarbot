@@ -6,7 +6,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
       <geometry>
-        <mesh filename="package://lidarbot_description/meshes/d415.dae"/>
+        <mesh filename="package://lidarbot_description/meshes/rpi_camera.dae"/>
       </geometry>
     </visual> 
     <collision>
@@ -38,7 +38,7 @@
         <visualize>true</visualize>
         <update_rate>10</update_rate>
         <camera>
-            <horizontal_fov>1.089</horizontal_fov>
+            <horizontal_fov>0.934</horizontal_fov>
             <image>
                 <format>R8G8B8</format>
                 <width>640</width>

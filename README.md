@@ -1,6 +1,6 @@
 # Lidarbot
 
-A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with an RPLIDAR A1 sensor and an Intel RealSense D415 depth camera used for autonomous navigation, obstacle avoidance and Simultaneous Localization and Mapping (SLAM) operations. 
+A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a raspberry pi camera for visual feedback and an RPLIDAR A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. 
 
 ***(Work in Progress)***
 
@@ -13,13 +13,13 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
 </p>
 
 ## Package Overview
-- [`lidarbot_base`](./lidarbot_base/) :
-- [`lidarbot_bringup`](./lidarbot_bringup/) :
-- [`lidarbot_description`](./lidarbot_description/) :
-- [`lidarbot_gazebo`](./lidarbot_gazebo/) :
-- [`lidarbot_navigation`](./lidarbot_navigation/) :
-- [`lidarbot_slam`](./lidarbot_slam/) :
-- [`lidarbot_teleop`](./lidarbot_teleop/) :
+- [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
+- [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar, IMU for use by the real lidarbot.
+- [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for Lidarbot, sensors and ros2 control.
+- [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate the lidarbot in Gazebo.
+- [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch and configuration files ***(work in progress)*** .
+- [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM and map files in the map directory ***(work in progress)***.
+- [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
 
 ## Hardware
 ### Part list
@@ -28,15 +28,15 @@ The following components were used in this project:
 | | Part |
 | --| --|
 |1| [Raspberry Pi 4 (4 GB)](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)|
-|2| SanDisk 64 GB SD Card|
+|2| SanDisk 32 GB SD Card|
 |3| [Two wheel drive robot chassis kit (with wheel encoders)](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
 |5| [2 x Photo interrupters for wheel encoders](https://www.aliexpress.com/item/32773600460.html?spm=a2g0o.order_list.order_list_main.5.21ef1802uhtGk4)|
 |6| MPU6050 board|
 |7| [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)|
-|8| Intel RealSense D415 depth camera|
+|8| Raspberry Pi camera v1.3|
 |9| [3D printed stands for RPLIDAR A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
-|10| Mount for D415 depth camera|
+|10| Mount for Raspberry Pi camera|
 |11| Powerbank for RPi 4 (minimum output: 5V 3A)|
 |12| 3 Slot 18650 battery holder|
 |13| 3 x 18650 batteries to power Motor Driver HAT|
@@ -73,3 +73,4 @@ The electronic components of the lidarbot are connected as shown below.
 
 ## Navigation
 
+## Acknowledgments

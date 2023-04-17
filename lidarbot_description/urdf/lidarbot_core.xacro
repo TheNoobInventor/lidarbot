@@ -145,11 +145,11 @@
         </geometry>
       </collision>
 
-      <!-- Depth camera mount -->
+      <!-- Camera mount -->
       <visual name="camera_mount_visual">
         <origin xyz="0.089 0 0.016" rpy="0 0 0"/>
           <geometry>
-            <cylinder radius="0.007" length="0.03"/>
+            <mesh filename="package://lidarbot_description/meshes/rpi_camera_mount.dae"/>
           </geometry>
       </visual>
       <collision name="camera_mount_collision">
