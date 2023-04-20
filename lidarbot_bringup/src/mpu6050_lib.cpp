@@ -3,7 +3,7 @@
 //Licensed under the CC BY-NC SA 4.0
 
 //Include the header file for this class
-#include "MPU6050.h"
+#include "lidarbot_bringup/mpu6050_lib.h"
 
 MPU6050::MPU6050(int8_t addr, bool run_update_thread) {
 	int status;
@@ -94,6 +94,25 @@ void MPU6050::getOffsets(float *ax_off, float *ay_off, float *az_off, float *gr_
 	*ax_off = *ax_off / 10000, *ay_off = *ay_off / 10000, *az_off = *az_off / 10000;
 
 	*az_off = *az_off - ACCEL_SENS; //Remove 1g from the value calculated to compensate for gravity)
+}
+
+// Get quaternion values from euler angles
+Quaternion MPU6050::getQuat(float *roll, float *pitch, float *yaw) {
+	Quaternion quat; // Temporary storage for quaternion
+
+	float cr = cos(*roll * 0.5);
+	float sr = sin(*roll * 0.5);
+	float cp = cos(*pitch * 0.5);
+	float sp = sin(*pitch * 0.5);
+	float cy = cos(*yaw * 0.5);
+	float sy = sin(*yaw * 0.5);
+
+	quat.x = sr * cp * cy - cr * sp * sy; 
+	quat.y = cr * sp * cy + sr * cp * sy; 
+	quat.z = cr * cp * sy - sr * sp * cy;
+	quat.w = cr * cp * cy + sr * sp * sy; 
+
+	return quat;
 }
 
 int MPU6050::getAngle(int axis, float *result) {

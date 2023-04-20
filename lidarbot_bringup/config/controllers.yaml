@@ -8,8 +8,8 @@ controller_manager: # Node name
     joint_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    #imu_sensor_broadcaster:
-      #type: imu_sensor_broadcaster/IMUSensorBroadcaster 
+    imu_broadcaster:
+      type: imu_sensor_broadcaster/IMUSensorBroadcaster 
 
 
 diff_controller:
@@ -27,9 +27,8 @@ diff_controller:
     # Whether the input has a time stamp or not
     use_stamped_vel: false
 
-#imu_sensor_broadcaster:
-#   ros__parameters:
-#    sensor_name: mpu6050 
-#    frame_id: imu_link
+imu_broadcaster:
+  ros__parameters:
 
-
+    sensor_name: mpu6050 
+    frame_id: imu_link

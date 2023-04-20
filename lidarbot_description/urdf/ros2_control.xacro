@@ -27,23 +27,28 @@
         <state_interface name='velocity'/>
         <state_interface name='position'/>
       </joint>
-    </ros2_control>
+	</ros2_control>
 
-	<!-- Imu sensor broadcaster --> 
-	<!--<ros2_control name='IMUSensorBroadcaster' type='sensor'>
+	<!-- MPU6050 sensor--> 
+	<ros2_control name='MPU6050' type='sensor'>
 	  <hardware>
-		<plugin>imu_sensor_broadcaster/IMUSensorBroadcaster</plugin>
+		<plugin>lidarbot_bringup/MPU6050Hardware</plugin>
+		  <param name='sensor_name'>mpu6050</param>
+		  <param name='frame_id'>imu_link</param>
 	  </hardware>
 	  <sensor name='mpu6050'>
-		<param name='frame_id'>imu_link</param>
-		<state_interface name='angular_velocity.x'/>
+	    <state_interface name='orientation.x'/>
+		<state_interface name='orientation.y'/>
+		<state_interface name='orientation.z'/>
+		<state_interface name='orientation.w'/>
+	    <state_interface name='angular_velocity.x'/>
 		<state_interface name='angular_velocity.y'/>
-		<state_interface name='angular_velocity.z'/>
+    	<state_interface name='angular_velocity.z'/>
 		<state_interface name='linear_acceleration.x'/>
 		<state_interface name='linear_acceleration.y'/>
 		<state_interface name='linear_acceleration.z'/>  
 	  </sensor>
-	</ros2_control> -->
+	</ros2_control>
   </xacro:unless>
 
   <!-- Gazebo ros2_control -->

@@ -86,8 +86,10 @@ extern "C" {
 #endif
 #undef ACCEL_RANGE
 
-
-
+struct Quaternion
+{
+    double w, x, y, z;
+};
 
 class MPU6050 {
 	private:
@@ -115,6 +117,7 @@ class MPU6050 {
 		void getAccel(float *x, float *y, float *z);
 		void getGyro(float *roll, float *pitch, float *yaw);
 		void getOffsets(float *ax_off, float *ay_off, float *az_off, float *gr_off, float *gp_off, float *gy_off);
+		Quaternion getQuat(float *roll, float *pitch, float *yaw);
 		int getAngle(int axis, float *result);
 		bool calc_yaw;
 };

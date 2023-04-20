@@ -76,6 +76,19 @@ def generate_launch_description():
             target_action=start_controller_manager_cmd,
             on_start=[start_joint_broadcaster_cmd]))
 
+    # Spawn imu_sensor_broadcaser
+    start_imu_broadcaster_cmd = Node(
+        condition=IfCondition(use_ros2_control),
+        package='controller_manager',
+        executable='spawner',
+        arguments=['imu_broadcaster'])
+
+    # Delayed imu_broadcaster_spawner action
+    start_delayed_imu_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=start_controller_manager_cmd,
+            on_start=[start_imu_broadcaster_cmd]))
+            
     # Start joystick node
     start_joystick_cmd= IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
@@ -100,6 +113,7 @@ def generate_launch_description():
     ld.add_action(start_delayed_controller_manager)
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
+    ld.add_action(start_delayed_imu_broadcaster_spawner)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_rplidar_cmd)
     ld.add_action(start_camera_cmd)

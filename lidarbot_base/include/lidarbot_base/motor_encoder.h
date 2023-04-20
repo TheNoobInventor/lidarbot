@@ -2,7 +2,7 @@
 extern "C" {
 #endif
 
-#ifndef __MOTOR_ENCODER_H
+#ifndef __MOTOR_ENCODER_H__
 #define __MOTOR_ENCODER_H__
 
 #include <stdio.h>

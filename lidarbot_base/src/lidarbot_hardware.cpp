@@ -1,8 +1,5 @@
 #include "lidarbot_base/lidarbot_hardware.hpp"
 
-#include "hardware_interface/types/hardware_interface_type_values.hpp"
-#include "hardware_interface/types/hardware_interface_return_values.hpp"
-
 namespace lidarbot_base
 {
 

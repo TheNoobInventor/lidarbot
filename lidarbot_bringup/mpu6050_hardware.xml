@@ -1,0 +1,9 @@
+<library path="mpu6050_hardware">
+	<class name="lidarbot_bringup/MPU6050Hardware"
+		   type="lidarbot_bringup::MPU6050Hardware"
+		   base_class_type="hardware_interface::SensorInterface">
+		<description>
+			The ros2_control hardware interface for the MPU6050 inertial measurement unit (IMU) sensor.
+		</description>
+	</class>
+</library>

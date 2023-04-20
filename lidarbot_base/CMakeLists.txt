@@ -49,8 +49,6 @@ install(
 # EXPORTS 
 ament_export_libraries(lidarbot_hardware)
 
-# SHOULD THIS BE HERE 
-# Motor Tests
 # Include C/Cpp "include" directory
 include_directories(include)
 
@@ -58,7 +56,6 @@ include_directories(include)
 add_executable(motor_test src/DEV_Config.c src/PCA9685.c src/MotorDriver.c src/motor_test.c)
 
 # Install Cpp executables
-# Use lines below as a guide
 install(TARGETS
   motor_test
   DESTINATION lib/${PROJECT_NAME}
