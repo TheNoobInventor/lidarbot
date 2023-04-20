@@ -47,10 +47,10 @@ class MPU6050Hardware : public hardware_interface::SensorInterface
 	double linear_acceleration_y;
 	double linear_acceleration_z;
 	  	
+	Quaternion quat;
+	float euler_angles[3]; 
 	float gyro_values[3];
   	float accel_values[3];
-	float euler_angles[3]; 
-	Quaternion quat;
 
     rclcpp::Logger logger_;
 };
