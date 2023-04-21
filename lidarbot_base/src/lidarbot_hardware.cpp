@@ -16,8 +16,6 @@ CallbackReturn LidarbotHardware::on_init(const hardware_interface::HardwareInfo 
 
     RCLCPP_INFO(logger_, "Initializing...");
 
-    time_ = std::chrono::system_clock::now();
-
     config_.left_wheel_name = info_.hardware_parameters["left_wheel_name"];
     config_.right_wheel_name = info_.hardware_parameters["right_wheel_name"];
     config_.enc_ticks_per_rev = std::stoi(info_.hardware_parameters["enc_ticks_per_rev"]);
@@ -96,18 +94,13 @@ CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & /
 {   
     RCLCPP_INFO(logger_, "Stopping Controller...");
 
-    signal(SIGINT, handler);
-
     return CallbackReturn::SUCCESS;
 }
 
 return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-    // Calculate delta time
-    auto new_time = std::chrono::system_clock::now();
-    std::chrono::duration<double> difference = new_time - time_;
-    double delta_seconds = difference.count();
-    time_ = new_time;
+    // Obtain elapsed time
+	double delta_seconds = period.seconds();
 
     // Obtain encoder values
     read_encoder_values(&left_wheel_.encoder_ticks, &right_wheel_.encoder_ticks);
@@ -126,8 +119,11 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {   
+	double left_motor_counts_per_loop = left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate;
+	double right_motor_counts_per_loop = right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate;
+
     // Send commands to motor driver
-    set_motor_speeds(left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate, right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate);
+    set_motor_speeds(left_motor_counts_per_loop, right_motor_counts_per_loop);
 
     return return_type::OK;
 }

@@ -1,4 +1,5 @@
 //-------------------------------MPU6050 Accelerometer and Gyroscope C++ library-----------------------------
+//Made changes to class and renamed file. Adapted from Alex Mous (https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi)
 //Copyright (c) 2019, Alex Mous
 //Licensed under the CC BY-NC SA 4.0
 

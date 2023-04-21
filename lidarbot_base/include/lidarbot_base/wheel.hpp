@@ -2,6 +2,7 @@
 #define _LIDARBOT_BASE__WHEEL_H_
 
 #include <string>
+#include <cmath>
 
 class Wheel
 {   

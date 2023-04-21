@@ -1,7 +1,6 @@
 #ifndef _LIDARBOT_BASE__LIDARBOT_HARDWARE_HPP_
 #define _LIDARBOT_BASE__LIDARBOT_HARDWARE_HPP_
 
-#include <chrono>
 #include <cmath>
 #include <memory>
 #include <cstring>
@@ -19,7 +18,6 @@
 #include "rclcpp_lifecycle/state.hpp"
 
 #include "motor_encoder.h"
-#include "config.hpp"
 #include "wheel.hpp"
 
 using hardware_interface::return_type;
@@ -30,6 +28,15 @@ namespace lidarbot_base
     
 class LidarbotHardware : public hardware_interface::SystemInterface
 {
+
+  struct Config
+  {
+	std::string left_wheel_name = "left_wheel";
+	std::string right_wheel_name = "right_wheel";
+	int enc_ticks_per_rev = 20;
+	double loop_rate = 30.0;
+  };
+
   public:
     LidarbotHardware(); 
 
@@ -57,7 +64,6 @@ class LidarbotHardware : public hardware_interface::SystemInterface
 
     rclcpp::Logger logger_;
 
-    std::chrono::time_point<std::chrono::system_clock> time_;
 };
 
 }

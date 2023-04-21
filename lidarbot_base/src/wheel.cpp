@@ -1,7 +1,5 @@
 #include "lidarbot_base/wheel.hpp"
 
-#include <cmath>
-
 Wheel::Wheel(const std::string &wheel_name, int ticks_per_rev)
 {
     setup(wheel_name, ticks_per_rev);
