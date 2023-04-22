@@ -8,7 +8,6 @@ MPU6050 device(0x68);
 
 int main() {
 	float ax, ay, az, gr, gp, gy; //Variables to store the accel, gyro and angle values
-	// float accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z;
 
 	sleep(1); //Wait for the MPU6050 to stabilize
 

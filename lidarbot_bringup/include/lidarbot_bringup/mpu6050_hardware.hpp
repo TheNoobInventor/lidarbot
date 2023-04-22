@@ -40,12 +40,12 @@ class MPU6050Hardware : public hardware_interface::SensorInterface
 
   private:
 	Quaternion orientation;
-	double angular_velocity_x;
-	double angular_velocity_y;
-	double angular_velocity_z;
-	double linear_acceleration_x;
-	double linear_acceleration_y;
-	double linear_acceleration_z;
+	double angular_vel_x;
+	double angular_vel_y;
+	double angular_vel_z;
+	double linear_accel_x;
+	double linear_accel_y;
+	double linear_accel_z;
 	  	
 	Quaternion quat;
 	float euler_angles[3]; 

@@ -34,28 +34,28 @@ std::vector<hardware_interface::StateInterface> MPU6050Hardware::export_state_in
 	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[1].name, &orientation.y));
 	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[2].name, &orientation.z));
 	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[3].name, &orientation.w));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[4].name, &angular_velocity_x));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[5].name, &angular_velocity_y));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[6].name, &angular_velocity_z));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[7].name, &linear_acceleration_x));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[8].name, &linear_acceleration_y));
-	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[9].name, &linear_acceleration_z));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[4].name, &angular_vel_x));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[5].name, &angular_vel_y));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[6].name, &angular_vel_z));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[7].name, &linear_accel_x));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[8].name, &linear_accel_y));
+	state_interfaces.emplace_back(hardware_interface::StateInterface(info_.sensors[0].name, info_.sensors[0].state_interfaces[9].name, &linear_accel_z));
 
 	return state_interfaces;
 }
 
 CallbackReturn MPU6050Hardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 {
-    RCLCPP_INFO(logger_, "Starting controller ...");
+	RCLCPP_INFO(logger_, "Starting controller ...");
 
-    return CallbackReturn::SUCCESS;
+	return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn MPU6050Hardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
-{   
-    RCLCPP_INFO(logger_, "Stopping Controller...");
-
-    return CallbackReturn::SUCCESS;
+{
+	RCLCPP_INFO(logger_, "Stopping Controller...");
+	
+	return CallbackReturn::SUCCESS;
 }
 
 return_type MPU6050Hardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
@@ -78,12 +78,12 @@ return_type MPU6050Hardware::read(const rclcpp::Time & /*time*/, const rclcpp::D
 	orientation.y = quat.y;
 	orientation.z = quat.z;
 	orientation.w = quat.w;
-	angular_velocity_x = gyro_values[0];	
-	angular_velocity_y = gyro_values[1];	
-	angular_velocity_z = gyro_values[2];	
-	linear_acceleration_x = accel_values[0];
-	linear_acceleration_y = accel_values[1];
-	linear_acceleration_z = accel_values[2];
+	angular_vel_x = gyro_values[0];	
+	angular_vel_y = gyro_values[1];	
+	angular_vel_z = gyro_values[2];	
+	linear_accel_x = accel_values[0];
+	linear_accel_y = accel_values[1];
+	linear_accel_z = accel_values[2];
 
     return return_type::OK;
 }
