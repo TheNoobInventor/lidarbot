@@ -60,7 +60,6 @@ CallbackReturn MPU6050Hardware::on_deactivate(const rclcpp_lifecycle::State & /*
 
 return_type MPU6050Hardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-
 	// Obtain current euler angles
 	device.getAngle(0, &euler_angles[0]);
 	device.getAngle(1, &euler_angles[1]);
@@ -85,7 +84,7 @@ return_type MPU6050Hardware::read(const rclcpp::Time & /*time*/, const rclcpp::D
 	linear_accel_y = accel_values[1];
 	linear_accel_z = accel_values[2];
 
-    return return_type::OK;
+	return return_type::OK;
 }
 
 } // namespace lidarbot_bringup

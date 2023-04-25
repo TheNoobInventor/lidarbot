@@ -153,9 +153,9 @@
           </geometry>
       </visual>
       <collision name="camera_mount_collision">
-        <origin xyz="0.075 0.0335 0.015" rpy="0 ${-pi/2} 0"/>
+        <origin xyz="0.092 0.0 0.035" rpy="${pi/2} 0 ${pi/2}"/>
         <geometry>
-          <box size="0.035 0.06 0.02"/>
+          <box size="0.045 0.04 0.02"/>
         </geometry>
       </collision>
 
