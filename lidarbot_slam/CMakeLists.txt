@@ -4,8 +4,10 @@ project(lidarbot_slam)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config launch maps rviz
+  DIRECTORY config launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
+
+#  DIRECTORY config launch maps rviz

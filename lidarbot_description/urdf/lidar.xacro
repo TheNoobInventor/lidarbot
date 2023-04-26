@@ -29,25 +29,18 @@
         <sensor name="lidar" type="ray">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
-            <update_rate>5.5</update_rate>
+            <update_rate>10</update_rate>
             <ray>
                 <scan>
                     <horizontal>
                         <samples>360</samples>
-                        <resolution>1</resolution>
                         <min_angle>-3.14</min_angle>
                         <max_angle>3.14</max_angle>
                     </horizontal>
                 </scan>
                 <range>
-                    <min>0.15</min>
+                    <min>0.3</min>
                     <max>12</max>
-                    <resolution>0.2</resolution>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.01</stddev>
-                </noise>
                 </range>
             </ray>
             <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">

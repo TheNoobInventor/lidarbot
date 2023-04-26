@@ -6,18 +6,6 @@ Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 s
 
 ***(Work in Progress)***
 
-<p align='center'>
-  <img title='Top View' src=docs/images/top_view.jpg width="400">
-</p>
-
-<p align="center">
-  <img title='Side View' src=docs/images/side_view.jpg width="400">
-</p>
-
-| Gazebo | RViz |
-| :------: | :----: |
-| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
-
 ## Package Overview
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and the MPU6050 inertial measurement unit (IMU) for use by the real lidarbot.
@@ -67,8 +55,71 @@ The electronic components of the lidarbot are connected as shown below.
   <img title='Wiring diagram' src=docs/images/lidarbot_wiring.png width="800">
 </p>
 
+The MPU6050 board pins were connected to the Raspberry Pi 4 GPIO pins as follows:
+
+| MPU6050 board | GPIO.BOARD| GPIO.BCM|
+| ----------- | ------------| ------ |
+| VCC         | 3.3V | 3.3V |
+| GND         | GND | GND |
+| SCL         | 05 | GPIO03 |
+| SDA         | 03 | GPIO02 |
+
+The right and left photo interrupter sensors are connected to GPIO pins as follows:
+
+| Photo interrupter (R) | GPIO.BOARD | GPIO.BCM|
+| ----------- | ------------| ------ |
+| OUT | 18 | GPIO24 |
+| VCC | 5V | 5V |
+| GND | GND | GND |
+
+| Photo interrupter (L) | GPIO.BOARD | GPIO.BCM|
+| ----------- | ------------| ------ |
+| OUT | 22 | GPIO25 |
+| VCC | 5V | 5V |
+| GND | GND | GND |
+
+<p align="center">
+  <img title='MPU6050' src=docs/images/mpu6050.jpg width="400">
+  <img title='Encoders' src=docs/images/encoders.jpg width="400">
+</p>
+
+The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.waveshare.com/wiki/Motor_Driver_HAT)) are connected to the motor wires and battery holder cables as follows: 
+
+| Motor Driver HAT pin | Connected to| 
+| -- | -- |
+| MA1 | Red wire (Left motor)| 
+| MA2 | Black wire (Left motor)| 
+| GND | Black wire (battery holder) | 
+| VIN | Red wire (battery holder) | 
+| MB1 | Red wire(Right motor)| 
+| MB2 | Black wire (Right motor)| 
+
+<p align="center">
+  <img title='Motor Driver HAT' src=docs/images/Motor_Driver_HAT.png width="400">
+</p>
+
+Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the motor hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
+
+
+<br/>
+
+Finally, the RPLIDAR A1 sensor is plugged into one of the USB ports of the Raspberry Pi 4.
+
+<p align='center'>
+  <img title='Top View' src=docs/images/top_view.jpg width="400">
+</p>
+
+<p align="center">
+  <img title='Side View' src=docs/images/side_view.jpg width="400">
+</p>
+
+
 ## Installation
 
 ## SLAM
+
+| Gazebo | RViz |
+| :------: | :----: |
+| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
 
 ## Navigation
