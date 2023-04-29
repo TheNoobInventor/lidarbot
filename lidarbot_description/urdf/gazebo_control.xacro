@@ -17,7 +17,6 @@
             <!-- Output -->
             <odometry_frame>odom</odometry_frame>
             <robot_base_frame>base_link</robot_base_frame>
-
             <publish_odom>true</publish_odom>
             <publish_odom_tf>true</publish_odom_tf>     
             <publish_wheel_tf>true</publish_wheel_tf>

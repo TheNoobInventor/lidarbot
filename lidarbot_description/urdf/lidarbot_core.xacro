@@ -22,7 +22,7 @@
    <joint name="chassis_joint" type="fixed">
      <parent link="base_link"/>
      <child link="chassis_link"/>
-     <origin xyz="0 0 -${(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
+     <origin xyz="-0.076 0 0" rpy="0 0 0"/>
    </joint>
 
   <link name="base_footprint"/> 	
@@ -30,18 +30,19 @@
   <joint name="base_footprint_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_footprint"/>
-    <origin xyz="0 0 -${2*(wheel_radius)+wheel_zoff}" rpy="0 0 0"/> 
+    <origin xyz="0 0 -${(wheel_radius + wheel_zoff / 2)}" rpy="0 0 0"/> 
   </joint>
 	
   <!-- Robot Chassis -->
   <link name="chassis_link">
       <visual>
-        <origin xyz="0 0 ${-wheel_zoff}" rpy="0 0 0"/>
+        <origin xyz="${base_length/2} 0 ${-wheel_zoff}" rpy="0 0 0"/>
           <geometry>
               <mesh filename="package://lidarbot_description/meshes/robot_chassis.dae" />
           </geometry>
       </visual>
       <collision>
+        <origin xyz="${base_length/2} 0 ${-wheel_zoff}" rpy="0 0 0"/>
         <geometry>
           <box size="${base_length} ${base_width} ${base_height}"/>
         </geometry>
@@ -49,13 +50,13 @@
 
     <!-- Caster mount -->
       <visual name="caster_mount_visual">
-          <origin xyz="0.086 0 -0.0475" rpy="0 0 0"/>
+          <origin xyz="0.191 0 -0.0475" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/caster_mount.dae" />
         </geometry>
       </visual>
       <collision name="caster_mount_collision">
-        <origin xyz="0.086 0 -0.005" rpy="0 0 0"/>
+        <origin xyz="0.191 0 -0.005" rpy="0 0 0"/>
         <geometry>
           <cylinder radius="0.023" length="0.0125"/>
         </geometry>
@@ -63,13 +64,13 @@
 
       <!-- Rpi stand -->
       <visual name="rpi_4_stand_visual">
-        <origin xyz="-0.06 0.015 0.031" rpy="${pi} 0 ${-pi}"/>
+        <origin xyz="0.045 0.015 0.031" rpy="${pi} 0 ${-pi}"/>
           <geometry>
               <mesh filename="package://lidarbot_description/meshes/rpi_stand.dae" />
           </geometry>
       </visual>
       <collision name="rpi_4_stand_collision">
-        <origin xyz="-0.06 0 0.017" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.045 0 0.017" rpy="0 0 ${pi/2}"/>
         <geometry>
           <box size="0.098 0.065 0.034"/>
         </geometry>
@@ -77,13 +78,13 @@
 
       <!-- Raspberry Pi -->
       <visual name="rpi_4_visual">
-        <origin xyz="-0.059 0.00245 0.033" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.046 0.00245 0.033" rpy="0 0 ${pi/2}"/>
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/rpi_4.dae"/>
         </geometry>
       </visual>
       <collision name="rpi_4_collision">
-        <origin xyz="-0.058 0.005 0.041" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.047 0.005 0.041" rpy="0 0 ${pi/2}"/>
         <geometry>
           <box size="0.09 0.06 0.02"/>
         </geometry>
@@ -91,13 +92,13 @@
 
       <!-- Power bank stand -->
       <visual name="power_bank_stand_visual">
-        <origin xyz="0.033 0.015 0.031" rpy="${pi} 0 ${pi}"/>
+        <origin xyz="0.138 0.015 0.031" rpy="${pi} 0 ${pi}"/>
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/power_bank_stand.dae"/>
         </geometry>
       </visual>
       <collision name="power_bank_stand_collision">
-        <origin xyz="0.033 0 0.0085" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.138 0 0.0085" rpy="0 0 ${pi/2}"/>
         <geometry>
           <box size="0.098 0.065 0.015"/>
         </geometry>
@@ -105,13 +106,13 @@
 
       <!-- Power bank -->
       <visual name="power_bank_visual">
-        <origin xyz="0.0635 0.04775 0.015" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.1685 0.04775 0.015" rpy="0 0 ${pi/2}"/>
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/power_bank.dae"/>
         </geometry>
       </visual>
       <collision name="power_bank_collision">
-        <origin xyz="0.033 0 0.025" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.138 0 0.025" rpy="0 0 ${pi/2}"/>
         <geometry>
           <box size="0.096 0.062 0.02"/>
         </geometry>
@@ -119,13 +120,13 @@
       
       <!-- Rplidar stand -->
       <visual name="rplidar_stand_visual">
-        <origin xyz="0.033 0.015 0.017" rpy="0 0 ${-2*pi}"/> 
+        <origin xyz="0.138 0.015 0.017" rpy="0 0 ${-2*pi}"/> 
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/rplidar_stand.dae"/>
         </geometry>
       </visual>
       <collision name="rplidar_stand_collision">
-        <origin xyz="0.033 0 0.04" rpy="0 0 ${pi/2}"/>
+        <origin xyz="0.138 0 0.04" rpy="0 0 ${pi/2}"/>
         <geometry>
           <box size="0.098 0.065 0.015"/>
         </geometry>
@@ -133,34 +134,34 @@
 
       <!-- Rplidar base -->
       <visual name="rplidar_base_visual">
-        <origin xyz="0.03485 0.0087 0.037" rpy="0 0 ${-pi/2}"/>
+        <origin xyz="0.13985 0.0087 0.037" rpy="0 0 ${-pi/2}"/>
           <geometry>
             <mesh filename="package://lidarbot_description/meshes/rplidar_base.dae"/>
           </geometry>
         </visual>
       <collision name="rplidar_base_collision">
-        <origin xyz="0.033 0 0.056" rpy="0 0 ${-pi/2}"/>
+        <origin xyz="0.138 0 0.056" rpy="0 0 ${-pi/2}"/>
         <geometry>
-          <box size="0.12 0.072 0.035"/>
+          <box size="0.11 0.072 0.035"/>
         </geometry>
       </collision>
 
       <!-- Camera mount -->
       <visual name="camera_mount_visual">
-        <origin xyz="0.055 0.0335 0.001" rpy="0 0 ${pi}"/>
+        <origin xyz="0.16 0.0335 0.001" rpy="0 0 ${pi}"/>
           <geometry>
             <mesh filename="package://lidarbot_description/meshes/rpi_camera_mount.dae"/>
           </geometry>
       </visual>
       <collision name="camera_mount_collision">
-        <origin xyz="0.092 0.0 0.035" rpy="${pi/2} 0 ${pi/2}"/>
+        <origin xyz="0.197 0.0 0.032" rpy="${pi/2} 0 ${pi/2}"/>
         <geometry>
-          <box size="0.045 0.04 0.02"/>
+          <box size="0.048 0.06 0.033"/>
         </geometry>
       </collision>
 
     <xacro:box_inertia mass="0.864" length="${base_length}" width="${base_width}" height="${base_height}">
-      <origin xyz="0 0 -0.0125" rpy="0 0 0"/>
+      <origin xyz="0.105 0 0.0175" rpy="0 0 0"/>
     </xacro:box_inertia>
   </link>
 
@@ -186,7 +187,7 @@
   <joint name="left_wheel_joint" type="continuous">
     <parent link="chassis_link"/>
     <child link="left_wheel"/>
-    <origin xyz="-0.028 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
+    <origin xyz="0.077 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -212,7 +213,7 @@
   <joint name="right_wheel_joint" type="continuous">
     <parent link="chassis_link"/>
     <child link="right_wheel"/>
-    <origin xyz="-0.028 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
+    <origin xyz="0.077 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -238,7 +239,7 @@
   <joint name="caster_wheel_joint" type="fixed">
     <parent link="chassis_link"/>
     <child link="caster_wheel"/>
-    <origin xyz="0.0925 0 -0.031" rpy="0 0 ${pi/2}"/>
+    <origin xyz="0.1975 0 -0.031" rpy="0 0 ${pi/2}"/>
   </joint>
 
   <gazebo reference="caster_wheel">

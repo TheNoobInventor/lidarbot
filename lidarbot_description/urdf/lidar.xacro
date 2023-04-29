@@ -3,17 +3,18 @@
 
     <link name="lidar_link">
         <visual>
+            <origin xyz="0 -0.0009 -0.011" rpy="0 0 0"/>
             <geometry>
                 <mesh filename="package://lidarbot_description/meshes/rplidar_top.dae"/>
             </geometry>
         </visual> 
         <collision>
-            <origin xyz="0 -0.0009 0.011" rpy="0 0 0"/>
+            <origin xyz="0 -0.0028 0" rpy="0 0 0"/>
             <geometry>
-            <cylinder radius="0.037" length="0.021"/>
+                <cylinder radius="0.037" length="0.021"/>
             </geometry>
         </collision>
-         <xacro:cylinder_inertia mass="${wheel_mass}" length="0.021" radius="0.037">
+         <xacro:cylinder_inertia mass="0.07" length="0.021" radius="0.037">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:cylinder_inertia>
    </link>
@@ -21,14 +22,15 @@
     <joint name="lidar_joint" type="fixed">
         <parent link="chassis_link"/>
         <child link="lidar_link"/>
-        <origin xyz="0.0335 0.0095 0.069" rpy="0 0 ${-pi/2}"/>
+        <origin xyz="0.1385 0.0095 0.08" rpy="0 0 ${-pi/2}"/>
         <axis xyz="0 0 1"/>
     </joint>
 
     <gazebo reference="lidar_link">
         <sensor name="lidar" type="ray">
-            <pose> 0 0 0 0 0 0 </pose>
-            <visualize>false</visualize>
+            <pose>0 0 0 0 0 0</pose>
+            <always_on>true</always_on>
+            <visualize>true</visualize>
             <update_rate>10</update_rate>
             <ray>
                 <scan>
@@ -39,9 +41,16 @@
                     </horizontal>
                 </scan>
                 <range>
-                    <min>0.3</min>
-                    <max>12</max>
-                </range>
+                    <min>0.15</min>
+                    <max>6.0</max>
+                    <!-- <max>12.0</max> -->
+                    <resolution>0.01500</resolution>
+		        </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
             </ray>
             <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
                 <ros>
