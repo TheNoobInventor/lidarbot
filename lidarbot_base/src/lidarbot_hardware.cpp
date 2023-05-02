@@ -60,7 +60,7 @@ CallbackReturn LidarbotHardware::on_configure(const rclcpp_lifecycle::State & /*
 {
     RCLCPP_INFO(logger_, "Configuring motors and encoders...");
 
-    // Motor Initialization
+    // Initialize motor driver
     Motor_Init();
 
     // Initialize wiringPi using GPIO BCM pin numbers

@@ -46,22 +46,26 @@ install(
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
+# TEST
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(motor_test 
+                  src/DEV_Config.c 
+                  src/PCA9685.c 
+                  src/MotorDriver.c 
+                  test/motor_test.cpp)
+
+  target_include_directories(motor_test PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  
+  # Link WiringPi and other libraries to motor_test target
+  target_link_libraries(motor_test m wiringPi pthread crypt rt) 
+
+endif()
+
 # EXPORTS 
 ament_export_libraries(lidarbot_hardware)
-
-# Include C/Cpp "include" directory
-include_directories(include)
-
-# Create Cpp executable
-add_executable(motor_test src/DEV_Config.c src/PCA9685.c src/MotorDriver.c src/motor_test.c)
-
-# Install Cpp executables
-install(TARGETS
-  motor_test
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-# Added math, wiringPi and other libraries
-target_link_libraries(motor_test m wiringPi pthread crypt rt)
 
 ament_package()
