@@ -1,6 +1,6 @@
 # Lidarbot
 
-![ROS CI](https://github.com/TheNoobInventor/lidarbot/actions/workflows/github/workflows/lidarbot_ci_action.yml/badge.svg)
+![ROS CI](https://github.com/TheNoobInventor/lidarbot/actions/workflows/.github/workflows/lidarbot_ci_action.yml/badge.svg)
 
 A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a raspberry pi camera for visual feedback and an RPLIDAR A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the robot localization package on the robot, to fuse IMU sensor data and the wheel encoders data, using an extended kalman filter (EKF) node, to provide more accurate robot odometry estimates.
 
@@ -120,8 +120,12 @@ Finally, the RPLIDAR A1 sensor is plugged into one of the USB ports of the Raspb
 
 ## SLAM
 
+### Simulation
+
 | Gazebo | RViz |
 | :------: | :----: |
 | <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
+
+### Lidarbot
 
 ## Navigation
