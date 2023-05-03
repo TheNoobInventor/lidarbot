@@ -1,0 +1,41 @@
+name: ROS2 CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - name: Setup ROS 2
+      uses: ros-tooling/setup-ros@v0.6
+      with:
+        required-ros-distributions: humble
+        
+    - name: Run Tests
+      uses: ros-tooling/action-ros-ci@v0.3
+      with:
+        package-name: |
+          lidarbot
+          lidarbot_base
+          lidarbot_bringup
+          lidarbot_description
+          lidarbot_gazebo
+          lidarbot_navigation
+          lidarbot_slam
+          lidarbot_teleop
+        target-ros2-distro: humble
+
+    - name: Upload Logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: colcon-logs
+        path: ros_ws/log
+      if: always()
