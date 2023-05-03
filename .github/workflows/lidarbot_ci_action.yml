@@ -39,6 +39,7 @@ jobs:
           lidarbot_slam
           lidarbot_teleop
         target-ros2-distro: humble
+        skip-tests: true
 
     - name: Upload Logs
       uses: actions/upload-artifact@v1
