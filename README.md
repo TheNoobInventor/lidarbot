@@ -1,5 +1,7 @@
 # Lidarbot
 
+![ROS CI](https://github.com/TheNoobInventor/lidarbot/actions/workflows/github/workflows/lidarbot_ci_action.yml/badge.svg)
+
 A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a raspberry pi camera for visual feedback and an RPLIDAR A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the robot localization package on the robot, to fuse IMU sensor data and the wheel encoders data, using an extended kalman filter (EKF) node, to provide more accurate robot odometry estimates.
 
 Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 sensor to be accessed by ros2_control's differential drive controller and IMU sensor broadcaster respectively, via ros2_control's resource manager.
@@ -11,8 +13,8 @@ Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 s
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and the MPU6050 inertial measurement unit (IMU) for use by the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for Lidarbot, sensors and ros2 control.
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate the lidarbot in Gazebo.
-- [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch and configuration files used for lidarbot navigation ***(work in progress)*** .
-- [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM and map files in the map directory ***(work in progress)***.
+- [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch, configuration and map files used for lidarbot navigation ***(work in progress)*** .
+- [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM ***(work in progress)***.
 - [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
 
 ## Hardware

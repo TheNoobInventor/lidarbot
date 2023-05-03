@@ -7,10 +7,10 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-22.04
     steps:
-    - name: Setup ROS 2
+    - name: Setup ROS2
       uses: ros-tooling/setup-ros@v0.6
       with:
         required-ros-distributions: humble
@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies for MPU6050 C++ library
       run: sudo apt install libi2c-dev i2c-tools libi2c0
         
-    - name: Run Tests
+    - name: Build Lidarbot packages 
       uses: ros-tooling/action-ros-ci@v0.3
       with:
         package-name: |
