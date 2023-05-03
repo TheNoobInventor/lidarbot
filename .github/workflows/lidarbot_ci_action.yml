@@ -22,6 +22,9 @@ jobs:
         git clone https://github.com/wbeebe/WiringPi.git
         cd WiringPi/
         ./build
+    
+    - name: Install dependencies for MPU6050 C++ library
+      run: sudo apt install libi2c-dev i2c-tools libi2c0
         
     - name: Run Tests
       uses: ros-tooling/action-ros-ci@v0.3
