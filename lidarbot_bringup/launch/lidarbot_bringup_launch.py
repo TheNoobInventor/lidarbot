@@ -100,6 +100,15 @@ def generate_launch_description():
     # Start camera node
     start_camera_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'camera_launch.py')]))
+	
+    twist_mux_params = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
+
+	# Start twist mux
+    start_twist_mux_cmd = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        parameters=[twist_mux_params],
+        remappings=[('/cmd_vel_out', '/diff_controller/cmd_vel_unstamped')])
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -117,8 +126,8 @@ def generate_launch_description():
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_rplidar_cmd)
     ld.add_action(start_camera_cmd)
+    ld.add_action(start_twist_mux_cmd)
     
     return ld
 
     # TODO: Launch file summary
-    # TODO: include imu

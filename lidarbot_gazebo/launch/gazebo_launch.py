@@ -82,6 +82,15 @@ def generate_launch_description():
     start_joystick_cmd= IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
 
+    twist_mux_params = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
+
+	# Start twist mux
+	start_twist_mux_cmd = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        parameters=[twist_mux_params, {'use_sim_time': True}],
+        remappings=[('/cmd_vel_out', '/diff_controller/cmd_vel_unstamped')])
+
     # Create the launch description and populate
     ld = LaunchDescription()
     
@@ -97,8 +106,8 @@ def generate_launch_description():
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
     ld.add_action(start_joystick_cmd)
-    
+    ld.add_action(start_twist_mux_cmd)
+
     #TODO: sort out imports
-    #TODO: toggle joystick functionality for using ros2_control plugin or gazebo control plugin
 
     return ld

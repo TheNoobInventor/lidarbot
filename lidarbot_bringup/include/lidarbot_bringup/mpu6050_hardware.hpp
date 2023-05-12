@@ -26,7 +26,7 @@ namespace lidarbot_bringup
 class MPU6050Hardware : public hardware_interface::SensorInterface
 {
   public:
-  	MPU6050Hardware();
+    MPU6050Hardware();
 
     CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
 
