@@ -1,7 +1,5 @@
 # Launch file to start the raspberry pi camera
 
-import os
-
 from launch import LaunchDescription
 from launch_ros.actions import Node
 

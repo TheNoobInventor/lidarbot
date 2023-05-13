@@ -16,7 +16,11 @@ def generate_launch_description():
     pkg_path= FindPackageShare(package='lidarbot_bringup').find('lidarbot_bringup')
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     pkg_teleop= FindPackageShare(package='lidarbot_teleop').find('lidarbot_teleop')
-    controller_params_file = os.path.join(pkg_path, 'config/controllers.yaml')
+    pkg_navigation = FindPackageShare(package='lidarbot_navigation').find('lidarbot_navigation')
+    
+    controller_params_file= os.path.join(pkg_path, 'config/controllers.yaml')
+    twist_mux_params_file = os.path.join(pkg_teleop, 'config/twist_mux.yaml')
+    ekf_params_file = os.path.join(pkg_navigation, 'config/ekf.yaml')
 
     # Launch configuration variables specific to simulation
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -88,6 +92,12 @@ def generate_launch_description():
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
             on_start=[start_imu_broadcaster_cmd]))
+
+    # Start robot localization using an Extended Kalman Filter
+    start_robot_localization_cmd = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        parameters=[ekf_params_file])
             
     # Start joystick node
     start_joystick_cmd= IncludeLaunchDescription(
@@ -101,13 +111,11 @@ def generate_launch_description():
     start_camera_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_path, 'launch', 'camera_launch.py')]))
 	
-    twist_mux_params = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
-
 	# Start twist mux
     start_twist_mux_cmd = Node(
         package='twist_mux',
         executable='twist_mux',
-        parameters=[twist_mux_params],
+        parameters=[twist_mux_params_file],
         remappings=[('/cmd_vel_out', '/diff_controller/cmd_vel_unstamped')])
 
     # Create the launch description and populate
@@ -123,6 +131,7 @@ def generate_launch_description():
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
     ld.add_action(start_delayed_imu_broadcaster_spawner)
+    ld.add_action(start_robot_localization_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_rplidar_cmd)
     ld.add_action(start_camera_cmd)

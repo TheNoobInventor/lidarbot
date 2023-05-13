@@ -7,9 +7,9 @@ import os
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PythonExpression, Command
+from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -21,7 +21,9 @@ def generate_launch_description():
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     pkg_teleop= FindPackageShare(package='lidarbot_teleop').find('lidarbot_teleop')
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
+
     gazebo_params_file = os.path.join(pkg_path, 'config/gazebo_params.yaml')
+    twist_mux_params_file = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
     world_filename = 'obstacles.world'
     world_path = os.path.join(pkg_path, 'worlds', world_filename)
 
@@ -82,13 +84,11 @@ def generate_launch_description():
     start_joystick_cmd= IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
 
-    twist_mux_params = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
-
 	# Start twist mux
-	start_twist_mux_cmd = Node(
+    start_twist_mux_cmd = Node(
         package='twist_mux',
         executable='twist_mux',
-        parameters=[twist_mux_params, {'use_sim_time': True}],
+        parameters=[twist_mux_params_file, {'use_sim_time': True}],
         remappings=[('/cmd_vel_out', '/diff_controller/cmd_vel_unstamped')])
 
     # Create the launch description and populate
@@ -107,7 +107,5 @@ def generate_launch_description():
     ld.add_action(start_joint_broadcaster_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_twist_mux_cmd)
-
-    #TODO: sort out imports
 
     return ld
