@@ -11,8 +11,8 @@ Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 s
 ## Package Overview
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and the real lidarbot.
-- [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for Lidarbot, sensors and ros2 control.
-- [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate the lidarbot in Gazebo.
+- [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for lidarbot, sensors and `ros2 control`.
+- [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate lidarbot in Gazebo.
 - [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch, configuration and map files used for lidarbot navigation.
 - [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM.
 - [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
@@ -103,8 +103,6 @@ The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.wav
 Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the motor hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
 
 
-<br/>
-
 Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPLIDAR A1 sensor is plugged into one of the Pi 4's USB ports.
 
 <p align='center'>
@@ -115,17 +113,46 @@ Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberr
   <img title='Side View' src=docs/images/side_view.jpg width="400">
 </p>
 
-
 ## Installation
-
-## SLAM
-
-### Simulation
 
 | Gazebo | RViz |
 | :------: | :----: |
 | <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
 
+## SLAM
+
+### Gazebo
+
+To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot which includes the joystick node for teleoperation:
+
+```
+ros2 launch lidarbot_gazebo gazebo_launch.py
+```
+
+In a separate terminal, navigate to the workspace directory, `lidarbot_ws` for example, and launch `slam_toolbox`:
+
+```
+ros2 launch slam_toolbox online_async_launch.py slam_params_file:=/src/lidarbot_slam/config/mapper_params_online_async.yaml use_sim_time:=true
+```
+
+In another terminal, navigate to the workspace directory again and start `rviz`:
+
+```
+rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
+```
+
+Drive around the obstacles to get a good map of the environment:
+
+<p align='center'>
+    <img src=docs/images/gazebo_mapping.gif width="800">
+</p>
+
+Save map
+
 ### Lidarbot
 
 ## Navigation
+
+### Gazebo
+
+### Lidarbot

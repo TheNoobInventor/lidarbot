@@ -30,8 +30,8 @@
         <sensor name="lidar" type="ray">
             <pose>0 0 0 0 0 0</pose>
             <always_on>true</always_on>
-            <visualize>true</visualize>
-            <update_rate>5.5</update_rate>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
             <ray>
                 <scan>
                     <horizontal>
