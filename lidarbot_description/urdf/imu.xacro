@@ -16,4 +16,80 @@
     <origin xyz="0.045 0 0.0175" rpy="0 0 ${pi}"/> 
   </joint>
 
+ <gazebo reference="imu_link">
+   <sensor name="mpu6050_imu" type="imu">
+    <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
+       <ros>
+         <remapping>~/out:=imu_broadcaster/imu</remapping>
+       </ros>
+      <initial_orientation_as_reference>false</initial_orientation_as_reference>
+    </plugin>
+     <always_on>true</always_on>
+     <update_rate>100</update_rate>
+     <visualize>true</visualize>
+     <imu>
+       <angular_velocity>
+         <x>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>2e-4</stddev>
+           </noise>
+         </x>
+         <y>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>2e-4</stddev>
+           </noise>
+         </y>
+         <z>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>2e-4</stddev>
+           </noise>
+         </z>
+       </angular_velocity>
+       <linear_acceleration>
+         <x>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>1.7e-2</stddev>
+           </noise>
+         </x>
+         <y>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>1.7e-2</stddev>
+           </noise>
+         </y>
+         <z>
+           <noise type="gaussian">
+             <mean>0.0</mean>
+             <stddev>1.7e-2</stddev>
+           </noise>
+         </z>
+       </linear_acceleration>
+       <orientation>
+         <x>
+           <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-3</stddev>
+            </noise>
+          </z>
+        </orientation>
+     </imu>
+   </sensor>
+ </gazebo>
+
 </robot>

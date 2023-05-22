@@ -119,6 +119,8 @@ Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberr
 | :------: | :----: |
 | <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
 
+## Robot localization
+
 ## SLAM
 
 ### Gazebo
@@ -132,7 +134,9 @@ ros2 launch lidarbot_gazebo gazebo_launch.py
 In a separate terminal, navigate to the workspace directory, `lidarbot_ws` for example, and launch `slam_toolbox`:
 
 ```
-ros2 launch slam_toolbox online_async_launch.py slam_params_file:=/src/lidarbot_slam/config/mapper_params_online_async.yaml use_sim_time:=true
+ros2 launch slam_toolbox online_async_launch.py \ 
+slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
+use_sim_time:=true
 ```
 
 In another terminal, navigate to the workspace directory again and start `rviz`:
@@ -150,6 +154,20 @@ Drive around the obstacles to get a good map of the environment:
 Save map
 
 ### Lidarbot
+
+The following command brings up lidarbot with camera, lidar and joystick
+
+```
+ros2 launch lidarbot_bringup bringup_launch.py
+```
+
+Open a new terminal, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
+
+```
+ros2 launch slam_toolbox online_async_launch.py \ 
+slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
+use_sim_time:=false
+```
 
 ## Navigation
 
