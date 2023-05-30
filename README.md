@@ -102,8 +102,7 @@ The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.wav
 
 Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the motor hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
 
-
-Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPLIDAR A1 sensor is plugged into one of the Pi 4's USB ports.
+Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPLIDAR A1 sensor is plugged into one of the RPi 4's USB ports.
 
 <p align='center'>
   <img title='Top View' src=docs/images/top_view.jpg width="400">
@@ -115,13 +114,78 @@ Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberr
 
 ## Installation
 
-| Gazebo | RViz |
-| :------: | :----: |
-| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
+### Development Machine setup
+
+A development machine or PC (laptop or desktop) is used to run more computationally intensive applications like Gazebo and Rviz. Additionally, the PC can be used to control lidarbot remotely. 
+
+Ubuntu 22.04 LTS is required for this project to work with ROS2 Humble. Ubuntu 22.04 LTS can be installed on a PC by following [this guide](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview). The ROS2 Humble installation installation procedure is avaiable [here](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html). The Desktop version is installed on the PC which includes RViz:
+
+```
+sudo apt install ros-humble-desktop
+```
+
+After the ROS2 Humble installation, create a workspace on the PC/development machine and clone this repository:
+
+```
+mkdir -p ~/dev_ws/src
+cd ~/dev_ws
+git clone https://github.com/TheNoobInventor/lidarbot.git
+```
+
+Next install ROS dependencies:
+
+```
+cd ~/dev_ws
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+Build the workspace:
+
+```
+colcon build --symlink-install
+```
+
+Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install).
+
+### Lidarbot setup
+
+To install ROS2 Humble on the Raspberry Pi, Ubuntu Server 22.04 was first flashed on a 32GB micro SD card, this process is detailed in this [guide](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview).
+
+After inserting the SD card and booting up the Pi, the base installation of the ROS2 Humble is installed:
+
+```
+sudo apt install ros-humble-ros-base
+```
+
+Similarly, after the ROS2 Humble installation, create a workspace on the Raspberry Pi and clone this repository:
+
+```
+mkdir -p ~/robot_ws/src
+cd ~/robot_ws
+git clone https://github.com/TheNoobInventor/lidarbot.git
+```
+
+Install ROS dependencies:
+
+```
+cd ~/robot_ws
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+Build the workspace:
+
+```
+colcon build --symlink-install
+```
 
 ## Robot localization
 
 ## SLAM
+
+| Gazebo | RViz |
+| :------: | :----: |
+| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
+
 
 ### Gazebo
 
@@ -174,3 +238,8 @@ use_sim_time:=false
 ### Gazebo
 
 ### Lidarbot
+
+## Acknowledgment
+
+- [Diffbot](https://github.com/ros-mobile-robots/diffbot)
+- [Mini_pupper_ros](https://github.com/mangdangroboticsclub/mini_pupper_ros)
