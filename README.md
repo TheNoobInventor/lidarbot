@@ -6,6 +6,10 @@ A differential drive robot is controlled using ROS2 Humble running on a Raspberr
 
 Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
 
+<p align='center'>
+    <img src=docs/images/real_mapping.gif width="600">
+</p>
+
 ***(Work in Progress)***
 
 ## Package Overview
@@ -203,16 +207,16 @@ slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \
 use_sim_time:=true
 ```
 
-In another terminal, navigate to the workspace directory again and start `rviz`:
+In another terminal, navigate to the workspace directory again and start `rviz2`:
 
 ```
 rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
 ```
 
-Drive around the obstacles to get a good map of the environment:
+Drive around the obstacles to generate a map of the environment:
 
 <p align='center'>
-    <img src=docs/images/gazebo_mapping.gif width="800">
+    <img src=docs/images/gazebo_mapping.gif width="600">
 </p>
 
 Save map
@@ -232,6 +236,19 @@ ros2 launch slam_toolbox online_async_launch.py \
 slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
 use_sim_time:=false
 ```
+In a new terminal, navigate to the workspace directory again and start `rviz2`:
+
+```
+rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
+```
+
+Finally, drive around the environment to generate a map:
+
+<p align='center'>
+    <img src=docs/images/real_mapping.gif width="600">
+</p>
+
+Save map
 
 ## Navigation
 
