@@ -61,7 +61,7 @@ The electronic components of the lidarbot are connected as shown below.
   <img title='Wiring diagram' src=docs/images/lidarbot_wiring.png width="800">
 </p>
 
-The MPU6050 board pins were connected to the Raspberry Pi 4 GPIO pins as follows:
+The MPU6050 board pins were connected to the Raspberry Pi 4 GPIO pins as follows for use with the I2C communication protocol:
 
 | MPU6050 board | GPIO.BOARD| GPIO.BCM|
 | ----------- | ------------| ------ |
@@ -140,6 +140,8 @@ Next install ROS dependencies:
 
 ```
 cd ~/dev_ws
+sudo rosdep init
+rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
@@ -149,7 +151,144 @@ Build the workspace:
 colcon build --symlink-install
 ```
 
-Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install).
+To avoid manually sourcing the ROS installation (or underlay) in each terminal window opened, and if ROS2 Humble is the only distribution on the PC, the command to source the underlay is added to the respective shell configuration file. 
+
+Using bash:
+```
+echo "source /opt/ros/$ROSDISTRO/setup.bash" >> $HOME/.bashrc
+```
+
+Using zsh:
+```
+echo "source /opt/ros/$ROSDISTRO/setup.zsh" >> $HOME/.zshrc
+```
+
+Additionally, to avoid manually sourcing our workspace (or overlay), add the command to source the workspace to the respective configuration file. 
+
+Using bash:
+```
+echo "source ~/dev_ws/install/setup.bash" >> $HOME/.bashrc
+source $HOME/.bashrc
+```
+
+Using zsh:
+```
+echo "source ~/dev_ws/install/setup.zsh" >> $HOME/.zshrc
+source $HOME/.zshrc
+```
+
+The command: `source $HOME/.zshrc` sources the configuration file for use in the current terminal. However, this step is not necessary for terminal windows opened hereafter.
+
+#### Gazebo and `ros2_control`
+Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). To use the `ros2_control` framework with Gazebo, the following packages are installed:
+
+```
+sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers \
+ros-humble-gazebo-ros2-control ros-humble-gazebo-ros-pkgs
+```
+
+#### Display lidarbot model in RViz
+
+The following packages are installed to be able to display the model in RViz:
+
+```
+sudo apt install ros-humble-joint-state-publisher \
+ros-humble-joint-state-publisher-gui ros-humble-xacro
+```
+
+The `xacro` tool, is installed to process the lidarbot URDF files and combine them into a single complete URDF file.
+
+The `description_launch.py` launch file displays the model in RViz:
+
+```
+ros2 launch lidarbot_description description_launch.py
+```
+
+<p align='center'>
+  <img src=docs/images/lidarbot_rviz.png width="600">
+</p>
+
+The `joint_state_publisher_gui` package is used to bringup a window with sliders to move non-static links in RViz. Set the `use_gui` argument to `true` to rotate the left and right wheels of lidarbot:
+
+```
+ros2 launch lidarbot_description description_launch.py use_gui:=true
+```
+
+<p align='center'>
+  <img src=docs/images/joint_state_publisher_gui.png width="600">
+</p>
+
+The different arguments for the launch file, and their default values, can be viewed by adding `--show-args` at the end of launch command:
+
+```
+ros2 launch lidarbot_description description_launch.py --show-args
+```
+
+#### Teleoperation
+
+A [wireless gamepad](https://www.aliexpress.com/item/1005005354226710.html), like the one shown below, is used to control lidarbot both in simulation and physically. 
+
+<p align='center'>
+  <img src=docs/images/wireless_gamepad.jpg width="400">
+</p>
+
+To be able to use the gamepad, the following ROS packages are installed:
+
+```
+sudo apt install ros-humble-joy ros-humble-teleop-twist-joy
+```
+
+To map the keys on the gamepad to control lidarbot, first install the following package:
+
+```
+sudo apt install ros-humble-joy-tester
+```
+
+This package is used to test the joystick controls. To use it, plug in the USB dongle in the PC, then run:
+
+```
+ros2 run joy joy_node
+``` 
+
+And the following, in a new terminal:
+```
+ros2 run joy_tester test_joy
+```
+
+This opens a GUI window like the one shown below,
+
+<p align='center'>
+  <img src=docs/images/joy_tester.png width="400">
+</p>
+
+Click each button and move each stick of the gamepad to confirm that the actions are shown in GUI. The numbers correspond to the axis of the buttons and joystics (sticks) that will be used in mapping the movements of lidarbot. 
+
+The gamepad configuration for this project is in [`joystick.yaml`](./lidarbot_teleop/config/joystick.yaml), where:
+
+| Button/stick | Button/stick axis | Function | 
+| :--: | :--: | -- |
+| L1 button | 4 | Hold this enable button to move robot at normal speed| 
+| Left stick | 2 | Move stick forward or backward for linear motion of the robot | 
+| Right stick | 1 | Move stick left or right for angular motion of the robot| 
+
+Setting `require_enable_button` to `true` ensures that L1 has to be held before using the sticks to move the robot and stops the robot once L1 is no longer pressed. 
+
+To enable turbo mode for faster speed, the `enable_turbo_button` option in the config file can be set to an unused button axis.
+
+#### Twist mux
+
+The [`twist_mux`](http://wiki.ros.org/twist_mux) package is used to multiplex several velocity command sources, used to move the robot with an unstamped [geometry_msgs::Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html) message, into a single one. These sources are assigned priority values to allow a velocity source to be used or disabled. In this project, the command velocity sources are from the joystick and navigation.
+
+Run the following command to install `twist_mux`:
+
+```
+sudo apt install ros-humble-twist-mux
+```
+
+The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files,[`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py)respectively.
+
+#### Robot localization
+TODO
 
 ### Lidarbot setup
 
@@ -173,7 +312,9 @@ Install ROS dependencies:
 
 ```
 cd ~/robot_ws
-rosdep install --from-paths src --ignore-src -r -y
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y --skip-keys=rviz2
 ```
 
 Build the workspace:
@@ -182,16 +323,123 @@ Build the workspace:
 colcon build --symlink-install
 ```
 
-## Robot localization
+Likewise, add run the commands, from the development machine setup section, to source the underlay and overlay in the respective shell configuration file --- replacing `dev_ws` with `robot_ws` where necessary.
+
+The `xacro` tool is also required by lidarbot:
+
+```
+sudo apt install ros-humble-xacro
+```
+
+#### Teleoperation and Twist mux
+
+The `joy`, `teleop_twist_joy` and `twist_mux` packages are requisite by lidarbot as well:
+
+```
+sudo apt install ros-humble-joy ros-humble-teleop-twist-joy ros-humble-twist-mux
+```
+
+There is no need to map the gamepad buttons and sticks again.
+
+#### ros2_control
+Install the `ros2_control` packages on the robot:
+
+```
+sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers 
+```
+
+#### WiringPi
+
+To be able to utilize the GPIO pins of the Raspberry Pi 4 and program them using C/C++, an unofficial WiringPi was installed. This is required as hardware interfaces used by `ros2_control` are currently written only in C++ and low-level communication between Waveshare's Motor Driver HAT and `ros2_control` is needed. 
+
+The library is installed by executing the following commands in a terminal:
+
+```
+cd ~/Downloads
+git clone https://github.com/wbeebe/WiringPi.git
+cd WiringPi/
+./build
+```
+To check the current gpio version run this:
+`gpio -v`
+
+The reference article for the WiringPi library is found [here](https://arcanesciencelab.wordpress.com/2020/10/29/getting-wiringpi-to-work-under-ubuntu-20-10-on-a-raspberry-pi-4b-w-4gb/). The library is also installed on the development machine to avoid build errors.
+
+#### RPLIDAR
+
+Install the `rplidar-ros` package to use the RPLIDAR A1 sensor on lidarbot:
+
+```
+sudo apt install ros-humble-rplidar-ros
+```
+
+#### Raspberry Pi Camera
+
+The following packages are installed to use the Raspberry Pi Camera v1.3:
+```
+sudo apt install libraspberrypi-bin v4l-utils ros-humble-v4l2-camera
+```
+
+Furthermore, [changes to configuration options](https://medium.com/swlh/raspberry-pi-ros-2-camera-eef8f8b94304) are needed to get the RPi camera v1.3 to work. 
+In `/boot/config.txt` set the following options:
+
+```
+camera_autodetect=0
+start_x=1
+```
+### MPU6050 library
+
+Alex Mous' [C/C++ MPU6050 library](https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
+) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster.
+
+Recall that the MPU6050 module uses the I2C communication protocol, the i2c dependencies for using this library are installed with:
+
+```
+sudo apt install libi2c-dev i2c-tools libi2c0
+```
+
+#### Robot localization
+
+TO DO
+
+## Network Configuration
+
+Both the development machine and lidarbot need to be connected to the same local network as a precursor for bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
+
+To ensure communication between the dev machine and lidarbot, the firewall on the development machine had to be disabled (the firewall on the Ubuntu server was diabled by default):
+
+```
+sudo ufw disable
+```
+
+Also the same `ROS_DOMAIN_ID`, between 1 and 232, was exported to the shell configuration files of both systems:
+
+```
+echo "export ROS_DOMAIN_ID=31" >> ~/.zshrc
+```
+
+Then source the shell configuration file:
+```
+source $HOME/.zshrc
+```
+
+However, both systems might need to be rebooted to effect these changes.
+
+## Test Drive
+
+### Gazebo
+
+### Lidarbot
 
 ## SLAM
 
-| Gazebo | RViz |
-| :------: | :----: |
-| <img title='Lidarbot Gazebo' src=docs/images/lidarbot_gazebo.png width=400>| <img title=' Lidarbot RViz' src='docs/images/lidarbot_rviz.png' width=400> |
-
-
 ### Gazebo
+
+The `slam_toolbox` package is first installed on the development machine:
+
+```
+sudo apt install ros-humble-slam-toolbox
+```
 
 To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot which includes the joystick node for teleoperation:
 
@@ -207,7 +455,7 @@ slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \
 use_sim_time:=true
 ```
 
-In another terminal, navigate to the workspace directory again and start `rviz2`:
+In another terminal, navigate to the workspace directory again and start `rviz2` with the `lidarbot_slam.rviz` config file:
 
 ```
 rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
@@ -216,39 +464,45 @@ rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
 Drive around the obstacles to generate a map of the environment:
 
 <p align='center'>
-    <img src=docs/images/gazebo_mapping.gif width="600">
+  <img src=docs/images/gazebo_mapping.gif width="600">
 </p>
 
-Save map
+After generating the map, in the **SlamToolboxPlugin** in RViz, type in a name for the map in the field beside the **Save Map** button, then click on it. 
+
+<p align='center'>
+    <img src=docs/images/save_map.png width="400">
+</p>
+
+The saved map can be found in the workspace directory and will be used by [Nav2 stack](https://navigation.ros.org/) for navigation. 
 
 ### Lidarbot
 
-The following command brings up lidarbot with camera, lidar and joystick
+Run the following command on lidarbot to brings up the camera, lidar and joystick:
 
 ```
 ros2 launch lidarbot_bringup bringup_launch.py
 ```
 
-Open a new terminal, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
+Open a new terminal, on the development machine, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
 
 ```
 ros2 launch slam_toolbox online_async_launch.py \ 
 slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
 use_sim_time:=false
 ```
-In a new terminal, navigate to the workspace directory again and start `rviz2`:
+In a new terminal, also on the development machine, navigate to the workspace directory again and start `rviz2`:
 
 ```
 rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
 ```
 
-Finally, drive around the environment to generate a map:
+Drive around the environment to generate a map:
 
 <p align='center'>
     <img src=docs/images/real_mapping.gif width="600">
 </p>
 
-Save map
+Then save the generated map.
 
 ## Navigation
 
@@ -258,5 +512,9 @@ Save map
 
 ## Acknowledgment
 
+- [Articulated Robotics](https://articulatedrobotics.xyz/)
+- [Automatic Addison](https://automaticaddison.com/)
 - [Diffbot](https://github.com/ros-mobile-robots/diffbot)
-- [Mini_pupper_ros](https://github.com/mangdangroboticsclub/mini_pupper_ros)
+- [Linorobot2](https://github.com/linorobot/linorobot2)
+- [Mini pupper](https://github.com/mangdangroboticsclub/mini_pupper_ros)
+- [Robotics Backend](https://roboticsbackend.com/)

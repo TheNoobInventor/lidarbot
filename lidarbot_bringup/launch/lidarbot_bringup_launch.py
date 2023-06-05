@@ -131,7 +131,7 @@ def generate_launch_description():
     ld.add_action(start_delayed_diff_drive_spawner)
     ld.add_action(start_delayed_joint_broadcaster_spawner)
     ld.add_action(start_delayed_imu_broadcaster_spawner)
-    #ld.add_action(start_robot_localization_cmd)
+    ld.add_action(start_robot_localization_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_rplidar_cmd)
     ld.add_action(start_camera_cmd)
