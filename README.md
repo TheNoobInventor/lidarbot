@@ -205,7 +205,7 @@ ros2 launch lidarbot_description description_launch.py
 ```
 
 <p align='center'>
-  <img src=docs/images/lidarbot_rviz.png width="600">
+  <img src=docs/images/lidarbot_rviz.png width="800">
 </p>
 
 The `joint_state_publisher_gui` package is used to bringup a window with sliders to move non-static links in RViz. Set the `use_gui` argument to `true` to rotate the left and right wheels of lidarbot:
@@ -215,7 +215,7 @@ ros2 launch lidarbot_description description_launch.py use_gui:=true
 ```
 
 <p align='center'>
-  <img src=docs/images/joint_state_publisher_gui.png width="600">
+  <img src=docs/images/joint_state_publisher_gui.png width="800">
 </p>
 
 The different arguments for the launch file, and their default values, can be viewed by adding `--show-args` at the end of launch command:
@@ -361,7 +361,9 @@ cd WiringPi/
 ./build
 ```
 To check the current gpio version run this:
-`gpio -v`
+```
+gpio -v
+```
 
 The reference article for the WiringPi library is found [here](https://arcanesciencelab.wordpress.com/2020/10/29/getting-wiringpi-to-work-under-ubuntu-20-10-on-a-raspberry-pi-4b-w-4gb/). The library is also installed on the development machine to avoid build errors.
 
