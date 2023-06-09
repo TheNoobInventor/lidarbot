@@ -258,7 +258,7 @@ ros2 run joy_tester test_joy
 This opens a GUI window like the one shown below,
 
 <p align='center'>
-  <img src=docs/images/joy_tester.png width="400">
+  <img src=docs/images/joy_tester.png width="600">
 </p>
 
 Click each button and move each stick of the gamepad to confirm that the actions are shown in GUI. The numbers correspond to the axis of the buttons and joystics (sticks) that will be used in mapping the movements of lidarbot. 
@@ -331,6 +331,12 @@ The `xacro` tool is also required by lidarbot:
 sudo apt install ros-humble-xacro
 ```
 
+#### Motor Driver HAT
+
+Need to install smbus -> `sudo pip3 install smbus` (the assumption is that you already have pip3 installed..provide install link if not)
+
+Add link to Waveshare's code and mention that we modified it for our purposes
+
 #### Teleoperation and Twist mux
 
 The `joy`, `teleop_twist_joy` and `twist_mux` packages are requisite by lidarbot as well:
@@ -340,13 +346,6 @@ sudo apt install ros-humble-joy ros-humble-teleop-twist-joy ros-humble-twist-mux
 ```
 
 There is no need to map the gamepad buttons and sticks again.
-
-#### ros2_control
-Install the `ros2_control` packages on the robot:
-
-```
-sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers 
-```
 
 #### WiringPi
 
@@ -366,6 +365,13 @@ gpio -v
 ```
 
 The reference article for the WiringPi library is found [here](https://arcanesciencelab.wordpress.com/2020/10/29/getting-wiringpi-to-work-under-ubuntu-20-10-on-a-raspberry-pi-4b-w-4gb/). The library is also installed on the development machine to avoid build errors.
+
+#### ros2_control
+Install the `ros2_control` packages on the robot:
+
+```
+sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers 
+```
 
 #### RPLIDAR
 
@@ -389,16 +395,18 @@ In `/boot/config.txt` set the following options:
 camera_autodetect=0
 start_x=1
 ```
-### MPU6050 library
+#### MPU6050 library
 
 Alex Mous' [C/C++ MPU6050 library](https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
-) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster.
+) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster in the [`lidarbot_bringup`](./lidarbot_bringup/) package.
 
 Recall that the MPU6050 module uses the I2C communication protocol, the i2c dependencies for using this library are installed with:
 
 ```
 sudo apt install libi2c-dev i2c-tools libi2c0
 ```
+
+Calibration
 
 #### Robot localization
 
@@ -426,6 +434,8 @@ source $HOME/.zshrc
 ```
 
 However, both systems might need to be rebooted to effect these changes.
+
+A static IP address was assigned to lidarbot on the router for it to be easily discoverable on the network.
 
 ## Test Drive
 
@@ -466,7 +476,7 @@ rviz2 -d src/lidarbot_slam/rviz/lidarbot_slam.rviz
 Drive around the obstacles to generate a map of the environment:
 
 <p align='center'>
-  <img src=docs/images/gazebo_mapping.gif width="600">
+  <img src=docs/images/gazebo_mapping.gif width="800">
 </p>
 
 After generating the map, in the **SlamToolboxPlugin** in RViz, type in a name for the map in the field beside the **Save Map** button, then click on it. 
