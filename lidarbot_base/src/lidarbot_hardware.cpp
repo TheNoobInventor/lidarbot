@@ -100,7 +100,7 @@ CallbackReturn LidarbotHardware::on_deactivate(const rclcpp_lifecycle::State & /
 return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
     // Obtain elapsed time
-	double delta_seconds = period.seconds();
+    double delta_seconds = period.seconds();
 
     // Obtain encoder values
     read_encoder_values(&left_wheel_.encoder_ticks, &right_wheel_.encoder_ticks);
@@ -119,8 +119,8 @@ return_type LidarbotHardware::read(const rclcpp::Time & /*time*/, const rclcpp::
 
 return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {   
-	double left_motor_counts_per_loop = left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate;
-	double right_motor_counts_per_loop = right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate;
+    double left_motor_counts_per_loop = left_wheel_.command / left_wheel_.rads_per_tick / config_.loop_rate;
+    double right_motor_counts_per_loop = right_wheel_.command / right_wheel_.rads_per_tick / config_.loop_rate;
 
     // Send commands to motor driver
     set_motor_speeds(left_motor_counts_per_loop, right_motor_counts_per_loop);
