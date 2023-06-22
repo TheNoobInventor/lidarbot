@@ -22,7 +22,7 @@ def generate_launch_description():
     twist_mux_params_file = os.path.join(pkg_teleop, 'config/twist_mux.yaml')
     ekf_params_file = os.path.join(pkg_navigation, 'config/ekf.yaml')
 
-    # Launch configuration variables specific to simulation
+    # Launch configuration variables 
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     

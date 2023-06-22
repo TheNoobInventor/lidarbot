@@ -3,7 +3,6 @@
 //Copyright (c) 2019, Alex Mous
 //Licensed under the CC BY-NC SA 4.0
 
-//Include the header file for this class
 #include "lidarbot_bringup/mpu6050_lib.h"
 
 MPU6050::MPU6050(int8_t addr, bool run_update_thread) {
@@ -58,6 +57,11 @@ void MPU6050::getGyro(float *roll, float *pitch, float *yaw) {
 	*roll = round((*roll - G_OFF_X) * 1000.0 / GYRO_SENS) / 1000.0; //Remove the offset and divide by the gyroscope sensetivity (use 1000 and round() to round the value to three decimal places)
 	*pitch = round((*pitch - G_OFF_Y) * 1000.0 / GYRO_SENS) / 1000.0;
 	*yaw = round((*yaw - G_OFF_Z) * 1000.0 / GYRO_SENS) / 1000.0;
+
+	// Convert deg/s to rad/s
+	*roll *= (M_PI / 180);
+	*pitch *= (M_PI / 180);
+	*yaw *= (M_PI / 180);
 }
 
 void MPU6050::getAccelRaw(float *x, float *y, float *z) {
@@ -74,6 +78,11 @@ void MPU6050::getAccel(float *x, float *y, float *z) {
 	*x = round((*x - A_OFF_X) * 1000.0 / ACCEL_SENS) / 1000.0; //Remove the offset and divide by the accelerometer sensetivity (use 1000 and round() to round the value to three decimal places)
 	*y = round((*y - A_OFF_Y) * 1000.0 / ACCEL_SENS) / 1000.0;
 	*z = round((*z - A_OFF_Z) * 1000.0 / ACCEL_SENS) / 1000.0;
+
+	// Convert g-unit to m/s^2
+	*x *= M_PER_SECS_SQUARED;
+	*y *= M_PER_SECS_SQUARED;
+	*z *= M_PER_SECS_SQUARED;
 }
 
 void MPU6050::getOffsets(float *ax_off, float *ay_off, float *az_off, float *gr_off, float *gp_off, float *gy_off) {

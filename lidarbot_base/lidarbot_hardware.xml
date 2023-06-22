@@ -3,7 +3,7 @@
            type="lidarbot_base::LidarbotHardware"
            base_class_type="hardware_interface::SystemInterface">
         <description>
-            The ros2_control hardware interface for the lidarbot.
+            The ros2_control hardware interface for the lidarbot that uses the PCA9685 chip (on the Motor Driver HAT) to adjust motor speeds.
         </description>
     </class>
 </library>

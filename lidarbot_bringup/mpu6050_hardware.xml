@@ -1,4 +1,4 @@
-<library path="mpu6050_hardware">
+<library path="mpu6050_hardware_interface">
 	<class name="lidarbot_bringup/MPU6050Hardware"
 		   type="lidarbot_bringup::MPU6050Hardware"
 		   base_class_type="hardware_interface::SensorInterface">

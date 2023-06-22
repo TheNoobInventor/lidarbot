@@ -1,4 +1,4 @@
-#include "lidarbot_bringup/mpu6050_hardware.hpp"
+#include "lidarbot_bringup/mpu6050_hardware_interface.hpp"
 
 namespace lidarbot_bringup
 {

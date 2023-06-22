@@ -24,11 +24,18 @@ diff_controller:
     wheel_separation: 0.134
     wheel_radius: 0.0335
 
+    pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.01, 0.01, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.01, 0.01, 0.01]
+
     # Whether the input has a time stamp or not
     use_stamped_vel: false
 
 imu_broadcaster:
   ros__parameters:
 
-    sensor_name: mpu6050 
+    sensor_name: mpu6050
     frame_id: imu_link
+    
+    static_covariance_orientation: [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    static_covariance_angular_velocity: [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    static_covariance_linear_acceleration: [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

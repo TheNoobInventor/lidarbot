@@ -128,7 +128,7 @@ return_type LidarbotHardware::write(const rclcpp::Time & /*time*/, const rclcpp:
     return return_type::OK;
 }
 
-}// namespace lidarbot_base
+} // namespace lidarbot_base
 
 #include "pluginlib/class_list_macros.hpp"
 

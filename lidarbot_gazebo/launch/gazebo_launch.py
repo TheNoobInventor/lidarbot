@@ -21,9 +21,11 @@ def generate_launch_description():
     pkg_description = FindPackageShare(package='lidarbot_description').find('lidarbot_description')
     pkg_teleop= FindPackageShare(package='lidarbot_teleop').find('lidarbot_teleop')
     pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
-
+    pkg_navigation = FindPackageShare(package='lidarbot_navigation').find('lidarbot_navigation')
+    
     gazebo_params_file = os.path.join(pkg_path, 'config/gazebo_params.yaml')
-    twist_mux_params_file = os.path.join(pkg_teleop, 'config', 'twist_mux.yaml')
+    twist_mux_params_file = os.path.join(pkg_teleop, 'config/twist_mux.yaml')
+    ekf_params_file = os.path.join(pkg_navigation, 'config/ekf.yaml')
     world_filename = 'obstacles.world'
     world_path = os.path.join(pkg_path, 'worlds', world_filename)
 
@@ -79,7 +81,13 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         arguments=['joint_broadcaster'])
-
+    
+    # Start robot localization using an Extended Kalman Filter
+    start_robot_localization_cmd = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        parameters=[ekf_params_file])
+    
     # Start joystick node for use with ros2_control
     start_joystick_cmd= IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_teleop, 'launch', 'joystick_launch.py')]))
@@ -105,6 +113,7 @@ def generate_launch_description():
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
+    ld.add_action(start_robot_localization_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_twist_mux_cmd)
 

@@ -25,14 +25,14 @@
 
 
 //Offsets - supply your own here (calculate offsets with getOffsets function)
-//     Accelerometer
-#define A_OFF_X -12906 
-#define A_OFF_Y 3048
-#define A_OFF_Z -14444
 //    Gyroscope
-#define G_OFF_X -91
-#define G_OFF_Y 479
-#define G_OFF_Z -150
+#define G_OFF_X -158 
+#define G_OFF_Y 677 
+#define G_OFF_Z -158 
+//     Accelerometer
+#define A_OFF_X -13427 
+#define A_OFF_Y 2930 
+#define A_OFF_Z -14466 
 
 //-----------------------END MODIFY THESE PARAMETERS-----------------------
 
@@ -53,6 +53,7 @@ extern "C" {
 
 #define TAU 0.05 //Complementary filter percentage
 #define RAD_T_DEG 57.29577951308 //Radians to degrees (180/PI)
+#define M_PER_SECS_SQUARED 9.80665 //Acceleration G-unit to m/s^2
 
 //Select the appropriate settings
 #if GYRO_RANGE == 1

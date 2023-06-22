@@ -52,6 +52,8 @@ Some other tools or parts used in the project are as follows:
 |2| 3D printer|
 |3| Screwdriver set|
 |4| Double-sided tape|
+|5| [Silicone rubber bumpers](https://www.aliexpress.com/item/1005002995402961.html) to absorb RPLIDAR vibration|
+
 
 ### Project Wiring and Assembly
 
@@ -275,6 +277,8 @@ Setting `require_enable_button` to `true` ensures that L1 has to be held before 
 
 To enable turbo mode for faster speed, the `enable_turbo_button` option in the config file can be set to an unused button axis.
 
+TODO: Explain deadzone parameter
+
 #### Twist mux
 
 The [`twist_mux`](http://wiki.ros.org/twist_mux) package is used to multiplex several velocity command sources, used to move the robot with an unstamped [geometry_msgs::Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html) message, into a single one. These sources are assigned priority values to allow a velocity source to be used or disabled. In this project, the command velocity sources are from the joystick and navigation.
@@ -288,7 +292,11 @@ sudo apt install ros-humble-twist-mux
 The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files,[`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py)respectively.
 
 #### Robot localization
-TODO
+TODO:
+
+sudo apt install ros-humble-robot-localization
+
+ekf.yaml
 
 ### Lidarbot setup
 
@@ -333,9 +341,13 @@ sudo apt install ros-humble-xacro
 
 #### Motor Driver HAT
 
+TODO
+
 Need to install smbus -> `sudo pip3 install smbus` (the assumption is that you already have pip3 installed..provide install link if not)
 
 Add link to Waveshare's code and mention that we modified it for our purposes
+
+Mention pull up resistor and add helpful links
 
 #### Teleoperation and Twist mux
 
@@ -406,11 +418,93 @@ Recall that the MPU6050 module uses the I2C communication protocol, the i2c depe
 sudo apt install libi2c-dev i2c-tools libi2c0
 ```
 
-Calibration
+Prior to using the Imu sensor broadcaster, the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
+
+- Place the lidarbot on a flat and level surface and unplug the RPLIDAR. 
+- Generate the MPU6050 offsets. A Cpp executable is created in the CMakeLists.txt file of the `lidarbot_bringup` package before generating the MPU6050 offsets. This section of the CMakeLists.txt file is shown below:
+
+  ```
+  # Create Cpp executable
+  add_executable(mpu6050_offsets src/mpu6050_lib.cpp src/mpu6050_offsets.cpp)
+
+  # Install Cpp executables
+  install(TARGETS
+    mpu6050_offsets
+    DESTINATION lib/${PROJECT_NAME}
+  )
+  ```
+
+  Build the `lidarbot_bringup` package:
+  ```
+  colcon build --symlin-install --packages-select lidarbot_bringup
+  ```
+
+  Run the executable:
+
+  ```
+  ros2 run lidarbot_bringup mpu6050_offsets
+  ```
+
+  Which outputs something like this:
+
+  ```
+  Please keep the MPU6050 module level and still. This could take a few minutes.
+
+  Calculating offsets ...
+
+  Gyroscope offsets:
+  ------------------
+  X: -104.689
+  Y: 651.005
+  Z: -158.596
+
+  Accelerometer offsets:
+  ----------------------
+  X: -13408.8
+  Y: 2742.39
+  Z: -14648.9
+
+  Include the obtained offsets in the respective macros of the mpu6050_lib.h file.
+  ```
+
+- Calibrate the MPU6050 module. Substitute the generated offsets into this section of the [`mpu6050_lib.h`](./lidarbot_bringup/include/lidarbot_bringup/mpu6050_lib.h) file:
+
+  ```
+  //Offsets - supply your own here (calculate offsets with getOffsets function)
+  //    Gyroscope
+  #define G_OFF_X -91
+  #define G_OFF_Y 479
+  #define G_OFF_Z -150
+  //     Accelerometer
+  #define A_OFF_X -12906 
+  #define A_OFF_Y 3048
+  #define A_OFF_Z -14444
+  ```
+  TODO:
+
+  ```
+  # COMPILE
+  add_library(mpu6050_hardware_interface SHARED
+    src/mpu6050_hardware_interface.cpp
+    src/mpu6050_lib.cpp
+  )
+
+  target_include_directories(mpu6050_hardware_interface PRIVATE	include)
+
+  ament_target_dependencies(mpu6050_hardware_interface ${THIS_PACKAGE_INCLUDE_DEPENDS})
+  ```
+
+The MPU6050 module is set to its most sensitive gyroscope and accelerometer ranges, which can be confirmed (or changed) at the top of the `mpu6050_lib.h` file.
 
 #### Robot localization
 
-TO DO
+TODO:
+
+```
+sudo apt install ros-humble-robot-localization
+```
+
+ekf.yaml
 
 ## Network Configuration
 
@@ -439,9 +533,13 @@ A static IP address was assigned to lidarbot on the router for it to be easily d
 
 ## Test Drive
 
+### Motor Connection Checks
+
 ### Gazebo
 
 ### Lidarbot
+
+TODO: ignore camera warning and error messages
 
 ## SLAM
 
