@@ -73,16 +73,18 @@ return_type MPU6050Hardware::read(const rclcpp::Time & /*time*/, const rclcpp::D
 	device.getAccel(&accel_values[0], &accel_values[1], &accel_values[2]); 
 
 	// Assign values to the state interfaces
-	orientation.x = quat.x;
-	orientation.y = quat.y;
+	// Orientation, angular velocity and linear acceleration conform the East North Up (ENU) coordinate frame
+	// convention (https://www.ros.org/reps/rep-0103.html) required by the robot_localization package
+	orientation.x = quat.y;
+	orientation.y = quat.x;
 	orientation.z = quat.z;
 	orientation.w = quat.w;
-	angular_vel_x = gyro_values[0];	
-	angular_vel_y = gyro_values[1];	
-	angular_vel_z = gyro_values[2];	
-	linear_accel_x = accel_values[0];
-	linear_accel_y = accel_values[1];
-	linear_accel_z = accel_values[2];
+	angular_vel_x = (double)gyro_values[1];	
+	angular_vel_y = (double)gyro_values[0];	
+	angular_vel_z = (double)gyro_values[2];	
+	linear_accel_x = (double)accel_values[1];
+	linear_accel_y = (double)accel_values[0];
+	linear_accel_z = (double)accel_values[2];
 
 	return return_type::OK;
 }

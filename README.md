@@ -298,6 +298,10 @@ sudo apt install ros-humble-robot-localization
 
 ekf.yaml
 
+```
+ros2 launch lidarbot_bringup lidarbot_bringup_launch.py use_robot_localization:=false
+```
+
 ### Lidarbot setup
 
 To install ROS2 Humble on the Raspberry Pi, Ubuntu Server 22.04 was first flashed on a 32GB micro SD card, this process is detailed in this [guide](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview).
@@ -348,6 +352,8 @@ Need to install smbus -> `sudo pip3 install smbus` (the assumption is that you a
 Add link to Waveshare's code and mention that we modified it for our purposes
 
 Mention pull up resistor and add helpful links
+
+Install C++ libraries (if any) for Motor Driver HAT
 
 #### Teleoperation and Twist mux
 
@@ -472,13 +478,13 @@ Prior to using the Imu sensor broadcaster, the MPU6050 module needs to be calibr
   ```
   //Offsets - supply your own here (calculate offsets with getOffsets function)
   //    Gyroscope
-  #define G_OFF_X -91
-  #define G_OFF_Y 479
-  #define G_OFF_Z -150
+  #define G_OFF_X -105
+  #define G_OFF_Y 651
+  #define G_OFF_Z -159
   //     Accelerometer
-  #define A_OFF_X -12906 
-  #define A_OFF_Y 3048
-  #define A_OFF_Z -14444
+  #define A_OFF_X -13409 
+  #define A_OFF_Y 2742 
+  #define A_OFF_Z -14649
   ```
   TODO:
 

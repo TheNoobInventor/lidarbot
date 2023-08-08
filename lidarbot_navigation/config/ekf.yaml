@@ -4,10 +4,8 @@ ekf_filter_node:
 
         use_sim_time: false
         
-        frequency: 30.0
+        frequency: 30.0 
         two_d_mode: true
-        publish_tf: true
-        publish_acceleration: false
         print_diagnostics: true
 
         map_frame: map
@@ -15,11 +13,11 @@ ekf_filter_node:
         base_link_frame: base_link
         world_frame: odom
 
-        odom0: diff_controller/odom
+        odom0: /diff_controller/odom
         odom0_differential: false
-        odom0_relative: false
+        odom0_relative: true 
 
-        imu0: imu_broadcaster/imu
+        imu0: /imu_broadcaster/imu
         imu0_differential: false
         imu0_relative: true
  
@@ -29,14 +27,15 @@ ekf_filter_node:
         #         roll_vel, pitch_vel, yaw_vel,
         #         x_accel , y_accel  , z_accel]
 
-        odom0_config: [false, false, false,
+        odom0_config: [true, true, false, 
                        false, false, false,
-                       true, true, false, 
+                       true, true, false,
                        false, false, true,
                        false, false, false]
-               
+
         imu0_config: [false, false, false,
-                      true, true, true,
+                      false, false, true, 
                       false, false, false,
-                      false, false, false,
-                      false, false, false]
+                      false, false, true, 
+                      true, false, false] 
+

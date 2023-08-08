@@ -1,4 +1,4 @@
-// MPU6050 offsets code
+// MPU6050 offsets program
 
 // Adapted from Example.cpp at https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
 
@@ -7,20 +7,19 @@
 MPU6050 device(0x68);
 
 int main() {
-	float ax, ay, az, gr, gp, gy; //Variables to store the accel, gyro and angle values
+	float ax, ay, az, gx, gy, gz; // Variables to store the accel and gyro values
 
-	sleep(1); //Wait for the MPU6050 to stabilize
+	sleep(1); // Wait for the MPU6050 to stabilize
 
 	// Calculate the offsets
-
-	std::cout << "\nPlease keep the MPU6050 module level and still. This could take a few minutes.\n\n";
+	std::cout << "\nPlease keep the MPU6050 module level and still. This may take a few minutes.\n\n";
 	std::cout << "Calculating offsets ...\n\n";
-	device.getOffsets(&ax, &ay, &az, &gr, &gp, &gy);
+	device.getOffsets(&ax, &ay, &az, &gx, &gy, &gz);
 	std::cout << "Gyroscope offsets:\n";
 	std::cout << "------------------\n";
-	std::cout << "X: " << gr << "\n";
-	std::cout << "Y: " << gp << "\n";
-	std::cout << "Z: " << gy << "\n\n";
+	std::cout << "X: " << gx << "\n";
+	std::cout << "Y: " << gy << "\n";
+	std::cout << "Z: " << gz << "\n\n";
 
 	std::cout << "Accelerometer offsets:\n";
 	std::cout << "----------------------\n";

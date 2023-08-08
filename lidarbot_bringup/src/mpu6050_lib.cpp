@@ -128,7 +128,9 @@ Quaternion MPU6050::getQuat(float *roll, float *pitch, float *yaw) {
 int MPU6050::getAngle(int axis, float *result) {
 	if (axis >= 0 && axis <= 2) { //Check that the axis is in the valid range
 		*result = _angle[axis]; //Get the result
-		return 0;
+
+		*result *= (M_PI / 180); // Convert from deg to rad
+		return 0;	
 	}
 	else {
 		std::cout << "ERR (MPU6050.cpp:getAngle()): 'axis' must be between 0 and 2 (for roll, pitch or yaw)\n"; //Print error message

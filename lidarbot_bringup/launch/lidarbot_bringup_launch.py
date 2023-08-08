@@ -25,6 +25,7 @@ def generate_launch_description():
     # Launch configuration variables 
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
+    use_robot_localization = LaunchConfiguration('use_robot_localization')
     
     # Declare the launch arguments  
     declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -36,7 +37,12 @@ def generate_launch_description():
         name='use_ros2_control',
         default_value='True',
         description='Use ros2_control if true')
-    
+
+    declare_use_robot_localization_cmd = DeclareLaunchArgument(
+        name='use_robot_localization',
+        default_value='True',
+        description='Use robot_localization package if true')
+
     # Start robot state publisher
     start_robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_description, 'launch', 'robot_state_publisher_launch.py')]), 
@@ -95,6 +101,7 @@ def generate_launch_description():
 
     # Start robot localization using an Extended Kalman Filter
     start_robot_localization_cmd = Node(
+        condition=IfCondition(use_robot_localization),
         package='robot_localization',
         executable='ekf_node',
         parameters=[ekf_params_file])
@@ -124,6 +131,7 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
+    ld.add_action(declare_use_robot_localization_cmd)
     
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
