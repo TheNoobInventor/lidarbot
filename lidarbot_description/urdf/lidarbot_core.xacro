@@ -3,7 +3,7 @@
 
   <xacro:include filename="inertial_macros.xacro"/>
 
-  <!-- Robot's chassis properties -->
+  <!-- Robot's base properties -->
   <xacro:property name="base_length" value="0.21"/>
   <xacro:property name="base_width" value="0.11"/>
   <xacro:property name="base_height" value="0.035"/>
@@ -13,28 +13,31 @@
   <xacro:property name="wheel_height" value="0.025"/>
   <xacro:property name="wheel_mass" value="0.031"/>
 
-  <!-- Distance between centre of wheel and robot base/chassis -->
+  <!-- Distance between centre of wheel and robot base/base -->
   <xacro:property name="wheel_zoff" value="0.0125"/>
 
-   <!-- Base link -->
-   <link name="base_link"/>
+  <link name="base_footprint"/> 	
 
-   <joint name="chassis_joint" type="fixed">
-     <parent link="base_link"/>
-     <child link="chassis_link"/>
-     <origin xyz="-0.076 0 0" rpy="0 0 0"/>
+   <joint name="base_joint" type="fixed">
+     <parent link="base_footprint"/>
+     <child link="base_link"/>
+     <!-- <origin xyz="-0.076 0 0" rpy="0 0 0"/> -->
+     <origin xyz="-0.076 0 ${(wheel_radius + wheel_zoff / 2)}" rpy="0 0 0"/>
    </joint>
 
-  <link name="base_footprint"/> 	
    
-  <joint name="base_footprint_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="base_footprint"/>
-    <origin xyz="0 0 -${(wheel_radius + wheel_zoff / 2)}" rpy="0 0 0"/> 
-  </joint>
+  <!-- <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/> -->
+
+
+    <!-- <parent link="base_link"/> -->
+    <!-- <child link="base_footprint"/> -->
+    <!-- <origin xyz="0 0 -${(wheel_radius + wheel_zoff / 2)}" rpy="0 0 0"/> 
+  </joint> -->
 	
-  <!-- Robot Chassis -->
-  <link name="chassis_link">
+  <!-- Robot base chasis-->
+  <link name="base_link">
       <visual>
         <origin xyz="${base_length/2} 0 ${-wheel_zoff}" rpy="0 0 0"/>
           <geometry>
@@ -185,7 +188,7 @@
   </link>
 
   <joint name="left_wheel_joint" type="continuous">
-    <parent link="chassis_link"/>
+    <parent link="base_link"/>
     <child link="left_wheel"/>
     <origin xyz="0.077 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
@@ -211,7 +214,7 @@
   </link>
 
   <joint name="right_wheel_joint" type="continuous">
-    <parent link="chassis_link"/>
+    <parent link="base_link"/>
     <child link="right_wheel"/>
     <origin xyz="0.077 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
     <axis xyz="0 0 1"/>
@@ -237,7 +240,7 @@
   </link>
 
   <joint name="caster_wheel_joint" type="fixed">
-    <parent link="chassis_link"/>
+    <parent link="base_link"/>
     <child link="caster_wheel"/>
     <origin xyz="0.1975 0 -0.031" rpy="0 0 ${pi/2}"/>
   </joint>

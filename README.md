@@ -138,7 +138,7 @@ cd ~/dev_ws
 git clone https://github.com/TheNoobInventor/lidarbot.git
 ```
 
-Next install ROS dependencies:
+Next install all the [ROS dependencies](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html) for the lidarbot packages:
 
 ```
 cd ~/dev_ws
@@ -147,11 +147,50 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-Build the workspace:
+Any ROS packages referred to subsequently are assumed to be installed using the `rosdep install` command above unless it is explicitly specified. 
+
+Two more dependencies need to be met before building the workspace: installing the WiringPi i2c library to use the Raspberry Pi 4 GPIO pins and dependencies for the MPU6050 RPi 4 C++ library.
+
+#### WiringPi
+
+To be able to utilize the GPIO pins of the Raspberry Pi 4 and program them using C/C++, an unofficial WiringPi was installed. This is required as hardware interfaces used by `ros2_control` are currently written only in C++ and low-level communication between Waveshare's Motor Driver HAT and `ros2_control` is needed. 
+
+The library is installed by executing the following commands in a terminal:
+
+```
+cd ~/Downloads
+git clone https://github.com/wbeebe/WiringPi.git
+cd WiringPi/
+./build
+```
+To check the current gpio version run this:
+```
+gpio -v
+```
+
+The reference article for the WiringPi library can be found [here](https://arcanesciencelab.wordpress.com/2020/10/29/getting-wiringpi-to-work-under-ubuntu-20-10-on-a-raspberry-pi-4b-w-4gb/).
+
+
+#### MPU6050 library
+
+Alex Mous' [C/C++ MPU6050 library](https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
+) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster in the [`lidarbot_bringup`](./lidarbot_bringup/) package.
+
+Recall that the MPU6050 module uses the I2C communication protocol, the i2c dependencies for using this library are installed with:
+
+```
+sudo apt install libi2c-dev i2c-tools libi2c0
+```
+
+Finally the workspace is built by running the following command:
 
 ```
 colcon build --symlink-install
 ```
+
+The `--symlink-install` argument uses symlinks instead of copies which saves you from having to rebuild every time you [tweak certain files](https://articulatedrobotics.xyz/ready-for-ros-5-packages/).
+
+#### Sourcing ROS Installation
 
 To avoid manually sourcing the ROS installation (or underlay) in each terminal window opened, and if ROS2 Humble is the only distribution on the PC, the command to source the underlay is added to the respective shell configuration file. 
 
@@ -181,24 +220,12 @@ source $HOME/.zshrc
 
 The command: `source $HOME/.zshrc` sources the configuration file for use in the current terminal. However, this step is not necessary for terminal windows opened hereafter.
 
-#### Gazebo and `ros2_control`
-Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). To use the `ros2_control` framework with Gazebo, the following packages are installed:
-
-```
-sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers \
-ros-humble-gazebo-ros2-control ros-humble-gazebo-ros-pkgs
-```
+#### Gazebo 
+Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). 
 
 #### Display lidarbot model in RViz
 
-The following packages are installed to be able to display the model in RViz:
-
-```
-sudo apt install ros-humble-joint-state-publisher \
-ros-humble-joint-state-publisher-gui ros-humble-xacro
-```
-
-The `xacro` tool, is installed to process the lidarbot URDF files and combine them into a single complete URDF file.
+The installed [xacro](https://index.ros.org/p/xacro/github-ros-xacro/#humble) tool dependency is used to process the lidarbot URDF files and combine them into a single complete URDF file.
 
 The `description_launch.py` launch file displays the model in RViz:
 
@@ -210,7 +237,7 @@ ros2 launch lidarbot_description description_launch.py
   <img src=docs/images/lidarbot_rviz.png width="800">
 </p>
 
-The `joint_state_publisher_gui` package is used to bringup a window with sliders to move non-static links in RViz. Set the `use_gui` argument to `true` to rotate the left and right wheels of lidarbot:
+The [joint_state_publisher_gui](https://index.ros.org/p/joint_state_publisher_gui/github-ros-joint_state_publisher/#humble) package is used to bringup a window with sliders to move non-static links in RViz. Set the `use_gui` argument to `true` to turn the left and right wheels of lidarbot:
 
 ```
 ros2 launch lidarbot_description description_launch.py use_gui:=true
@@ -234,19 +261,7 @@ A [wireless gamepad](https://www.aliexpress.com/item/1005005354226710.html), lik
   <img src=docs/images/wireless_gamepad.jpg width="400">
 </p>
 
-To be able to use the gamepad, the following ROS packages are installed:
-
-```
-sudo apt install ros-humble-joy ros-humble-teleop-twist-joy
-```
-
-To map the keys on the gamepad to control lidarbot, first install the following package:
-
-```
-sudo apt install ros-humble-joy-tester
-```
-
-This package is used to test the joystick controls. To use it, plug in the USB dongle in the PC, then run:
+The [joy_tester](https://index.ros.org/p/joy_tester/github-joshnewans-joy_tester/#humble) package is used to test and map the gamepad (joystick) keys to control lidarbot. To use it, plug in the USB dongle in the PC, then run:
 
 ```
 ros2 run joy joy_node
@@ -281,20 +296,14 @@ TODO: Explain deadzone parameter
 
 #### Twist mux
 
-The [`twist_mux`](http://wiki.ros.org/twist_mux) package is used to multiplex several velocity command sources, used to move the robot with an unstamped [geometry_msgs::Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html) message, into a single one. These sources are assigned priority values to allow a velocity source to be used or disabled. In this project, the command velocity sources are from the joystick and navigation.
+The [`twist_mux`](https://index.ros.org/p/twist_mux/github-ros-teleop-twist_mux/#humble) package is used to multiplex several velocity command sources, used to move the robot with an unstamped [geometry_msgs::Twist](http://docs.ros.org/en/api/geometry_msgs/html/msg/Twist.html) message, into a single one. These sources are assigned priority values to allow a velocity source to be used or disabled. In this project, the command velocity sources are from the joystick and navigation.
 
-Run the following command to install `twist_mux`:
+The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files, [`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py) respectively.
 
-```
-sudo apt install ros-humble-twist-mux
-```
-
-The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files,[`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py)respectively.
+It can be observed from the configuration file, that the joystick commmand velocity source has a higher priority, with an assigned value of 100,compared to the navigation velocity source that is assigned a value of 10.
 
 #### Robot localization
 TODO:
-
-sudo apt install ros-humble-robot-localization
 
 ekf.yaml
 
@@ -329,75 +338,30 @@ rosdep update
 rosdep install --from-paths src --ignore-src -r -y --skip-keys=rviz2
 ```
 
-Build the workspace:
+`rviz2` is skipped in the ROS dependency installation process because it is only run on the PC and not on the robot.
+
+[WiringPi i2c library](####WiringPi) and [MPU6050 RPi 4 C++ library](####MPU6050-library) are also installed before building the workspace.
+
+The following command is executed to build the workspace:
 
 ```
 colcon build --symlink-install
 ```
 
-Likewise, add run the commands, from the development machine setup section, to source the underlay and overlay in the respective shell configuration file --- replacing `dev_ws` with `robot_ws` where necessary.
+Likewise to avoid manually sourcing the underlay and overlay, the same steps employed in the [development machine setup](####-Sourcing-ROS-Installation) are followed but replacing `dev_ws` with `robot_ws` where necessary.
 
-The `xacro` tool is also required by lidarbot:
-
-```
-sudo apt install ros-humble-xacro
-```
 
 #### Motor Driver HAT
 
-TODO
+TODO:
 
 Need to install smbus -> `sudo pip3 install smbus` (the assumption is that you already have pip3 installed..provide install link if not)
 
-Add link to Waveshare's code and mention that we modified it for our purposes
+Add link to Waveshare's code and mention the modifications made
 
-Mention pull up resistor and add helpful links
+Pull up resistor with relevant links
 
 Install C++ libraries (if any) for Motor Driver HAT
-
-#### Teleoperation and Twist mux
-
-The `joy`, `teleop_twist_joy` and `twist_mux` packages are requisite by lidarbot as well:
-
-```
-sudo apt install ros-humble-joy ros-humble-teleop-twist-joy ros-humble-twist-mux
-```
-
-There is no need to map the gamepad buttons and sticks again.
-
-#### WiringPi
-
-To be able to utilize the GPIO pins of the Raspberry Pi 4 and program them using C/C++, an unofficial WiringPi was installed. This is required as hardware interfaces used by `ros2_control` are currently written only in C++ and low-level communication between Waveshare's Motor Driver HAT and `ros2_control` is needed. 
-
-The library is installed by executing the following commands in a terminal:
-
-```
-cd ~/Downloads
-git clone https://github.com/wbeebe/WiringPi.git
-cd WiringPi/
-./build
-```
-To check the current gpio version run this:
-```
-gpio -v
-```
-
-The reference article for the WiringPi library is found [here](https://arcanesciencelab.wordpress.com/2020/10/29/getting-wiringpi-to-work-under-ubuntu-20-10-on-a-raspberry-pi-4b-w-4gb/). The library is also installed on the development machine to avoid build errors.
-
-#### ros2_control
-Install the `ros2_control` packages on the robot:
-
-```
-sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers 
-```
-
-#### RPLIDAR
-
-Install the `rplidar-ros` package to use the RPLIDAR A1 sensor on lidarbot:
-
-```
-sudo apt install ros-humble-rplidar-ros
-```
 
 #### Raspberry Pi Camera
 
@@ -407,24 +371,16 @@ sudo apt install libraspberrypi-bin v4l-utils ros-humble-v4l2-camera
 ```
 
 Furthermore, [changes to configuration options](https://medium.com/swlh/raspberry-pi-ros-2-camera-eef8f8b94304) are needed to get the RPi camera v1.3 to work. 
+
 In `/boot/config.txt` set the following options:
 
 ```
 camera_autodetect=0
 start_x=1
 ```
-#### MPU6050 library
+#### MPU6050 offsets
 
-Alex Mous' [C/C++ MPU6050 library](https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
-) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster in the [`lidarbot_bringup`](./lidarbot_bringup/) package.
-
-Recall that the MPU6050 module uses the I2C communication protocol, the i2c dependencies for using this library are installed with:
-
-```
-sudo apt install libi2c-dev i2c-tools libi2c0
-```
-
-Prior to using the Imu sensor broadcaster, the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
+Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_broadcaster/github-ros-controls-ros2_controllers/#humble), the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
 
 - Place the lidarbot on a flat and level surface and unplug the RPLIDAR. 
 - Generate the MPU6050 offsets. A Cpp executable is created in the CMakeLists.txt file of the `lidarbot_bringup` package before generating the MPU6050 offsets. This section of the CMakeLists.txt file is shown below:
@@ -502,16 +458,6 @@ Prior to using the Imu sensor broadcaster, the MPU6050 module needs to be calibr
 
 The MPU6050 module is set to its most sensitive gyroscope and accelerometer ranges, which can be confirmed (or changed) at the top of the `mpu6050_lib.h` file.
 
-#### Robot localization
-
-TODO:
-
-```
-sudo apt install ros-humble-robot-localization
-```
-
-ekf.yaml
-
 ## Network Configuration
 
 Both the development machine and lidarbot need to be connected to the same local network as a precursor for bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
@@ -551,13 +497,7 @@ TODO: ignore camera warning and error messages
 
 ### Gazebo
 
-The `slam_toolbox` package is first installed on the development machine:
-
-```
-sudo apt install ros-humble-slam-toolbox
-```
-
-To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot which includes the joystick node for teleoperation:
+To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot on the development machine (which includes the joystick node for teleoperation):
 
 ```
 ros2 launch lidarbot_gazebo gazebo_launch.py

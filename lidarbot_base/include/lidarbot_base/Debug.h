@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-#define USE_DEBUG 1
+#define USE_DEBUG 0
 #if USE_DEBUG
 	#define DEBUG(__info,...) printf("Debug : " __info,##__VA_ARGS__)
 #else

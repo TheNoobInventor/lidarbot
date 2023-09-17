@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Lidarbot meta package</description>
   <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD 3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

@@ -5,16 +5,16 @@
   <version>0.0.0</version>
   <description>Lidarbot Description Package</description>
   <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD 3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz2</exec_depend>
-  <exec_depend>xacro</exec_depend>
 
   <depend>urdf</depend>
+  <depend>xacro</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

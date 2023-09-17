@@ -4,22 +4,24 @@ ekf_filter_node:
 
         use_sim_time: false
         
-        frequency: 30.0 
+        frequency: 50.0 
         two_d_mode: true
         print_diagnostics: true
 
         map_frame: map
         odom_frame: odom
-        base_link_frame: base_link
+        base_link_frame: base_footprint
         world_frame: odom
 
-        odom0: /diff_controller/odom
+        odom0: diff_controller/odom
         odom0_differential: false
         odom0_relative: true 
+        # odom0_queue_size: 7
 
-        imu0: /imu_broadcaster/imu
+        imu0: imu_broadcaster/imu
         imu0_differential: false
         imu0_relative: true
+        # imu0_queue_size: 30
  
         #        [x_pos   , y_pos    , z_pos,
         #         roll    , pitch    , yaw,
@@ -39,3 +41,46 @@ ekf_filter_node:
                       false, false, true, 
                       true, false, false] 
 
+# [ADVANCED] The process noise covariance matrix can be difficult to tune, and can vary for each application, so it is
+# exposed as a configuration parameter. This matrix represents the noise we add to the total error after each
+# prediction step. The better the omnidirectional motion model matches your system, the smaller these values can be.
+# However, if users find that a given variable is slow to converge, one approach is to increase the
+# process_noise_covariance diagonal value for the variable in question, which will cause the filter's predicted error
+# to be larger, which will cause the filter to trust the incoming measurement more during correction. The values are
+# ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below if
+# unspecified.
+        process_noise_covariance: [0.05,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.05
+                                   0.0,    5.0,   0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.05
+                                   0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.06
+                                   0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.03
+                                   0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.03
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    50.0,   0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.06
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    2.5,   0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.025
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     2.5,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.025
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0, #0.04
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,   0.0,    0.0,    0.0,    0.0,    0.0, #0.01
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0, #0.01
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    50.0,   0.0,    0.0,    0.0, #0.02
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    5.0,   0.0,    0.0, #0.01
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0, #0.01
+                                   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0] #0.015
+# [ADVANCED] This represents the initial value for the state estimate error covariance matrix. Setting a diagonal
+# value (variance) to a large value will result in rapid convergence for initial measurements of the variable in
+# question. Users should take care not to use large values for variables that will not be measured directly. The values
+# are ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below
+#if unspecified.
+        initial_estimate_covariance: [1e-3,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    1e-3,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    1e-3,   0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    1e-3,   0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    1e-3,   0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,     0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,    0.0,     0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     1e-3,    0.0,    0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     1e-3,   0.0,    0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,   0.0, #1e-9
+                                      0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,     0.0,    0.0,    0.0] #1e-9

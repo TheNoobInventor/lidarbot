@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Lidarbot base motor driver package</description>
   <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD 3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -13,6 +13,7 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>ros2_controllers</depend>
   
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>

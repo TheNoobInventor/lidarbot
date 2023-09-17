@@ -69,7 +69,6 @@ void set_motor_speeds(double left_wheel_command, double right_wheel_command)
 
 void handler(int signo)
 {
-    DEBUG("\r\nHandler: Motor Stop\r\n");
     Motor_Stop(MOTORA);
     Motor_Stop(MOTORB);
 
