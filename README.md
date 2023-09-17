@@ -174,7 +174,7 @@ The reference article for the WiringPi library can be found [here](https://arcan
 #### MPU6050 library
 
 Alex Mous' [C/C++ MPU6050 library](https://github.com/alex-mous/MPU6050-C-CPP-Library-for-Raspberry-Pi
-) for Raspberry Pi 4 was used to setup the `ros2_control` Imu sensor broadcaster in the [`lidarbot_bringup`](./lidarbot_bringup/) package.
+) for Raspberry Pi 4, with modifications to incorporate quaternions, was used to setup the `ros2_control` Imu sensor broadcaster in the [`lidarbot_bringup`](./lidarbot_bringup/) package.
 
 Recall that the MPU6050 module uses the I2C communication protocol, the i2c dependencies for using this library are installed with:
 
