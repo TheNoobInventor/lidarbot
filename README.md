@@ -182,6 +182,8 @@ Recall that the MPU6050 module uses the I2C communication protocol, the i2c depe
 sudo apt install libi2c-dev i2c-tools libi2c0
 ```
 
+---
+
 Finally the workspace is built by running the following command:
 
 ```
@@ -301,6 +303,20 @@ The [`twist_mux`](https://index.ros.org/p/twist_mux/github-ros-teleop-twist_mux/
 The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files, [`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py) respectively.
 
 It can be observed from the configuration file, that the joystick commmand velocity source has a higher priority, with an assigned value of 100,compared to the navigation velocity source that is assigned a value of 10.
+
+```
+twist_mux:
+  ros__parameters:
+    topics:
+      navigation:
+        topic   : cmd_vel
+        timeout : 0.5
+        priority: 10
+      joystick:
+        topic   : cmd_vel_joy
+        timeout : 0.5
+        priority: 100
+```
 
 #### Robot localization
 TODO:
