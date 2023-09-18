@@ -3,7 +3,8 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Odometry2/Shape1
       Splitter Ratio: 0.5
     Tree Height: 419
   - Class: rviz_common/Selection
@@ -68,6 +69,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: true
         camera_link:
           Alpha: 1
           Show Axes: false
@@ -78,11 +80,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         caster_wheel:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        chassis_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -130,8 +127,6 @@ Visualization Manager:
           Value: false
         caster_wheel:
           Value: false
-        chassis_link:
-          Value: false
         imu_link:
           Value: false
         left_wheel:
@@ -151,25 +146,22 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          {}
-        odom:
-          base_link:
+          odom:
             base_footprint:
-              {}
-            chassis_link:
-              camera_link:
-                camera_link_optical:
+              base_link:
+                camera_link:
+                  camera_link_optical:
+                    {}
+                caster_wheel:
                   {}
-              caster_wheel:
-                {}
-              imu_link:
-                {}
-              left_wheel:
-                {}
-              lidar_link:
-                {}
-              right_wheel:
-                {}
+                imu_link:
+                  {}
+                left_wheel:
+                  {}
+                lidar_link:
+                  {}
+                right_wheel:
+                  {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -187,9 +179,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 0
+      Max Intensity: 15
       Min Color: 0; 0; 0
-      Min Intensity: 0
+      Min Intensity: 3
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
@@ -223,6 +215,7 @@ Visualization Manager:
         Grid: true
         LaserScan: true
         Map: true
+        Odometry: true
         RobotModel: true
         TF: true
         Value: true
@@ -247,6 +240,84 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /map_updates
       Use Timestamp: false
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: false
+      Enabled: true
+      Keep: 10
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 53; 132; 228
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /diff_controller/odom
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: false
+      Enabled: true
+      Keep: 10
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 46; 194; 126
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /odometry/filtered
       Value: true
   Enabled: true
   Global Options:
@@ -303,7 +374,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 59.21685028076172
+      Scale: 152.72531127929688
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
       X: -0.07789774239063263
