@@ -122,20 +122,26 @@ Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberr
 
 ### Development Machine setup
 
-A development machine or PC (laptop or desktop) is used to run more computationally intensive applications like Gazebo and Rviz. Additionally, the PC can be used to control lidarbot remotely. 
+A development machine or PC (laptop or desktop) is used to run more computationally intensive applications like Gazebo and Rviz. Additionally, the PC can be used to remotely control lidarbot.  
 
-Ubuntu 22.04 LTS is required for this project to work with ROS2 Humble. Ubuntu 22.04 LTS can be installed on a PC by following [this guide](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview). The ROS2 Humble installation installation procedure is avaiable [here](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html). The Desktop version is installed on the PC (which includes RViz):
+Ubuntu 22.04 LTS is required for this project to work with ROS2 Humble. Ubuntu 22.04 LTS can be installed on a PC by following [this guide](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview). The ROS2 Humble installation procedure is available [here](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html). The Desktop version is installed on the PC (which includes RViz):
 
 ```
 sudo apt install ros-humble-desktop
+```
+
+Then install the ROS development tools:
+
+```
+sudo apt install ros-dev-tools
 ```
 
 After the ROS2 Humble installation, create a workspace on the PC/development machine and clone this repository:
 
 ```
 mkdir -p ~/dev_ws/src
-cd ~/dev_ws
-git clone https://github.com/TheNoobInventor/lidarbot.git
+cd ~/dev_ws/src
+git clone https://github.com/TheNoobInventor/lidarbot.git .
 ```
 
 Next install all the [ROS dependencies](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html) for the lidarbot packages:
@@ -144,7 +150,7 @@ Next install all the [ROS dependencies](https://docs.ros.org/en/humble/Tutorials
 cd ~/dev_ws
 sudo rosdep init
 rosdep update
-rosdep install --from-paths src --ignore-src -r -y
+rosdep install --from-paths src --ignore-src --rosdistro humble -r -y
 ```
 
 Any ROS packages referred to subsequently are assumed to be installed using the `rosdep install` command above unless it is explicitly specified. 
@@ -182,28 +188,18 @@ Recall that the MPU6050 module uses the I2C communication protocol, the i2c depe
 sudo apt install libi2c-dev i2c-tools libi2c0
 ```
 
----
-
-Finally the workspace is built by running the following command:
-
-```
-colcon build --symlink-install
-```
-
-The `--symlink-install` argument uses symlinks instead of copies which saves you from having to rebuild every time you [tweak certain files](https://articulatedrobotics.xyz/ready-for-ros-5-packages/).
-
 #### Sourcing ROS Installation
 
 To avoid manually sourcing the ROS installation (or underlay) in each terminal window opened, and if ROS2 Humble is the only distribution on the PC, the command to source the underlay is added to the respective shell configuration file. 
 
 Using bash:
 ```
-echo "source /opt/ros/$ROSDISTRO/setup.bash" >> $HOME/.bashrc
+echo "source /opt/ros/humble/setup.bash" >> $HOME/.bashrc
 ```
 
 Using zsh:
 ```
-echo "source /opt/ros/$ROSDISTRO/setup.zsh" >> $HOME/.zshrc
+echo "source /opt/ros/humble/setup.zsh" >> $HOME/.zshrc
 ```
 
 Additionally, to avoid manually sourcing our workspace (or overlay), add the command to source the workspace to the respective configuration file. 
@@ -222,7 +218,19 @@ source $HOME/.zshrc
 
 The command: `source $HOME/.zshrc` sources the configuration file for use in the current terminal. However, this step is not necessary for terminal windows opened hereafter.
 
-#### Gazebo 
+---
+
+Finally, navigate to the workspace directory and run the build command:
+
+```
+cd ~/dev_ws
+colcon build --symlink-install
+```
+
+The `--symlink-install` argument uses symlinks instead of copies which saves you from having to rebuild every time you [tweak certain files](https://articulatedrobotics.xyz/ready-for-ros-5-packages/).
+
+
+#### Gazebo
 Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). 
 
 #### Display lidarbot model in RViz
@@ -331,18 +339,18 @@ ros2 launch lidarbot_bringup lidarbot_bringup_launch.py use_robot_localization:=
 
 To install ROS2 Humble on the Raspberry Pi, Ubuntu Server 22.04 was first flashed on a 32GB micro SD card, this process is detailed in this [guide](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview).
 
-After inserting the SD card and booting up the Pi, the base installation of the ROS2 Humble is installed:
+After inserting the SD card and booting up the Pi, the environment for ROS2 Humble is setup by following this [guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html). Afterwards, ROS-Base (Bare Bones) and ROS development tools are installed:
 
 ```
-sudo apt install ros-humble-ros-base
+sudo apt install ros-humble-ros-base ros-dev-tools
 ```
 
 Similarly, after the ROS2 Humble installation, create a workspace on the Raspberry Pi and clone this repository:
 
 ```
 mkdir -p ~/robot_ws/src
-cd ~/robot_ws
-git clone https://github.com/TheNoobInventor/lidarbot.git
+cd ~/robot_ws/src
+git clone https://github.com/TheNoobInventor/lidarbot.git .
 ```
 
 Install ROS dependencies:
@@ -351,27 +359,27 @@ Install ROS dependencies:
 cd ~/robot_ws
 sudo rosdep init
 rosdep update
-rosdep install --from-paths src --ignore-src -r -y --skip-keys=rviz2
+rosdep install --from-paths src --ignore-src -r -y --skip-keys "rviz2 gazebo_ros2_control gazebo_ros_pkgs" --rosdistro humble
 ```
 
-`rviz2` is skipped in the ROS dependency installation process because it is only run on the PC and not on the robot.
+`rviz2` and the gazebo related packages are skipped in the ROS dependency installation process as they are only run on the PC and not on the robot --- the rosdep keys for the ROS2 Humble distribution are available [here](https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml).
 
-[WiringPi i2c library](####WiringPi) and [MPU6050 RPi 4 C++ library](####MPU6050-library) are also installed before building the workspace.
-
-The following command is executed to build the workspace:
-
-```
-colcon build --symlink-install
-```
+[WiringPi i2c library](####WiringPi) and [MPU6050 RPi 4 C++ library](####MPU6050-library) are also installed before building the workspace --- a `Downloads` directory will need to be created to clone the WiringPi files.
 
 Likewise to avoid manually sourcing the underlay and overlay, the same steps employed in the [development machine setup](####-Sourcing-ROS-Installation) are followed but replacing `dev_ws` with `robot_ws` where necessary.
 
+Afterwards, navigate to the workspace directory then run build command:
+
+```
+cd ~/robot_ws
+colcon build --symlink-install
+```
 
 #### Motor Driver HAT
 
 TODO:
 
-Need to install smbus -> `sudo pip3 install smbus` (the assumption is that you already have pip3 installed..provide install link if not)
+smbus dependency met after MPU6050 packages were installed
 
 Add link to Waveshare's code and mention the modifications made
 
@@ -383,7 +391,7 @@ Install C++ libraries (if any) for Motor Driver HAT
 
 The following packages are installed to use the Raspberry Pi Camera v1.3:
 ```
-sudo apt install libraspberrypi-bin v4l-utils ros-humble-v4l2-camera
+sudo apt install libraspberrypi-bin v4l-utils
 ```
 
 Furthermore, [changes to configuration options](https://medium.com/swlh/raspberry-pi-ros-2-camera-eef8f8b94304) are needed to get the RPi camera v1.3 to work. 
@@ -393,6 +401,11 @@ In `/boot/config.txt` set the following options:
 ```
 camera_autodetect=0
 start_x=1
+```
+Confirm the RPi camera is connected by running this command:
+
+```
+vcgencmd get_camera
 ```
 #### MPU6050 offsets
 
@@ -476,15 +489,15 @@ The MPU6050 module is set to its most sensitive gyroscope and accelerometer rang
 
 ## Network Configuration
 
-Both the development machine and lidarbot need to be connected to the same local network as a precursor for bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
+Both the development machine and lidarbot need to be connected to the same local network as a precursor to bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
 
-To ensure communication between the dev machine and lidarbot, the firewall on the development machine had to be disabled (the firewall on the Ubuntu server was diabled by default):
+To ensure communication between the dev machine and lidarbot, the firewall on the development machine had to be disabled (the firewall on the Ubuntu server was disabled by default):
 
 ```
 sudo ufw disable
 ```
 
-Also the same `ROS_DOMAIN_ID`, between 1 and 232, was exported to the shell configuration files of both systems:
+If communicatioon is still not able to be established between both ROS systems, `ROS_DOMAIN_ID` numbers can be introduced to fix this. Choose the same `ROS_DOMAIN_ID`, between 1 and 232, and export this to the shell configuration files of both systems:
 
 ```
 echo "export ROS_DOMAIN_ID=31" >> ~/.zshrc
@@ -495,13 +508,43 @@ Then source the shell configuration file:
 source $HOME/.zshrc
 ```
 
-However, both systems might need to be rebooted to effect these changes.
+Both systems might need to be rebooted to effect these changes.
 
-A static IP address was assigned to lidarbot on the router for it to be easily discoverable on the network.
+Additionally, a static IP address was assigned to lidarbot on the router for easy discoverability on the network.
 
 ## Test Drive
 
 ### Motor Connection Checks
+
+TODO:
+
+Fully charge the 18650 batteries, then prop the robot on a box (add image).
+
+Build the base package (if you don't want to build everything):
+
+```
+colcon build --packages-select lidarbot_base
+```
+
+Then run the following command to run tests:
+
+```
+colcon test --ctest-args tests --packages-select lidarbot_base
+```
+
+Explain test sequence
+
+negative value is backward, positive is forward. 
+
+[Writing basic cpp tests in ros2](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Testing/Cpp.html)
+
+[Colcon testing docs](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Testing/CLI.html)
+
+reference test file
+
+Examine test results:
+
+`colcon test-result --all --verbose`
 
 ### Gazebo
 
@@ -552,7 +595,7 @@ The saved map can be found in the workspace directory and will be used by [Nav2 
 Run the following command on lidarbot to brings up the camera, lidar and joystick:
 
 ```
-ros2 launch lidarbot_bringup bringup_launch.py
+ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
 ```
 
 Open a new terminal, on the development machine, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
