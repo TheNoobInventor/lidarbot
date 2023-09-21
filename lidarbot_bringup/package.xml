@@ -10,6 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   
   <depend>theora_image_transport</depend>
+  <depend>image_transport_plugins</depend>
 
   <exec_depend>robot_localization</exec_depend>
   <exec_depend>rplidar_ros</exec_depend>

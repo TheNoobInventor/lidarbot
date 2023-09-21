@@ -391,22 +391,35 @@ Install C++ libraries (if any) for Motor Driver HAT
 
 The following packages are installed to use the Raspberry Pi Camera v1.3:
 ```
-sudo apt install libraspberrypi-bin v4l-utils
+sudo apt install libraspberrypi-bin v4l-utils raspi-config
 ```
 
-Furthermore, [changes to configuration options](https://medium.com/swlh/raspberry-pi-ros-2-camera-eef8f8b94304) are needed to get the RPi camera v1.3 to work. 
-
-In `/boot/config.txt` set the following options:
+Support for the RPi camera v1.3 will need to be enabled by navigating the menu options after running the following command:
 
 ```
-camera_autodetect=0
-start_x=1
+sudo raspi-config
 ```
+<p align='center'>
+  <img src=docs/images/raspi_config_1.png width="400">
+  <img src=docs/images/raspi_config_2.png width="400">
+</p>
+
+<p align='center'>
+  <img src=docs/images/raspi_config_3.png width="400">
+  <img src=docs/images/raspi_config_4.png width="400">
+</p>
+
 Confirm the RPi camera is connected by running this command:
 
 ```
 vcgencmd get_camera
 ```
+
+This should output the following result:
+```
+supported=1 detected=1, libcamera interfaces=0
+```
+
 #### MPU6050 offsets
 
 Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_broadcaster/github-ros-controls-ros2_controllers/#humble), the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
@@ -491,13 +504,13 @@ The MPU6050 module is set to its most sensitive gyroscope and accelerometer rang
 
 Both the development machine and lidarbot need to be connected to the same local network as a precursor to bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
 
-To ensure communication between the dev machine and lidarbot, the firewall on the development machine had to be disabled (the firewall on the Ubuntu server was disabled by default):
+To ensure communication between the dev machine and lidarbot, firstly, the firewall on the development machine had to be disabled (the firewall on the Ubuntu server was disabled by default):
 
 ```
 sudo ufw disable
 ```
 
-If communicatioon is still not able to be established between both ROS systems, `ROS_DOMAIN_ID` numbers can be introduced to fix this. Choose the same `ROS_DOMAIN_ID`, between 1 and 232, and export this to the shell configuration files of both systems:
+The next step is to export `ROS_DOMAIN_ID` numbers, between 1 and 232, to the shell configurations of both systems:
 
 ```
 echo "export ROS_DOMAIN_ID=31" >> ~/.zshrc
