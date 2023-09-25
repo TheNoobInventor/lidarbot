@@ -15,7 +15,7 @@ controller_manager: # Node name
 diff_controller:
   ros__parameters:
     
-    publish_rate: 30.0 # Has to be a double otherwise errors are encountered
+    publish_rate: 30.0 #60.0 # Has to be a double otherwise errors are encountered
 
     base_frame_id: base_footprint
 
@@ -30,6 +30,9 @@ diff_controller:
     # pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.01]
     # twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.01] 
 
+    # pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    # twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0] 
+
     # Whether the input has a time stamp or not
     use_stamped_vel: false
 
@@ -39,15 +42,6 @@ imu_broadcaster:
     sensor_name: mpu6050
     frame_id: imu_link
 
-    static_covariance_orientation: [0.03, 0.0, 0.0, 0.003, 0.0, 0.0, 0.003, 0.0, 0.0] # use the same for angular velocity for now
-    static_covariance_angular_velocity: [0.03, 0.0, 0.0, 0.03, 0.0, 0.0, 0.03, 0.0, 0.0]
-    static_covariance_linear_acceleration: [0.00133755, 0.0, 0.0, 0.000209753, 0.0, 0.0, 0.00143276, 0.0, 0.0] # leave the same for now
-
-    # static_covariance_orientation: [0.000873, 0.0, 0.0, 0.000873, 0.0, 0.0, 0.000873, 0.0, 0.0] # use the same for angular velocity for now
-    # static_covariance_angular_velocity: [0.000873, 0.0, 0.0, 0.000873, 0.0, 0.0, 0.000873, 0.0, 0.0]
+    # static_covariance_orientation: [0.03, 0.0, 0.0, 0.003, 0.0, 0.0, 0.003, 0.0, 0.0] # use the same for angular velocity for now
+    # static_covariance_angular_velocity: [0.03, 0.0, 0.0, 0.03, 0.0, 0.0, 0.03, 0.0, 0.0]
     # static_covariance_linear_acceleration: [0.00133755, 0.0, 0.0, 0.000209753, 0.0, 0.0, 0.00143276, 0.0, 0.0] # leave the same for now
-
-    # From 500 data points
-    # static_covariance_orientation: [2.63882e-06, 0.0, 0.0, 7.50018e-06, 0.0, 0.0, 2.89257e-09, 0.0, 0.0]
-    # static_covariance_angular_velocity: [2.71413e-07, 0.0, 0.0, 6.79488e-07, 0.0, 0.0, 4.37879e-07, 0.0, 0.0]
-    # static_covariance_linear_acceleration: [0.00133755, 0.0, 0.0, 0.000209753, 0.0, 0.0, 0.00143276, 0.0, 0.0]

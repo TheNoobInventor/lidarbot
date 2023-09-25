@@ -4,15 +4,15 @@
 
 A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a raspberry pi camera for visual feedback and an RPLIDAR A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the robot localization package on the robot, to fuse IMU sensor data and the wheel encoders data, using an extended kalman filter (EKF) node, to provide more accurate robot odometry estimates.
 
-Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
+Hardware interfaces are written for the Waveshare Motor Driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
 
 <p align='center'>
     <img src=docs/images/real_mapping.gif width="600">
 </p>
 
-***(Work in Progress)***
+🚧	***(Work in Progress)*** 
 
-## Package Overview
+## 🗃️ Package Overview
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for lidarbot, sensors and `ros2 control`.
@@ -21,7 +21,7 @@ Hardware interfaces are written for the Waveshare motor driver HAT and MPU6050 s
 - [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM.
 - [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
 
-## Hardware
+## 🧰	Hardware
 ### Part list
 The following components were used in this project:
 
@@ -118,7 +118,7 @@ Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberr
   <img title='Side View' src=docs/images/side_view.jpg width="400">
 </p>
 
-## Installation
+## 🔌	 Installation
 
 ### Development Machine setup
 
@@ -302,7 +302,10 @@ Setting `require_enable_button` to `true` ensures that L1 has to be held before 
 
 To enable turbo mode for faster speed, the `enable_turbo_button` option in the config file can be set to an unused button axis.
 
-TODO: Explain deadzone parameter
+The `joy_node` parameter, `deadzone`, specifies the amount a joystick has to be moved for it to be [considered to be away from the center](https://github.com/ros-drivers/joystick_drivers/blob/ros2/joy/README.md). This parameter is normalized between -1 and 1. A value of `0.25` indicates that the joytsick has to be moved 25% of the way to the edge of an axis's range before that axis will output a non-zero value. 
+
+The `deadzone` parameter should be tuned to suit the performance of one's game controller.
+
 
 #### Twist mux
 
@@ -310,7 +313,7 @@ The [`twist_mux`](https://index.ros.org/p/twist_mux/github-ros-teleop-twist_mux/
 
 The `twist_mux` configuration file is in [`twist_mux.yaml`](./lidarbot_teleop/config/twist_mux.yaml), and is used in the gazebo and lidarbot bringup launch files, [`gazebo_launch.py`](./lidarbot_gazebo/launch/gazebo_launch.py) and [`lidarbot_bringup_launch.py`](./lidarbot_bringup/launch/lidarbot_bringup_launch.py) respectively.
 
-It can be observed from the configuration file, that the joystick commmand velocity source has a higher priority, with an assigned value of 100,compared to the navigation velocity source that is assigned a value of 10.
+It can be observed from the configuration file, that the joystick commmand velocity source has a higher priority, with an assigned value of `100`, compared to the navigation velocity source that is assigned a value of `10`.
 
 ```
 twist_mux:
@@ -359,14 +362,15 @@ Install ROS dependencies:
 cd ~/robot_ws
 sudo rosdep init
 rosdep update
-rosdep install --from-paths src --ignore-src -r -y --skip-keys "rviz2 gazebo_ros2_control gazebo_ros_pkgs" --rosdistro humble
+rosdep install --from-paths src --ignore-src -r -y \ 
+--skip-keys "rviz2 gazebo_ros2_control gazebo_ros_pkgs" --rosdistro humble
 ```
 
 `rviz2` and the gazebo related packages are skipped in the ROS dependency installation process as they are only run on the PC and not on the robot --- the rosdep keys for the ROS2 Humble distribution are available [here](https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml).
 
-[WiringPi i2c library](####WiringPi) and [MPU6050 RPi 4 C++ library](####MPU6050-library) are also installed before building the workspace --- a `Downloads` directory will need to be created to clone the WiringPi files.
+[WiringPi i2c library](#wiringpi) and [MPU6050 RPi 4 C++ library](#mpu6050-library) are also installed before building the workspace --- a `Downloads` directory will need to be created to clone the WiringPi files.
 
-Likewise to avoid manually sourcing the underlay and overlay, the same steps employed in the [development machine setup](####-Sourcing-ROS-Installation) are followed but replacing `dev_ws` with `robot_ws` where necessary.
+Likewise to avoid manually sourcing the underlay and overlay, the same steps employed in the [development machine setup](#sourcing-ros-installation) are followed but replacing `dev_ws` with `robot_ws` where necessary.
 
 Afterwards, navigate to the workspace directory then run build command:
 
@@ -377,15 +381,23 @@ colcon build --symlink-install
 
 #### Motor Driver HAT
 
-TODO:
+Waveshare's Motor Driver HAT was used to control the motors of lidarbot. The relevant files found in the [`include`](./lidarbot_base/include/lidarbot_base/) and [`src`](./lidarbot_base/src/) directories of the [`lidarbot_base`](./lidarbot_base/) package. These files were modified, from those made [available by Waveshare](https://www.waveshare.com/wiki/Motor_Driver_HAT) with new ones added as well, to find a workaround to determining the motor direction of rotation --- this is a relatively straightforward task if the motors used here had hall effect encoders affixed to them. 
 
-smbus dependency met after MPU6050 packages were installed
+The library dependencies for using the Motor Driver HAT were met after installing the MPU6050 library.
 
-Add link to Waveshare's code and mention the modifications made
+TODO: 
+
+brief on how hall effect sensor work
+
+This could be an upgrade idea for lidarbot.
+
+`ros2_control` hardware interface was written to explain
+
+explain further down how this links with diff_drive_controller
 
 Pull up resistor with relevant links
 
-Install C++ libraries (if any) for Motor Driver HAT
+explain code structure
 
 #### Raspberry Pi Camera
 
@@ -425,7 +437,7 @@ supported=1 detected=1, libcamera interfaces=0
 Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_broadcaster/github-ros-controls-ros2_controllers/#humble), the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
 
 - Place the lidarbot on a flat and level surface and unplug the RPLIDAR. 
-- Generate the MPU6050 offsets. A Cpp executable is created in the CMakeLists.txt file of the `lidarbot_bringup` package before generating the MPU6050 offsets. This section of the CMakeLists.txt file is shown below:
+- Generate the MPU6050 offsets. A Cpp executable is created in the CMakeLists.txt file of the `lidarbot_bringup` package before generating the MPU6050 offsets. This section of the [CMakeLists.txt](./lidarbot_bringup/CMakeLists.txt) file is shown below:
 
   ```
   # Create Cpp executable
@@ -484,23 +496,11 @@ Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_b
   #define A_OFF_Y 2742 
   #define A_OFF_Z -14649
   ```
-  TODO:
-
-  ```
-  # COMPILE
-  add_library(mpu6050_hardware_interface SHARED
-    src/mpu6050_hardware_interface.cpp
-    src/mpu6050_lib.cpp
-  )
-
-  target_include_directories(mpu6050_hardware_interface PRIVATE	include)
-
-  ament_target_dependencies(mpu6050_hardware_interface ${THIS_PACKAGE_INCLUDE_DEPENDS})
-  ```
+- Afterwards, the `lidarbot_bringup` package is rebuilt to reflect any changes made to the `mpu6050_lib.h` file.
 
 The MPU6050 module is set to its most sensitive gyroscope and accelerometer ranges, which can be confirmed (or changed) at the top of the `mpu6050_lib.h` file.
 
-## Network Configuration
+## 📡	Network Configuration
 
 Both the development machine and lidarbot need to be connected to the same local network as a precursor to bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
 
@@ -525,7 +525,20 @@ Both systems might need to be rebooted to effect these changes.
 
 Additionally, a static IP address was assigned to lidarbot on the router for easy discoverability on the network.
 
+***NOTE:*** 
+Best practices might not have been employed in establishing communication between the two systems. The approach proposed [here](https://docs.ros.org/en/humble/How-To-Guides/Installation-Troubleshooting.html) was unable to be replicated in this project but others might find better success.
+
+## Differential Drive Controller
+
+
+## IMU Sensor Broadcaster
+
+
 ## Test Drive
+
+### Gazebo
+
+### Lidarbot
 
 ### Motor Connection Checks
 
@@ -559,9 +572,7 @@ Examine test results:
 
 `colcon test-result --all --verbose`
 
-### Gazebo
-
-### Lidarbot
+TODO: command to drive lidarbot around
 
 TODO: ignore camera warning and error messages
 
