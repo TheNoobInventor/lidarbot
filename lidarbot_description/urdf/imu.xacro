@@ -20,7 +20,7 @@
    <sensor name="mpu6050_imu" type="imu">
     <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
        <ros>
-         <remapping>~/out:=imu_broadcaster/imu</remapping>
+         <remapping>~/out:=imu_broadcaster/data</remapping>
        </ros>
       <initial_orientation_as_reference>false</initial_orientation_as_reference>
     </plugin>
