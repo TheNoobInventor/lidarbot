@@ -27,7 +27,7 @@ The following components were used in this project:
 
 | | Part |
 | --| --|
-|1| [Raspberry Pi 4 (4 GB)](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)|
+|1| Raspberry Pi 4 (2 GB)|
 |2| SanDisk 32 GB SD Card (minimum)|
 |3| [Two wheel drive robot chassis kit (with wheel encoders)](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
@@ -642,6 +642,8 @@ Drive around the environment to generate a map:
 </p>
 
 Then save the generated map.
+
+TODO: Need to change slam_toolbox ROS parameter mode to `mapping` in `mapper_params_online_async.yaml` in `lidarbot_slam/config`. Show a snippet of the code and what needs to be changed for mapping. Same thing applies for navigation/localization
 
 ## Navigation
 

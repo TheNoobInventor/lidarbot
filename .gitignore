@@ -1,2 +1,4 @@
 .vscode/
 .vale.ini
+lidarbot_base/src/motor_node.cpp
+lidarbot_base/src/motor_diagnostics_node.cpp
