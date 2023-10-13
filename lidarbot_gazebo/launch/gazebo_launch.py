@@ -33,7 +33,9 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     world = LaunchConfiguration('world')
-    
+    use_robot_localization = LaunchConfiguration('use_robot_localization')
+
+    # Declare the launch arguments
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         name='use_sim_time',
         default_value='True',
@@ -48,7 +50,12 @@ def generate_launch_description():
         name='world',
         default_value=world_path,
         description='Full path to the world model to load')
-    
+
+    declare_use_robot_localization_cmd = DeclareLaunchArgument(
+        name='use_robot_localization',
+        default_value='True',
+        description='Use robot_localization package if true')
+
     # Start robot state publisher
     start_robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_description, 'launch', 'robot_state_publisher_launch.py')]), 
@@ -74,6 +81,13 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         arguments=['diff_controller'])
+   
+   # Spawn imu_sensor_broadcaser
+    start_imu_broadcaster_cmd = Node(
+        condition=IfCondition(use_ros2_control),
+        package='controller_manager',
+        executable='spawner',
+        arguments=['imu_broadcaster'])
 
     # Spawn joint_state_broadcaser
     start_joint_broadcaster_cmd = Node(
@@ -84,6 +98,7 @@ def generate_launch_description():
     
     # Start robot localization using an Extended Kalman Filter
     start_robot_localization_cmd = Node(
+        condition=IfCondition(use_robot_localization),
         package='robot_localization',
         executable='ekf_node',
         parameters=[ekf_params_file])
@@ -106,13 +121,15 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_use_ros2_control_cmd)
     ld.add_action(declare_world_cmd)
-    
+    ld.add_action(declare_use_robot_localization_cmd)
+
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(start_gazebo_cmd)
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
+    ld.add_action(start_imu_broadcaster_cmd)
     ld.add_action(start_robot_localization_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_twist_mux_cmd)

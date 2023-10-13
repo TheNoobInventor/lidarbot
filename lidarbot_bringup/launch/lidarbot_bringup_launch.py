@@ -75,7 +75,7 @@ def generate_launch_description():
 
     # Spawn joint_state_broadcaser
     start_joint_broadcaster_cmd = Node(
-        condition=IfCondition(use_ros2_control),
+        # condition=IfCondition(use_ros2_control),
         package='controller_manager',
         executable='spawner',
         arguments=['joint_broadcaster'])
@@ -88,7 +88,7 @@ def generate_launch_description():
 
     # Spawn imu_sensor_broadcaser
     start_imu_broadcaster_cmd = Node(
-        condition=IfCondition(use_ros2_control),
+        # condition=IfCondition(use_ros2_control),
         package='controller_manager',
         executable='spawner',
         arguments=['imu_broadcaster'])

@@ -691,6 +691,8 @@ TODO:
     map_start_at_dock: true 
 ```
 
+TODO: Note about the option of using AMCL for localization using nav2's localization launch file. Currently using slam_toolbox for localization
+
 ### Lidarbot
 
 Change `map_file_name` key to use real map
