@@ -13,7 +13,7 @@ from nav2_common.launch import HasNodeParams
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
-    slam_params_file = LaunchConfiguration('params_file')
+    slam_params_file = LaunchConfiguration('slam_params_file')
     default_params_file = os.path.join(get_package_share_directory('lidarbot_slam'),
                                        'config', 'mapper_params_online_async.yaml')
     
