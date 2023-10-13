@@ -576,9 +576,30 @@ TODO: command to drive lidarbot around
 
 TODO: ignore camera warning and error messages
 
-## SLAM
+## Mapping
+
+TODO: Brief overview of slam_toolbox
 
 ### Gazebo
+
+Before starting the mapping operation, ensure that the `mode` key, under `ROS Parameters` in the [`mapper_params_online_async.yaml`](./lidarbot_slam/config/mapper_params_online_async.yaml) file, is set to `mapping` and also that the `map_file_name`, `map_start_pose` and the `map_start_at_dock` keys are commented out:
+
+``` 
+    # ROS Parameters
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_footprint
+    scan_topic: /scan
+    use_map_saver: true
+    mode: mapping #localization
+
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    #map_file_name: /path/to/map_file
+    #map_start_pose: [0.0, 0.0, 0.0]
+    #map_start_at_dock: true 
+```
 
 To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot on the development machine (which includes the joystick node for teleoperation):
 
@@ -586,13 +607,15 @@ To start mapping in a simulation environment, launch the Gazebo simulation of li
 ros2 launch lidarbot_gazebo gazebo_launch.py
 ```
 
-In a separate terminal, navigate to the workspace directory, `lidarbot_ws` for example, and launch `slam_toolbox`:
+In a separate terminal, navigate to the workspace directory, `lidarbot_ws` for example, and launch `slam_toolbox` with the [`online_async_launch.py`](./lidarbot_slam/launch/online_async_launch.py) file:
 
 ```
-ros2 launch slam_toolbox online_async_launch.py \ 
+ros2 launch lidarbot_slam online_async_launch.py \ 
 slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
 use_sim_time:=true
 ```
+
+***Note**: The online asynchronous mode in `slam_toolbox` uses live and the most recent scan data to create a map, to avoid any lags therefore, some scans can be skipped.*
 
 In another terminal, navigate to the workspace directory again and start `rviz2` with the `lidarbot_slam.rviz` config file:
 
@@ -622,10 +645,10 @@ Run the following command on lidarbot to brings up the camera, lidar and joystic
 ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
 ```
 
-Open a new terminal, on the development machine, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
+First ensure that the [`mapper_params_online_async.yaml`](./lidarbot_slam/config/mapper_params_online_async.yaml) file is configured for mapping (refer to the previous subsection). Then open a new terminal, on the development machine, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
 
 ```
-ros2 launch slam_toolbox online_async_launch.py \ 
+ros2 launch lidarbot_slam online_async_launch.py \ 
 slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
 use_sim_time:=false
 ```
@@ -643,13 +666,34 @@ Drive around the environment to generate a map:
 
 Then save the generated map.
 
-TODO: Need to change slam_toolbox ROS parameter mode to `mapping` in `mapper_params_online_async.yaml` in `lidarbot_slam/config`. Show a snippet of the code and what needs to be changed for mapping. Same thing applies for navigation/localization
+TODO: Need to change slam_toolbox ROS parameter mode to `mapping` in `mapper_params_online_async.yaml` in `lidarbot_slam/config`. Show a snippet of the code and what needs to be changed for mapping. Same thing applies for localization
 
+Prop robot and show different odometry movements in rviz. Then show the robot response when on the 'ground'
 ## Navigation
 
 ### Gazebo
 
+TODO:
+``` 
+    # ROS Parameters
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_footprint
+    scan_topic: /scan
+    use_map_saver: true
+    mode: localization #mapping
+
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    map_file_name: /home/noobinventor/lidarbot_ws/src/lidarbot_navigation/maps/sim_map
+    #map_start_pose: [0.0, 0.0, 0.0]
+    map_start_at_dock: true 
+```
+
 ### Lidarbot
+
+Change `map_file_name` key to use real map
 
 ## Acknowledgment
 
