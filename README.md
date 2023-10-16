@@ -666,36 +666,49 @@ Drive around the environment to generate a map:
 
 Then save the generated map.
 
-TODO: Need to change slam_toolbox ROS parameter mode to `mapping` in `mapper_params_online_async.yaml` in `lidarbot_slam/config`. Show a snippet of the code and what needs to be changed for mapping. Same thing applies for localization
 
-Prop robot and show different odometry movements in rviz. Then show the robot response when on the 'ground'
 ## Navigation
 
 ### Gazebo
 
-TODO:
-``` 
-    # ROS Parameters
-    odom_frame: odom
-    map_frame: map
-    base_frame: base_footprint
-    scan_topic: /scan
-    use_map_saver: true
-    mode: localization #mapping
+Nav2's amcl package is used for localization with the map generated from slam_toolbox
 
-    # if you'd like to immediately start continuing a map at a given pose
-    # or at the dock, but they are mutually exclusive, if pose is given
-    # will use pose
-    map_file_name: /home/noobinventor/lidarbot_ws/src/lidarbot_navigation/maps/sim_map
-    #map_start_pose: [0.0, 0.0, 0.0]
-    map_start_at_dock: true 
+```
+ros2 launch lidarbot_gazebo gazebo_launch.py
 ```
 
-TODO: Note about the option of using AMCL for localization using nav2's localization launch file. Currently using slam_toolbox for localization
+Note map location and name
 
+```
+ros2 launch nav2_bringup localization_launch.py map:=./sim_map.yaml use_sim_time:=true
+```
+
+```
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true map_subscribe_transient_local:=true
+```
+
+```
+rviz2 -d src/lidarbot_navigation/rviz/lidarbot_nav.rviz
+```
 ### Lidarbot
 
-Change `map_file_name` key to use real map
+TODO: Prop robot and show different odometry movements in rviz. Then show the robot response when on the 'ground'
+
+```
+ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
+```
+
+```
+ros2 launch nav2_bringup localization_launch.py map:=./real_map.yaml use_sim_time:=false
+```
+
+```
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false map_subscribe_transient_local:=true
+```
+
+```
+rviz2 -d src/lidarbot_navigation/rviz/lidarbot_nav.rviz
+```
 
 ## Acknowledgment
 

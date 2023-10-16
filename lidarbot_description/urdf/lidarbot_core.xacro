@@ -13,7 +13,7 @@
   <xacro:property name="wheel_height" value="0.025"/>
   <xacro:property name="wheel_mass" value="0.031"/>
 
-  <!-- Distance between centre of wheel and robot base/base -->
+  <!-- Distance between centre of wheel and robot base -->
   <xacro:property name="wheel_zoff" value="0.0125"/>
 
   <link name="base_footprint"/> 	

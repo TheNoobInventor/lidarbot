@@ -82,13 +82,6 @@ def generate_launch_description():
         executable='spawner',
         arguments=['diff_controller'])
    
-   # Spawn imu_sensor_broadcaser
-    start_imu_broadcaster_cmd = Node(
-        condition=IfCondition(use_ros2_control),
-        package='controller_manager',
-        executable='spawner',
-        arguments=['imu_broadcaster'])
-
     # Spawn joint_state_broadcaser
     start_joint_broadcaster_cmd = Node(
         condition=IfCondition(use_ros2_control),
@@ -129,7 +122,6 @@ def generate_launch_description():
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_diff_controller_cmd)
     ld.add_action(start_joint_broadcaster_cmd)
-    ld.add_action(start_imu_broadcaster_cmd)
     ld.add_action(start_robot_localization_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_twist_mux_cmd)
