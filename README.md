@@ -2,7 +2,7 @@
 
 ![ROS2 CI](https://github.com/TheNoobInventor/lidarbot/actions/workflows/.github/workflows/lidarbot_ci_action.yml/badge.svg)
 
-A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a Raspberry Pi camera for visual feedback and an RPLIDAR A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the `robot_localization` package on the robot, to fuse IMU sensor data and the wheel encoders data, using an Extended Kalman Filter (EKF) node, to provide more accurate robot odometry estimates.
+A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a Raspberry Pi camera for visual feedback and an RPlidar A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the `robot_localization` package on the robot, to fuse IMU sensor data and the wheel encoders data, using an Extended Kalman Filter (EKF) node, to provide more accurate robot odometry estimates.
 
 Hardware interfaces are written for the Waveshare Motor Driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
 
@@ -13,8 +13,8 @@ Hardware interfaces are written for the Waveshare Motor Driver HAT and MPU6050 s
 🚧	***(Work in Progress)*** 
 
 ## 🗃️ Package Overview
-- [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware interface for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
-- [`lidarbot_bringup`](./lidarbot_bringup/) : Contains launch files to bring up the camera, lidar and the real lidarbot.
+- [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware component for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
+- [`lidarbot_bringup`](./lidarbot_bringup/) : Contains hardware component for the MPU6050 module, launch files to bring up the camera, lidar and the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for lidarbot, sensors and `ros2 control`.
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate lidarbot in Gazebo.
 - [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch, configuration and map files used for lidarbot navigation.
@@ -31,18 +31,18 @@ The following components were used in this project:
 |2| SanDisk 32 GB SD Card (minimum)|
 |3| [Two wheel drive robot chassis kit (with wheel encoders)](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
-|5| [2 x Photo interrupters for wheel encoders](https://www.aliexpress.com/item/32773600460.html?spm=a2g0o.order_list.order_list_main.5.21ef1802uhtGk4)|
+|5| [2 x Photo interrupters for wheel encoders](https://s.click.aliexpress.com/e/_DdivGob)|
 |6| MPU6050 board|
-|7| [RPLIDAR A1](https://www.slamtec.com/en/Lidar/A1)|
+|7| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
 |8| Raspberry Pi camera v1.3|
-|9| [3D printed stands for RPLIDAR A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
+|9| [3D printed stands for RPlidar A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
 |10| Mount for Raspberry Pi camera|
 |11| Powerbank for RPi 4 (minimum output: 5V 3A)|
-|12| 3 Slot 18650 battery holder|
-|13| 3 x 18650 batteries to power Motor Driver HAT|
-|14| Female to Female Dupont jumper cables|
-|15| Spare wires|
-|16| On/Off switch (included in robot chassis kit)|
+|12| Gamepad|
+|13| 3 Slot 18650 battery holder|
+|14| 3 x 18650 batteries to power Motor Driver HAT|
+|15| Female to Female Dupont jumper cables|
+|16| Spare wires|
 
 Some other tools or parts used in the project are as follows:
 
@@ -52,7 +52,7 @@ Some other tools or parts used in the project are as follows:
 |2| 3D printer|
 |3| Screwdriver set|
 |4| Double-sided tape|
-|5| [Silicone rubber bumpers](https://www.aliexpress.com/item/1005002995402961.html) to absorb RPLIDAR vibration|
+|5| [Silicone rubber bumpers](https://www.aliexpress.com/item/1005002995402961.html) to absorb RPlidar vibration|
 
 
 ### Project Wiring and Assembly
@@ -108,7 +108,7 @@ The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.wav
 
 Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the motor hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
 
-Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPLIDAR A1 sensor is plugged into one of the RPi 4's USB ports.
+Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPlidar A1 sensor is plugged into one of the RPi 4's USB ports.
 
 <p align='center'>
   <img title='Top View' src=docs/images/top_view.jpg width="400">
@@ -436,7 +436,7 @@ supported=1 detected=1, libcamera interfaces=0
 
 Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_broadcaster/github-ros-controls-ros2_controllers/#humble), the MPU6050 module needs to be calibrated to filter out its sensor noise/offsets. This is done in the following steps:
 
-- Place the lidarbot on a flat and level surface and unplug the RPLIDAR. 
+- Place the lidarbot on a flat and level surface and unplug the RPlidar. 
 - Generate the MPU6050 offsets. A Cpp executable is created in the CMakeLists.txt file of the `lidarbot_bringup` package before generating the MPU6050 offsets. This section of the [CMakeLists.txt](./lidarbot_bringup/CMakeLists.txt) file is shown below:
 
   ```
@@ -610,8 +610,8 @@ ros2 launch lidarbot_gazebo gazebo_launch.py
 In a separate terminal, navigate to the workspace directory, `lidarbot_ws` for example, and launch `slam_toolbox` with the [`online_async_launch.py`](./lidarbot_slam/launch/online_async_launch.py) file:
 
 ```
-ros2 launch lidarbot_slam online_async_launch.py \ 
-slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
+ros2 launch lidarbot_slam online_async_launch.py \
+slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \
 use_sim_time:=true
 ```
 
@@ -648,8 +648,8 @@ ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
 First ensure that the [`mapper_params_online_async.yaml`](./lidarbot_slam/config/mapper_params_online_async.yaml) file is configured for mapping (refer to the previous subsection). Then open a new terminal, on the development machine, navigate to the workspace directory and launch `slam_toolbox` with the `use_sim_time` parameter set to `false`:
 
 ```
-ros2 launch lidarbot_slam online_async_launch.py \ 
-slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \ 
+ros2 launch lidarbot_slam online_async_launch.py \
+slam_params_file:=src/lidarbot_slam/config/mapper_params_online_async.yaml \
 use_sim_time:=false
 ```
 In a new terminal, also on the development machine, navigate to the workspace directory again and start `rviz2`:
@@ -680,16 +680,24 @@ ros2 launch lidarbot_gazebo gazebo_launch.py
 Note map location and name
 
 ```
-ros2 launch nav2_bringup localization_launch.py map:=./sim_map.yaml use_sim_time:=true
-```
-
-```
-ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true map_subscribe_transient_local:=true
-```
-
-```
 rviz2 -d src/lidarbot_navigation/rviz/lidarbot_nav.rviz
 ```
+
+```
+ros2 launch lidarbot_navigation localization_launch.py map:=./sim_map.yaml use_sim_time:=true
+```
+
+```
+ros2 launch lidarbot_navigation navigation_launch.py use_sim_time:=true \
+map_subscribe_transient_local:=true
+```
+
+Set initial pose using the `2D Pose Estimate` button in the toolbar
+
+Note about the pixels
+
+Blue arrow shows unfiltered odometry, while green shows the filtered odometry. The number of arrows shown is the number of odometry data to keep before removing the oldest. 0 means keep all of them.
+
 ### Lidarbot
 
 TODO: Prop robot and show different odometry movements in rviz. Then show the robot response when on the 'ground'
@@ -699,16 +707,19 @@ ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
 ```
 
 ```
-ros2 launch nav2_bringup localization_launch.py map:=./real_map.yaml use_sim_time:=false
-```
-
-```
-ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false map_subscribe_transient_local:=true
-```
-
-```
 rviz2 -d src/lidarbot_navigation/rviz/lidarbot_nav.rviz
 ```
+
+```
+ros2 launch lidarbot_navigation localization_launch.py map:=./real_map.yaml use_sim_time:=false
+```
+
+```
+ros2 launch lidarbot_navigation navigation_launch.py use_sim_time:=false \
+map_subscribe_transient_local:=true
+```
+
+Use waypoint mode here
 
 ## Acknowledgment
 

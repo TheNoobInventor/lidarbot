@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Odometry2
         - /Odometry2/Shape1
       Splitter Ratio: 0.5
     Tree Height: 419
@@ -133,10 +134,6 @@ Visualization Manager:
           Value: false
         lidar_link:
           Value: false
-        map:
-          Value: true
-        odom:
-          Value: true
         right_wheel:
           Value: false
       Marker Scale: 1
@@ -145,23 +142,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                camera_link:
-                  camera_link_optical:
-                    {}
-                caster_wheel:
-                  {}
-                imu_link:
-                  {}
-                left_wheel:
-                  {}
-                lidar_link:
-                  {}
-                right_wheel:
-                  {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -259,7 +240,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 10
+      Keep: 5
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
@@ -298,7 +279,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 10
+      Keep: 5
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
