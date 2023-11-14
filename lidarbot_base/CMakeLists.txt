@@ -6,6 +6,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
+find_package(std_srvs REQUIRED)
 
 # COMPILE
 add_library(lidarbot_hardware SHARED 
@@ -46,24 +47,29 @@ install(
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
-# TEST
-if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
-  ament_add_gtest(motor_test 
-                  src/DEV_Config.c 
-                  src/PCA9685.c 
-                  src/MotorDriver.c 
-                  test/motor_test.cpp)
+include_directories(include)
 
-  target_include_directories(motor_test PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-  )
-  
-  # Link WiringPi and other libraries to motor_test target
-  target_link_libraries(motor_test m wiringPi pthread crypt rt) 
+# Add motor_checks_client and motor_checks_server nodes as executables with dependencies
+add_executable(motor_checks_server 
+              src/motor_checks_server.cpp 
+              src/motor_encoder.c   
+              src/DEV_Config.c 
+              src/PCA9685.c 
+              src/MotorDriver.c) 
 
-endif()
+ament_target_dependencies(motor_checks_server rclcpp std_srvs)
+target_link_libraries(motor_checks_server m wiringPi pthread crypt rt)
+target_compile_options(motor_checks_server PRIVATE -w)
+
+add_executable(motor_checks_client src/motor_checks_client.cpp) 
+ament_target_dependencies(motor_checks_client rclcpp std_srvs)
+
+# Install executables to enable discovery for 'ros2 run'
+install(TARGETS 
+    motor_checks_client 
+    motor_checks_server
+    DESTINATION lib/${PROJECT_NAME}
+)
 
 # EXPORTS 
 ament_export_libraries(lidarbot_hardware)

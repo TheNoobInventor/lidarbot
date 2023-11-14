@@ -4,7 +4,7 @@
 
 A differential drive robot is controlled using ROS2 Humble running on a Raspberry Pi 4 (running Ubuntu server 22.04). The vehicle is equipped with a Raspberry Pi camera for visual feedback and an RPlidar A1 sensor used for Simultaneous Localization and Mapping (SLAM), autonomous navigation and obstacle avoidance. Additionally, an MPU6050 inertial measurement unit (IMU) is employed by the `robot_localization` package on the robot, to fuse IMU sensor data and the wheel encoders data, using an Extended Kalman Filter (EKF) node, to provide more accurate robot odometry estimates.
 
-Hardware interfaces are written for the Waveshare Motor Driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
+Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 sensor to be accessed by the `ros2_control` differential drive controller and Imu sensor broadcaster respectively, via the `ros2_control` resource manager.
 
 <p align='center'>
     <img src=docs/images/real_mapping.gif width="600">
@@ -27,7 +27,7 @@ The following components were used in this project:
 
 | | Part |
 | --| --|
-|1| Raspberry Pi 4 (2 GB)|
+|1| Raspberry Pi 4 (4 GB)|
 |2| SanDisk 32 GB SD Card (minimum)|
 |3| [Two wheel drive robot chassis kit (with wheel encoders)](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
@@ -52,8 +52,6 @@ Some other tools or parts used in the project are as follows:
 |2| 3D printer|
 |3| Screwdriver set|
 |4| Double-sided tape|
-|5| [Silicone rubber bumpers](https://www.aliexpress.com/item/1005002995402961.html) to absorb RPlidar vibration|
-
 
 ### Project Wiring and Assembly
 
@@ -389,15 +387,13 @@ TODO:
 
 brief on how hall effect sensor work
 
-This could be an upgrade idea for lidarbot.
+Pulse counts
 
-`ros2_control` hardware interface was written to explain
-
-explain further down how this links with diff_drive_controller
+Link with diff_drive_controller
 
 Pull up resistor with relevant links
 
-explain code structure
+Code structure
 
 #### Raspberry Pi Camera
 
@@ -542,39 +538,54 @@ Best practices might not have been employed in establishing communication betwee
 
 ### Motor Connection Checks
 
-TODO:
+A [ROS service](https://foxglove.dev/blog/creating-ros2-services) was written to test the connections of the motor(s) and by extension to know if the motor is faulty. Before running the tests, ensure that the 18650 batteries are charged, then prop the robot on a box or similar to prevent it falling off an edge for instance. 
 
-Fully charge the 18650 batteries, then prop the robot on a box (add image).
-
-Build the base package (if you don't want to build everything):
+Run the [client node](./lidarbot_base/src/motor_checks_client.cpp) to request the motor checks:
 
 ```
-colcon build --packages-select lidarbot_base
+ros2 run lidarbot_base motor_checks_client
 ```
 
-Then run the following command to run tests:
+Then run the [server node](./lidarbot_base/src/motor_checks_server.cpp) to check the motors:
 
 ```
-colcon test --ctest-args tests --packages-select lidarbot_base
+ros2 run lidarbot_base motor_checks_server
+```
+These are the steps followed by the server node:
+- The server initializes the left and right motor pulse counts to 0. 
+- It then runs each motor in the forward direction at 50% speed for 2 seconds. The terminal output is shown below:
+  ```
+  [INFO] [1699988646.067449176] [rclcpp]: Ready to check motors
+  [INFO] [1699988648.190017279] [rclcpp]: Received request to check motors...
+  [INFO] [1699988648.190117076] [rclcpp]: Checking left motor...
+  [INFO] [1699988652.196330587] [rclcpp]: Checking right motor...
+  [INFO] [1699988656.202619229] [rclcpp]: Sending back response...
+  ```
+- The current pulse counts for each motor are checked to confirm that the pulse is above 0.
+- If both motors have their pulse counts above 0, a success message is sent to the client: 
+
+  ```
+  [INFO] [1699991078.643028687] [rclcpp]: service not available, waiting again...
+  [INFO] [1699991087.233641544] [rclcpp]: The checks were successful!
+  ```
+- If one or both of the motors do not have pulse counts above zero a warning message is sent from the server to the client and identifies the faulty motor(s). At the moment, however, the message sent to the client does not identify the faulty motor but instead outputs this message when there is an error:
+
+  ```
+  terminate called after throwing an instance of 'std::future_error'
+    what():  std::future_error: No associated state
+  [ros2run]: Aborted
+  ```
+  This section will be updated once the issue has been fixed.
+
+If a motor moves backward instead of forward, swap the cables for the specific motor to change the direction.
+
+After it is confirmed that both motors moved forward, lidarbot can be driven around with the gamepad (with the joystick and button configuration presented [here](#teleoperation)) by running this command:
+
+```
+ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
 ```
 
-Explain test sequence
-
-negative value is backward, positive is forward. 
-
-[Writing basic cpp tests in ros2](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Testing/Cpp.html)
-
-[Colcon testing docs](https://docs.ros.org/en/foxy/Tutorials/Intermediate/Testing/CLI.html)
-
-reference test file
-
-Examine test results:
-
-`colcon test-result --all --verbose`
-
-TODO: command to drive lidarbot around
-
-TODO: ignore camera warning and error messages
+**Note:** There are some warning and error messages outputted to the terminal related to the camera. These are mostly related to calibrating the camera and can be ignored. 
 
 ## Mapping
 
@@ -585,20 +596,20 @@ TODO: Brief overview of slam_toolbox
 Before starting the mapping operation, ensure that the `mode` key, under `ROS Parameters` in the [`mapper_params_online_async.yaml`](./lidarbot_slam/config/mapper_params_online_async.yaml) file, is set to `mapping` and also that the `map_file_name`, `map_start_pose` and the `map_start_at_dock` keys are commented out:
 
 ``` 
-    # ROS Parameters
-    odom_frame: odom
-    map_frame: map
-    base_frame: base_footprint
-    scan_topic: /scan
-    use_map_saver: true
-    mode: mapping #localization
+# ROS Parameters
+odom_frame: odom
+map_frame: map
+base_frame: base_footprint
+scan_topic: /scan
+use_map_saver: true
+mode: mapping #localization
 
-    # if you'd like to immediately start continuing a map at a given pose
-    # or at the dock, but they are mutually exclusive, if pose is given
-    # will use pose
-    #map_file_name: /path/to/map_file
-    #map_start_pose: [0.0, 0.0, 0.0]
-    #map_start_at_dock: true 
+# if you'd like to immediately start continuing a map at a given pose
+# or at the dock, but they are mutually exclusive, if pose is given
+# will use pose
+#map_file_name: /path/to/map_file
+#map_start_pose: [0.0, 0.0, 0.0]
+#map_start_at_dock: true 
 ```
 
 To start mapping in a simulation environment, launch the Gazebo simulation of lidarbot on the development machine (which includes the joystick node for teleoperation):
@@ -720,6 +731,9 @@ map_subscribe_transient_local:=true
 ```
 
 Use waypoint mode here
+
+TODO:
+Table of contents
 
 ## Acknowledgment
 

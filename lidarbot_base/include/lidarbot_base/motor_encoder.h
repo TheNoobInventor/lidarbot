@@ -21,6 +21,9 @@ void right_wheel_pulse();
 void set_motor_speeds(double left_wheel_command, double right_wheel_command);
 void read_encoder_values(int *left_encoder_value, int *right_encoder_value);
 
+extern int left_wheel_pulse_count;
+extern int right_wheel_pulse_count;
+
 #endif 
 
 #ifdef __cplusplus
