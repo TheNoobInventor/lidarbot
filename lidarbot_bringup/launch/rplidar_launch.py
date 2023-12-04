@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
-import os
-
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import LogInfo
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -17,7 +14,7 @@ def generate_launch_description():
     frame_id = LaunchConfiguration('frame_id', default='lidar_link')
     inverted = LaunchConfiguration('inverted', default='false')
     angle_compensate = LaunchConfiguration('angle_compensate', default='true')
-    scan_mode = LaunchConfiguration('scan_mode', default='Sensitivity')
+    scan_mode = LaunchConfiguration('scan_mode', default='Standard')
     
     return LaunchDescription([
 
@@ -50,6 +47,7 @@ def generate_launch_description():
             'angle_compensate',
             default_value=angle_compensate,
             description='Specifying whether or not to enable angle_compensate of scan data'),
+            
         DeclareLaunchArgument(
             'scan_mode',
             default_value=scan_mode,
@@ -65,6 +63,7 @@ def generate_launch_description():
                          'serial_baudrate': serial_baudrate,
                          'frame_id': frame_id,
                          'inverted': inverted,
-                         'angle_compensate': angle_compensate}],
+                         'angle_compensate': angle_compensate,
+                         'scan_mode': scan_mode}],
             output='screen'),
     ])

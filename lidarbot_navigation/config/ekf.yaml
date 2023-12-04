@@ -6,7 +6,6 @@ ekf_filter_node:
         
         frequency: 50.0
         two_d_mode: true
-        print_diagnostics: true
 
         map_frame: map
         odom_frame: odom
