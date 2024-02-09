@@ -39,10 +39,11 @@ The following components were used in this project:
 |10| Mount for Raspberry Pi camera|
 |11| Powerbank for RPi 4 (minimum output: 5V 3A)|
 |12| Gamepad|
-|13| 3 Slot 18650 battery holder|
-|14| 3 x 18650 batteries to power Motor Driver HAT|
-|15| Female to Female Dupont jumper cables|
-|16| Spare wires|
+|13| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
+|14| 3 Slot 18650 battery holder|
+|15| 3 x 18650 batteries to power Motor Driver HAT|
+|16| Female to Female Dupont jumper cables|
+|17| Spare wires|
 
 Some other tools or parts used in the project are as follows:
 
@@ -497,6 +498,8 @@ Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_b
 The MPU6050 module is set to its most sensitive gyroscope and accelerometer ranges, which can be confirmed (or changed) at the top of the `mpu6050_lib.h` file.
 
 ## 📡	Network Configuration
+
+TODO: update with Mini Router setup
 
 Both the development machine and lidarbot need to be connected to the same local network as a precursor to bidirectional communication between the two systems. This [guide](https://roboticsbackend.com/ros2-multiple-machines-including-raspberry-pi/) by Robotics Backend was used in configuring the network communication. 
 

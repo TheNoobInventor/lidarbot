@@ -74,17 +74,19 @@ int main(int argc, char **argv)
     // Initialize wiringPi using GPIO BCM pin numbers
     wiringPiSetupGpio();
     
-    // Setup GPIO encoder pins
-    pinMode(LEFT_WHL_ENCODER, INPUT);
-    pinMode(RIGHT_WHL_ENCODER, INPUT);
+    // Setup GPIO encoder interrupt and direction pins
+    pinMode(LEFT_WHL_ENC_INT, INPUT);
+    pinMode(RIGHT_WHL_ENC_INT, INPUT);
+    pinMode(LEFT_WHL_ENC_DIR, INPUT);
+    pinMode(RIGHT_WHL_ENC_DIR, INPUT);
 
     // Setup pull up resistors on encoder pins
-    pullUpDnControl(LEFT_WHL_ENCODER, PUD_UP);
-    pullUpDnControl(RIGHT_WHL_ENCODER, PUD_UP);
+    pullUpDnControl(LEFT_WHL_ENC_INT, PUD_UP);
+    pullUpDnControl(RIGHT_WHL_ENC_INT, PUD_UP);
 
     // Initialize encoder interrupts for falling signal states
-    wiringPiISR(LEFT_WHL_ENCODER, INT_EDGE_FALLING, left_wheel_pulse);
-    wiringPiISR(RIGHT_WHL_ENCODER, INT_EDGE_FALLING, right_wheel_pulse);
+    wiringPiISR(LEFT_WHL_ENC_INT, INT_EDGE_FALLING, left_wheel_pulse);
+    wiringPiISR(RIGHT_WHL_ENC_INT, INT_EDGE_FALLING, right_wheel_pulse);
 
     // Initialize the rclcpp library
     rclcpp::init(argc, argv);
@@ -92,7 +94,7 @@ int main(int argc, char **argv)
     // Create a shared pointer to a Node type and name it "motor_checks_server"
     std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("motor_checks_server");
 
-    // Create a "checks" service with a motorChecks callback
+    // Create a "checks" service with a checkMotors callback
     rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr service = 
         node->create_service<std_srvs::srv::Trigger>("checks", &checkMotors);
 
