@@ -12,6 +12,41 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
 
 🚧	***(Work in Progress)*** 
 
+- [Lidarbot](#lidarbot)
+  - [🗃️ Package Overview](#️-package-overview)
+  - [🧰	Hardware](#hardware)
+    - [Part list](#part-list)
+    - [Project Wiring and Assembly](#project-wiring-and-assembly)
+  - [🔌	 Installation](#-installation)
+    - [Development Machine setup](#development-machine-setup)
+      - [WiringPi](#wiringpi)
+      - [MPU6050 library](#mpu6050-library)
+      - [Sourcing ROS Installation](#sourcing-ros-installation)
+      - [Gazebo](#gazebo)
+      - [Display lidarbot model in RViz](#display-lidarbot-model-in-rviz)
+      - [Teleoperation](#teleoperation)
+      - [Twist mux](#twist-mux)
+      - [Robot localization](#robot-localization)
+    - [Lidarbot setup](#lidarbot-setup)
+      - [Motor Driver HAT](#motor-driver-hat)
+      - [Raspberry Pi Camera](#raspberry-pi-camera)
+      - [MPU6050 offsets](#mpu6050-offsets)
+  - [📡	Network Configuration](#network-configuration)
+  - [Differential Drive Controller](#differential-drive-controller)
+  - [IMU Sensor Broadcaster](#imu-sensor-broadcaster)
+  - [Test Drive](#test-drive)
+    - [Gazebo](#gazebo-1)
+    - [Lidarbot](#lidarbot-1)
+    - [Motor Connection Checks](#motor-connection-checks)
+  - [Mapping](#mapping)
+    - [Gazebo](#gazebo-2)
+    - [Lidarbot](#lidarbot-2)
+  - [Navigation](#navigation)
+    - [Gazebo](#gazebo-3)
+    - [Lidarbot](#lidarbot-3)
+  - [Acknowledgment](#acknowledgment)
+
+
 ## 🗃️ Package Overview
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware component for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains hardware component for the MPU6050 module, launch files to bring up the camera, lidar and the real lidarbot.
@@ -29,9 +64,10 @@ The following components were used in this project:
 | --| --|
 |1| Raspberry Pi 4 (4 GB)|
 |2| SanDisk 32 GB SD Card (minimum)|
-|3| [Two wheel drive robot chassis kit (with wheel encoders)](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
+|3| [Two wheel drive robot chassis kit](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
-|5| [2 x Photo interrupters for wheel encoders](https://s.click.aliexpress.com/e/_DdivGob)|
+|5| 2 x [Motors with encoders](https://www.aliexpress.com/item/1005006363532248.html?spm=a2g0o.detail.pcDetailTopMoreOtherSeller.6.5fdeSplESplEAo&gps-id=pcDetailTopMoreOtherSeller&scm=1007.40050.354490.0&scm_id=1007.40050.354490.0&scm-url=1007.40050.354490.0&pvid=1fbd5a28-56b9-49ff-ad51-948875853e0c&_t=gps-id:pcDetailTopMoreOtherSeller,scm-url:1007.40050.354490.0,pvid:1fbd5a28-56b9-49ff-ad51-948875853e0c,tpp_buckets:668%232846%238109%231935&utparam-url=scene%3ApcDetailTopMoreOtherSeller%7Cquery_from%3A)|
+|6| 2 x [PH 2.0 Motor pin connectors](https://s.click.aliexpress.com/e/_Dl669tn)
 |6| MPU6050 board|
 |7| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
 |8| Raspberry Pi camera v1.3|
@@ -54,6 +90,8 @@ Some other tools or parts used in the project are as follows:
 |3| Screwdriver set|
 |4| Double-sided tape|
 
+Additionally, some nylon stand-offs were used in between the Raspberry Pi 4 and its 3D printed stand to make it easier to plug in the USB power cable from the powerbank.
+
 ### Project Wiring and Assembly
 
 The electronic components of the lidarbot are connected as shown below.
@@ -71,26 +109,43 @@ The MPU6050 board pins were connected to the Raspberry Pi 4 GPIO pins as follows
 | SCL         | 05 | GPIO03 |
 | SDA         | 03 | GPIO02 |
 
-The right and left photo interrupter sensors are connected to GPIO pins as follows:
+In a previous hardware version of lidarbot, photo interrupters were used with encoder disks with 20 slots (included in the robot chassis kit). However, this setup proved restrictive in yielding satisfactory results in navigation due to the low number of encoder ticks, 20. Therefore, the robot chassis kit motors were replaced with the ones below with built-in encoders --- which have encoder ticks of approximately 1084, calculated using this [guide](https://automaticaddison.com/calculate-pulses-per-revolution-for-a-dc-motor-with-encoder/) from Automatic Addison.
 
-| Photo interrupter (R) | GPIO.BOARD | GPIO.BCM|
+These are new motors used for lidarbot:
+
+<p align="center">
+  <img title='Motors' src=docs/images/motors.jpg width="400">
+  <img title='Motor pins' src=docs/images/motor_pins.jpg width="400">
+</p>
+
+The pins on right and left motors are connected to the GPIO pins as follows:
+
+| Right motor pins | GPIO.BOARD | GPIO.BCM|
 | ----------- | ------------| ------ |
-| OUT | 18 | GPIO24 |
+| C1 (or Encoder A) | 22 | GPIO25 |
+| C2 (or Encoder B) | 16 | GPIO23 |
 | VCC | 5V | 5V |
 | GND | GND | GND |
 
-| Photo interrupter (L) | GPIO.BOARD | GPIO.BCM|
+| Left motor pins| GPIO.BOARD | GPIO.BCM|
 | ----------- | ------------| ------ |
-| OUT | 22 | GPIO25 |
+| C1 (or Encoder A) | 18 | GPIO24 |
+| C2 (or Encoder B) | 15 | GPIO22 |
 | VCC | 5V | 5V |
 | GND | GND | GND |
+
+Where, 
+
+C1 - counts the respective motor pulses and
+
+C2 - checks the direction of motion of the respective motor, that is, forward or reverse.
 
 <p align="center">
   <img title='MPU6050' src=docs/images/mpu6050.jpg width="400">
   <img title='Encoders' src=docs/images/encoders.jpg width="400">
 </p>
 
-The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.waveshare.com/wiki/Motor_Driver_HAT)) are connected to the motor wires and battery holder cables as follows: 
+The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.waveshare.com/wiki/Motor_Driver_HAT)) are connected to the motor pins, M+ and M-, and battery holder cables as follows: 
 
 | Motor Driver HAT pin | Connected to| 
 | -- | -- |
@@ -105,16 +160,16 @@ The screw terminal blocks on the Motor Driver HAT ([shown below](https://www.wav
   <img title='Motor Driver HAT' src=docs/images/Motor_Driver_HAT.png width="400">
 </p>
 
-Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the motor hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
+Solder the cables (provided) to the motors. Might need to use spare wires if the provided ones are too short to reach the Motor Driver Hat. Should the wheel(s) move in the direction opposite of what is expected, exchange the respective motor cables screwed into the terminal blocks.
 
 Finally, the Raspberry Pi camera is connected to the ribbon slot on the Raspberry Pi 4 and the RPlidar A1 sensor is plugged into one of the RPi 4's USB ports.
 
 <p align='center'>
-  <img title='Top View' src=docs/images/top_view.jpg width="400">
+  <img title='Top View' src=docs/images/top_view.jpg width="600">
 </p>
 
 <p align="center">
-  <img title='Side View' src=docs/images/side_view.jpg width="400">
+  <img title='Side View' src=docs/images/side_view.jpg width="600">
 </p>
 
 ## 🔌	 Installation
@@ -580,6 +635,11 @@ These are the steps followed by the server node:
   ```
   This section will be updated once the issue has been fixed.
 
+<p align='center'>
+    <img src=docs/images/motor_connection_tests.gif width="400">
+</p>
+
+
 If a motor moves backward instead of forward, swap the cables for the specific motor to change the direction.
 
 After it is confirmed that both motors moved forward, lidarbot can be driven around with the gamepad (with the joystick and button configuration presented [here](#teleoperation)) by running this command:
@@ -750,9 +810,6 @@ map_subscribe_transient_local:=true
 Using navigation goal button from nav2 plugin
 
 Use waypoint mode here
-
-TODO:
-Table of contents
 
 ## Acknowledgment
 

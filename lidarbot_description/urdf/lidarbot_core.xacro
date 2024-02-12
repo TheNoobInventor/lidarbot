@@ -27,7 +27,7 @@
   <!-- Robot base chasis-->
   <link name="base_link">
       <visual>
-        <origin xyz="${base_length/2} 0 ${-wheel_zoff}" rpy="0 0 0"/>
+        <origin xyz="${base_length/2} 0 ${-wheel_zoff}" rpy="0 0 ${pi}"/>
           <geometry>
               <mesh filename="package://lidarbot_description/meshes/robot_chassis.dae" />
           </geometry>
@@ -41,13 +41,13 @@
 
     <!-- Caster mount -->
       <visual name="caster_mount_visual">
-          <origin xyz="0.191 0 -0.0475" rpy="0 0 0"/>
+          <origin xyz="0.0185 0 -0.0475" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://lidarbot_description/meshes/caster_mount.dae" />
         </geometry>
       </visual>
       <collision name="caster_mount_collision">
-        <origin xyz="0.191 0 -0.005" rpy="0 0 0"/>
+        <origin xyz="0.0185 0 -0.005" rpy="0 0 0"/>
         <geometry>
           <cylinder radius="0.023" length="0.0125"/>
         </geometry>
@@ -178,7 +178,7 @@
   <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="left_wheel"/>
-    <origin xyz="0.077 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
+    <origin xyz="0.133 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -204,7 +204,7 @@
   <joint name="right_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="right_wheel"/>
-    <origin xyz="0.077 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
+    <origin xyz="0.133 -0.065 -${wheel_zoff}" rpy="${pi/2} 0 ${-pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -230,7 +230,7 @@
   <joint name="caster_wheel_joint" type="fixed">
     <parent link="base_link"/>
     <child link="caster_wheel"/>
-    <origin xyz="0.1975 0 -0.031" rpy="0 0 ${pi/2}"/>
+    <origin xyz="0.028 0 -0.031" rpy="0 0 ${pi/2}"/>
   </joint>
 
   <gazebo reference="caster_wheel">
