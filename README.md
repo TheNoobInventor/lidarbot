@@ -560,6 +560,27 @@ Quick difference between variance and covariances
  
 IMU covariances required in `controllers.yaml`
 
+Generate covariances for MPU6050 module:
+
+```ros2 run lidarbot_bringup mpu6050_covariances```
+
+Executable output:
+
+```
+Please keep the MPU6050 module level and still.
+Reading and appending 500 sensor data points to respective arrays, it may take a while ...
+
+Calculating variances ...
+
+static_covariance_orientation: [5.46409e-06, 0.0, 0.0, 5.72254e-06, 0.0, 0.0, 4.22433e-07, 0.0, 0.0]
+static_covariance_angular_velocity: [2.01015e-06, 0.0, 0.0, 1.9657e-06, 0.0, 0.0, 8.13776e-07, 0.0, 0.0]
+static_covariance_linear_acceleration: [0.000632951, 0.0, 0.0, 0.000801987, 0.0, 0.0, 0.00117363, 0.0, 0.0]
+
+Paste covariance arrays in the imu_broadcaster ros__parameters section in lidarbot_bringup/config/controllers.yaml.
+
+```
+
+
 ## 📡	Network Configuration
 
 TODO: update with Mini Router setup
