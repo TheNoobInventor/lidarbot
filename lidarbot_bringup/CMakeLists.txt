@@ -52,15 +52,19 @@ ament_export_libraries(mpu6050_hardware_interface)
 
 include_directories(include)
 
-# Create Cpp executable
+# Create Cpp executables
 add_executable(mpu6050_offsets src/mpu6050_lib.cpp src/mpu6050_offsets.cpp)
+add_executable(mpu6050_covariances src/mpu6050_lib.cpp src/mpu6050_covariances.cpp)
 
 # Install Cpp executables
 install(TARGETS
+  mpu6050_offsets
+  mpu6050_covariances
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Link i2c to mpu6050_offsets
+# Link i2c to mpu6050_offsets and mpu6050_covariances targets
 target_link_libraries(mpu6050_offsets i2c)
+target_link_libraries(mpu6050_covariances i2c)
 
 ament_package()

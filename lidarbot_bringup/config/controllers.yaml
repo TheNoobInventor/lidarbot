@@ -40,12 +40,8 @@ imu_broadcaster:
 
     sensor_name: mpu6050
     frame_id: imu_link
-
-    # static_covariance_orientation: [0.005, 0.0, 0.0, 0.0, 0.005, 0.0, 0.0, 0.0, 0.005] 
-    # static_covariance_angular_velocity: [5.76e-04, 0.0, 0.0, 0.0, 5.76e-04, 0.0, 0.0, 0.0, 5.76e-04]
-    # static_covariance_linear_acceleration: [9.8067e-03, 0.0, 0.0, 0.0, 9.8067e-03, 0.0, 0.0, 0.0, 9.8067e-03]
-
-   # 500 data points
+   
+   # 500 data points used to calculated covariances
     static_covariance_orientation: [2.63882e-06, 0.0, 0.0, 0.0, 7.50018e-06, 0.0, 0.0, 0.0, 2.89257e-09]
     static_covariance_angular_velocity: [2.71413e-07, 0.0, 0.0, 0.0, 6.79488e-07, 0.0, 0.0, 0.0, 4.37879e-07]
     static_covariance_linear_acceleration: [0.00133755, 0.0, 0.0, 0.0, 0.000209753, 0.0, 0.0, 0.0, 0.00143276]

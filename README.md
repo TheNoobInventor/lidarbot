@@ -31,6 +31,7 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
       - [Motor Driver HAT](#motor-driver-hat)
       - [Raspberry Pi Camera](#raspberry-pi-camera)
       - [MPU6050 offsets](#mpu6050-offsets)
+      - [MPU6050 covariances](#mpu6050-covariances)
   - [📡	Network Configuration](#network-configuration)
   - [Differential Drive Controller](#differential-drive-controller)
   - [IMU Sensor Broadcaster](#imu-sensor-broadcaster)
@@ -551,6 +552,13 @@ Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_b
 - Afterwards, the `lidarbot_bringup` package is rebuilt to reflect any changes made to the `mpu6050_lib.h` file.
 
 The MPU6050 module is set to its most sensitive gyroscope and accelerometer ranges, which can be confirmed (or changed) at the top of the `mpu6050_lib.h` file.
+
+#### MPU6050 covariances
+
+TODO:
+Quick difference between variance and covariances
+ 
+IMU covariances required in `controllers.yaml`
 
 ## 📡	Network Configuration
 
