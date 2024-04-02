@@ -4,10 +4,11 @@
   <name>lidarbot_navigation</name>
   <version>0.0.0</version>
   <description>Lidarbot navigation package</description>
-  <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
+  <maintainer email="noobinventor@tutamail.com">Chinedu Amadi</maintainer>
   <license>BSD 3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
@@ -15,6 +16,7 @@
   <depend>robot_localization</depend>
   <depend>navigation2</depend>
   <depend>nav2_bringup</depend>
+  <depend>rclpy</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
