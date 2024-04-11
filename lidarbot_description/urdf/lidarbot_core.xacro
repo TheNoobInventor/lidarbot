@@ -160,7 +160,7 @@
   <link name="left_wheel">
     <visual>
         <geometry>
-          <mesh filename="package://lidarbot_description/meshes/left_wheel.dae" />
+          <mesh filename="package://lidarbot_description/meshes/right_wheel.dae" />
         </geometry>
     </visual>
     <collision>
@@ -178,7 +178,7 @@
   <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="left_wheel"/>
-    <origin xyz="0.133 0.055 -${wheel_zoff}" rpy="${pi/2} 0 ${pi}"/>
+    <origin xyz="0.133 0.065 -${wheel_zoff}" rpy="-${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
   </joint>
 
