@@ -505,7 +505,7 @@ Prior to using the [Imu sensor broadcaster](https://index.ros.org/p/imu_sensor_b
 
   Build the `lidarbot_bringup` package:
   ```
-  colcon build --symlin-install --packages-select lidarbot_bringup
+  colcon build --symlink-install --packages-select lidarbot_bringup
   ```
 
   Run the executable:
