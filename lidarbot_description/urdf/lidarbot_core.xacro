@@ -156,7 +156,7 @@
     </xacro:box_inertia>
   </link>
 
-  <!-- Left Wheel -->
+  <!-- Left wheel -->
   <link name="left_wheel">
     <visual>
         <geometry>
@@ -164,7 +164,7 @@
         </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0.0155" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.0065" rpy="0 0 0"/>
       <geometry>
         <sphere radius="${wheel_radius}"/>
       </geometry>
@@ -179,10 +179,10 @@
     <parent link="base_link"/>
     <child link="left_wheel"/>
     <origin xyz="0.133 0.065 -${wheel_zoff}" rpy="-${pi/2} 0 ${pi}"/>
-    <axis xyz="0 0 1"/>
+    <axis xyz="0 0 -1"/>
   </joint>
 
-  <!-- Right Wheel -->
+  <!-- Right wheel -->
   <link name="right_wheel">
     <visual>
       <geometry>
@@ -236,6 +236,16 @@
   <gazebo reference="caster_wheel">
     <mu1 value="0.001"/>
     <mu2 value="0.001"/>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <mu1 value="1.16"/>
+    <mu2 value="1.16"/>
+  </gazebo>
+
+  <gazebo reference="right_wheel">
+    <mu1 value="1.16"/>
+    <mu2 value="1.16"/>
   </gazebo>
 
 </robot>

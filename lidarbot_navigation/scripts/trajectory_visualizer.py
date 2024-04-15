@@ -20,10 +20,10 @@ class TrajectoryVisualizer(Node):
 
         # Declare parameters
         self.max_poses_param = self.declare_parameter("max_poses", 1000).value
-        # self.threshold_param = self.declare_parameter("threshold", 0.001).value
-        self.threshold_param = self.declare_parameter("threshold", 0.005).value
+        self.threshold_param = self.declare_parameter("threshold", 0.001).value
 
-        self.frame_id_param = self.declare_parameter("frame_id", "map").value
+        # self.frame_id_param = self.declare_parameter("frame_id", "map").value
+        self.frame_id_param = self.declare_parameter("frame_id", "odom").value
 
         self.trajectory_path_msg = Path()
         self.previous_pose_position = Point()
@@ -41,24 +41,17 @@ class TrajectoryVisualizer(Node):
 
     # Callback function for odometry type messages
     def odom_callback(self, odom_msg):
-        # self.get_logger().info(
-        #     "Received odom message with x: %f and y: %f"
-        #     % (
-        #         odom_msg.pose.pose.position.x,
-        #         odom_msg.pose.pose.position.y,
-        #     )
-        # )
 
         # Process message position and add it to path
         self.publish_trajectory_path(odom_msg.pose.pose.position)
 
     # Add pose and publish trajectory path message
     def publish_trajectory_path(self, position):
+
         # If the pose has moved more than a set threshold, add it ot the path message and publish
         if (abs(self.previous_pose_position.x - position.x) > self.threshold_param) or (
             abs(self.previous_pose_position.y - position.y) > self.threshold_param
         ):
-            # self.get_logger().info("Exceding threshold, adding pose to path")
 
             # Add current pose to path
             self.trajectory_path_msg.header.stamp = self.get_clock().now().to_msg()
