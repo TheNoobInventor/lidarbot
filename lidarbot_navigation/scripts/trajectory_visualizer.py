@@ -21,9 +21,7 @@ class TrajectoryVisualizer(Node):
         # Declare parameters
         self.max_poses_param = self.declare_parameter("max_poses", 1000).value
         self.threshold_param = self.declare_parameter("threshold", 0.001).value
-
-        # self.frame_id_param = self.declare_parameter("frame_id", "map").value
-        self.frame_id_param = self.declare_parameter("frame_id", "odom").value
+        self.frame_id_param = self.declare_parameter("frame_id", "map").value
 
         self.trajectory_path_msg = Path()
         self.previous_pose_position = Point()
