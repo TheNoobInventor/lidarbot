@@ -4,7 +4,7 @@
   <name>lidarbot_base</name>
   <version>0.0.0</version>
   <description>Lidarbot base motor driver package</description>
-  <maintainer email="chineduam@tuta.io">Chinedu Amadi</maintainer>
+  <maintainer email="noobinventor@tutamail.com">Chinedu Amadi</maintainer>
   <license>BSD 3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

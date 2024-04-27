@@ -49,10 +49,11 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
 
 
 ## 🗃️ Package Overview
+- [`lidarbot_aruco`](./lidarbot_aruco/) : Contains configuration, launch and node files to use ArUco markers with lidarbot.
 - [`lidarbot_base`](./lidarbot_base/) : Contains the ROS2 control hardware component for the lidarbot with low-level code for the Waveshare Motor Driver HAT.
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains hardware component for the MPU6050 module, launch files to bring up the camera, lidar and the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for lidarbot, sensors and `ros2 control`.
-- [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate lidarbot in Gazebo.
+- [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate lidarbot in Gazebo Classic.
 - [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch, configuration and map files used for lidarbot navigation.
 - [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM.
 - [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
