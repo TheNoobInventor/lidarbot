@@ -13,6 +13,9 @@
   <test_depend>python3-pytest</test_depend>
 
   <depend>usb-cam</depend>
+  <depend>geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf_transformations</depend>
 
   <export>
     <build_type>ament_python</build_type>

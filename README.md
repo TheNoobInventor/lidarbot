@@ -848,4 +848,5 @@ Use waypoint mode here
 - [Diffbot](https://github.com/ros-mobile-robots/diffbot)
 - [Linorobot2](https://github.com/linorobot/linorobot2)
 - [Mini pupper](https://github.com/mangdangroboticsclub/mini_pupper_ros)
+- [Pyimagesearch](https://pyimagesearch.com/)
 - [Robotics Backend](https://roboticsbackend.com/)
