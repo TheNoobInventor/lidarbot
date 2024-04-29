@@ -25,7 +25,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "aruco_trajectory_visualizer_node = lidarbot_aruco.aruco_trajectory_visualizer.main"
+            "aruco_trajectory_visualizer_node = lidarbot_aruco.aruco_trajectory_visualizer:main"
         ],
     },
 )

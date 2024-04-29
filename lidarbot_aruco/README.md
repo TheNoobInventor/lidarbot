@@ -39,3 +39,23 @@ Running the previous script opens a window with the generated ArUco tag displaye
 
 To close the window, press the **q** key on the keyboard on the opened window.
 
+## Camera calibration
+
+The Logitech webcam C270 HD is used in this project and needs to be calibrated.
+
+First install the [ROS usb camera driver](https://index.ros.org/r/usb_cam/#humble) package:
+
+```bash
+sudo apt install ros-humble-usb-cam
+```
+
+Camera calibration was done following the steps outlined this [guide](https://navigation.ros.org/tutorials/docs/camera_calibration.html).
+
+TODO: Note about 'dt' field in calibration file. Reference Addison's calibration guide.
+
+Execute the command below to run the usb-cam driver node:
+
+```bash
+ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ~/dev_ws/src/lidarbot_aruco/config/params_1.yaml
+```
+

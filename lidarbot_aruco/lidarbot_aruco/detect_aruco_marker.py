@@ -7,6 +7,7 @@
 
 import argparse
 import cv2
+import sys
 
 # Construct argument parser and parse the arguments
 ap = argparse.ArgumentParser()

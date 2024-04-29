@@ -1,9 +1,12 @@
+%YAML:1.0
+---
 image_width: 640
 image_height: 480
 camera_name: narrow_stereo
 camera_matrix:
   rows: 3
   cols: 3
+  dt: d
   data: [842.57825,   0.     , 304.89032,
            0.     , 841.64125, 224.5223 ,
            0.     ,   0.     ,   1.     ]
@@ -11,6 +14,7 @@ distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
   cols: 5
+  dt: d
   data: [0.002363, 0.562980, -0.004719, -0.008675, 0.000000]
 rectification_matrix:
   rows: 3

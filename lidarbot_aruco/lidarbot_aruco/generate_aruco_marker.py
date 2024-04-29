@@ -71,8 +71,8 @@ def main():
             args["type"], args["id"]
         )
     )
-    tag = np.zeros((250, 250, 1), dtype="uint8")
-    cv2.aruco.generateImageMarker(arucoDict, args["id"], 250, tag, 1)
+    tag = np.zeros((180, 180, 1), dtype="uint8")
+    cv2.aruco.generateImageMarker(arucoDict, args["id"], 180, tag, 1)
 
     # Write the generated ArUCo tag to disk and then display it to our
     # screen
