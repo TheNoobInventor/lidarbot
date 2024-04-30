@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # This node is used to visualize the trajectory of lidarbot by tracking the ArUco marker
-# on it
+# on it and drawing lines through the center of the marker in subsequent image frames
 
 # Adapted from: https://automaticaddison.com/estimate-aruco-marker-pose-using-opencv-gazebo-and-ros-2/
 
@@ -9,16 +9,13 @@
 import cv2
 import numpy as np
 import argparse
-from scipy.spatial.transform import Rotation as R
 
 # Import ROS2 libraries
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data  # Uses Best Effort reliability for camera
 from cv_bridge import CvBridge  # Package to convert between ROS and OpenCV Images
-from geometry_msgs.msg import TransformStamped  # Handles TransformStamped message
 from sensor_msgs.msg import Image  # Image is the message type
-from tf2_ros import TransformBroadcaster
 
 # Construct argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -62,7 +59,6 @@ class ArucoNode(Node):
             "/home/noobinventor/lidarbot_ws/src/lidarbot_aruco/config/chessboard_calibration.yaml",
         )
         self.declare_parameter("image_topic", "/image_raw")
-        self.declare_parameter("aruco_marker_name", "aruco_marker_frame")
 
         # Read parameters
         aruco_dictionary_name = (
@@ -82,9 +78,6 @@ class ArucoNode(Node):
         )
         image_topic = (
             self.get_parameter("image_topic").get_parameter_value().string_value
-        )
-        self.aruco_marker_name = (
-            self.get_parameter("aruco_marker_name").get_parameter_value().string_value
         )
 
         # Check that we have a valid ArUco marker
@@ -118,18 +111,18 @@ class ArucoNode(Node):
         )
         self.subscription  # prevent unused variable warning
 
-        # Initialize the transform broadcaster
-        self.tfbroadcaster = TransformBroadcaster(self)
-
         # Used to convert between ROS and OpenCV images
         self.bridge = CvBridge()
+
+        # List of points to draw curves through
+        self.points = []
 
     # Callback function
     def listener_callback(self, data):
         # Display the message on the console
         self.get_logger().info("Receiving video frame")
 
-        # Convert ROS Image message to OpenCV image
+        # Convert ROS image message to OpenCV image
         current_frame = self.bridge.imgmsg_to_cv2(data, desired_encoding="bgr8")
 
         # Detect ArUco markers in the video frame
@@ -142,9 +135,6 @@ class ArucoNode(Node):
         # Check that at least one ArUco marker was detected
         if marker_ids is not None:
 
-            # Draw a square around detected markers in the video frame
-            cv2.aruco.drawDetectedMarkers(current_frame, corners, marker_ids)
-
             # Get the rotation and translation vectors
             rvecs, tvecs, obj_points = cv2.aruco.estimatePoseSingleMarkers(
                 corners,
@@ -153,70 +143,35 @@ class ArucoNode(Node):
                 self.dist_coeffs,
             )
 
-            # The pose of the marker is with respect to the camera lens frame.
-            # Imagine you are looking through the camera viewfinder,
-            # the camera lens frame's:
-            # x-axis points to the right
-            # y-axis points straight down towards your toes
-            # z-axis points straight ahead away from your eye, out of the camera
-            for i, marker_id in enumerate(marker_ids):
+            # Loop over the detected ArUCo corners
+            for markerCorner, markerID in zip(corners, marker_ids):
+                # Extract the marker corners (which are always returned in
+                # top-left, top-right, bottom-right, and bottom-left order)
+                corners = markerCorner.reshape((4, 2))
+                (topLeft, topRight, bottomRight, bottomLeft) = corners
 
-                # Create the coordinate transform
-                t = TransformStamped()
-                t.header.stamp = self.get_clock().now().to_msg()
-                t.header.frame_id = "webcam_frame"
-                t.child_frame_id = self.aruco_marker_name
+                # Convert the (x,y) coordinates pairs to integers
+                topRight = (int(topRight[0]), int(topRight[1]))
+                bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
+                bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
+                topLeft = (int(topLeft[0]), int(topLeft[1]))
 
-                # Store the translation (i.e. position) information
-                t.transform.translation.x = tvecs[i][0][0]
-                t.transform.translation.y = tvecs[i][0][1]
-                t.transform.translation.z = tvecs[i][0][2]
+                # Compute and draw the center (x, y)-coordinates of the ArUco
+                # marker
+                cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+                cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+                self.points.append([cX, cY])
+                cv2.circle(current_frame, (cX, cY), 4, (0, 0, 255), -1)
 
-                # Store the rotation information
-                rotation_matrix = np.eye(4)
-                rotation_matrix[0:3, 0:3] = cv2.Rodrigues(np.array(rvecs[i][0]))[0]
-                r = R.from_matrix(rotation_matrix[0:3, 0:3])
-                quat = r.as_quat()
+                # Convert points list to numpy array
+                points_array = np.array(self.points)
+                points_array = points_array.reshape((-1, 1, 2))
 
-                # Quaternion format
-                t.transform.rotation.x = quat[0]
-                t.transform.rotation.y = quat[1]
-                t.transform.rotation.z = quat[2]
-                t.transform.rotation.w = quat[3]
-
-                # Send the transform
-                self.tfbroadcaster.sendTransform(t)
-
-                # Draw the axes on the marker
-                cv2.drawFrameAxes(
-                    current_frame,
-                    self.camera_matrix,
-                    self.dist_coeffs,
-                    rvecs[i],
-                    tvecs[i],
-                    0.05,
+                # Connect center coordinates of detected marker in respective frames
+                # NOTE: this section works for only one marker
+                cv2.polylines(
+                    current_frame, [points_array], False, (0, 255, 0), thickness=5
                 )
-
-                # Draw circle at the center of ArUco tag
-                # x_sum = (
-                #     corners[0][0][0][0]
-                #     + corners[0][0][1][0]
-                #     + corners[0][0][2][0]
-                #     + corners[0][0][3][0]
-                # )
-                # y_sum = (
-                #     corners[0][0][0][1]
-                #     + corners[0][0][1][1]
-                #     + corners[0][0][2][1]
-                #     + corners[0][0][3][1]
-                # )
-                #
-                # x_centerPixel = x_sum * 0.25
-                # y_centerPixel = y_sum * 0.25
-                #
-                # cv2.circle(
-                #     current_frame, (x_centerPixel, y_centerPixel), 4, (0, 0, 255), -1
-                # )
 
             # Display image for testing
             cv2.imshow("camera", current_frame)
