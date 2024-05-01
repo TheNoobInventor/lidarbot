@@ -6,7 +6,7 @@
 import rclpy
 from rclpy.node import Node
 
-from nav_msgs.msg import Path, Odometry
+from nav_msgs.msg import Path
 from geometry_msgs.msg import (
     Point,
     PoseStamped,
@@ -21,21 +21,19 @@ class TrajectoryVisualizer(Node):
         # Declare parameters
         self.max_poses_param = self.declare_parameter("max_poses", 1000).value
         self.threshold_param = self.declare_parameter("threshold", 0.001).value
-        # self.frame_id_param = self.declare_parameter("frame_id", "map").value
-        self.frame_id_param = self.declare_parameter("frame_id", "odom").value
+        self.frame_id_param = self.declare_parameter("frame_id", "map").value
+        # self.frame_id_param = self.declare_parameter("frame_id", "odom").value
 
         self.trajectory_path_msg = Path()
         self.previous_pose_position = Point()
-        # self.previous_pose_position.x = 0.0
-        # self.previous_pose_position.y = 0.0
 
         # Setup trajectory path publisher
         self.trajectory_path_pub = self.create_publisher(Path, "/trajectory_path", 10)
 
         # Setup subscriber to odometry
         self.odom_sub = self.create_subscription(
-            Odometry,
-            "/odometry/filtered",
+            Path,
+            "/transformed_global_plan",
             self.odom_callback,
             10,
         )
@@ -44,7 +42,8 @@ class TrajectoryVisualizer(Node):
     def odom_callback(self, odom_msg):
 
         # Process message position and add it to path
-        self.publish_trajectory_path(odom_msg.pose.pose.position)
+        # self.publish_trajectory_path(odom_msg.pose.pose.position)
+        self.publish_trajectory_path(odom_msg.pose.position)
 
     # Add pose and publish trajectory path message
     def publish_trajectory_path(self, position):
@@ -64,12 +63,13 @@ class TrajectoryVisualizer(Node):
             #     self.get_clock().now().to_msg().nanosec()
             # )
 
-            self.trajectory_path_msg.header.frame_id = "map"  # self.frame_id_param
+            self.trajectory_path_msg.header.frame_id = self.frame_id_param
             pose_stamped_msg = PoseStamped()
             pose_stamped_msg.header.stamp = self.get_clock().now().to_msg()
             pose_stamped_msg.pose.position.x = position.x
             pose_stamped_msg.pose.position.y = position.y
-            pose_stamped_msg.pose.orientation.w = 1.0
+            pose_stamped_msg.pose.orientation.z = position.orientation.z
+            pose_stamped_msg.pose.orientation.w = position.orientation.w
 
             # If max number of poses in path has not been reach, just add pose to message
             if len(self.trajectory_path_msg.poses) < self.max_poses_param:

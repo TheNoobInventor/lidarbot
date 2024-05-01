@@ -64,3 +64,5 @@ ros2 run lidarbot_aruco aruco_trajectory_visualizer_node
 ```
 
 TODO: add gif showing node in action
+
+Move this to main README
