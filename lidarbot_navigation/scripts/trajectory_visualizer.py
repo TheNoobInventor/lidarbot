@@ -3,6 +3,8 @@
 # Node to visualize the robot trajectory in Rviz.
 # Adapted from https://github.com/RBinsonB/trajectory_visualization
 
+# WIP
+
 import rclpy
 from rclpy.node import Node
 
@@ -22,7 +24,6 @@ class TrajectoryVisualizer(Node):
         self.max_poses_param = self.declare_parameter("max_poses", 1000).value
         self.threshold_param = self.declare_parameter("threshold", 0.001).value
         self.frame_id_param = self.declare_parameter("frame_id", "map").value
-        # self.frame_id_param = self.declare_parameter("frame_id", "odom").value
 
         self.trajectory_path_msg = Path()
         self.previous_pose_position = Point()
@@ -34,6 +35,8 @@ class TrajectoryVisualizer(Node):
         self.odom_sub = self.create_subscription(
             Path,
             "/transformed_global_plan",
+            # Odometry,
+            # /odometry/filtered,
             self.odom_callback,
             10,
         )
@@ -43,7 +46,7 @@ class TrajectoryVisualizer(Node):
 
         # Process message position and add it to path
         # self.publish_trajectory_path(odom_msg.pose.pose.position)
-        self.publish_trajectory_path(odom_msg.pose.position)
+        self.publish_trajectory_path(odom_msg.poses[0].pose.position)
 
     # Add pose and publish trajectory path message
     def publish_trajectory_path(self, position):
@@ -55,21 +58,12 @@ class TrajectoryVisualizer(Node):
 
             # Add current pose to path
             self.trajectory_path_msg.header.stamp = self.get_clock().now().to_msg()
-            # self.trajectory_path_msg.header.stamp.sec = (
-            #     self.get_clock().now().to_msg().sec()
-            # )
-            #
-            # self.trajectory_path_msg.header.stamp.nanosec = (
-            #     self.get_clock().now().to_msg().nanosec()
-            # )
-
             self.trajectory_path_msg.header.frame_id = self.frame_id_param
             pose_stamped_msg = PoseStamped()
             pose_stamped_msg.header.stamp = self.get_clock().now().to_msg()
             pose_stamped_msg.pose.position.x = position.x
             pose_stamped_msg.pose.position.y = position.y
-            pose_stamped_msg.pose.orientation.z = position.orientation.z
-            pose_stamped_msg.pose.orientation.w = position.orientation.w
+            pose_stamped_msg.pose.orientation.w = 1.0
 
             # If max number of poses in path has not been reach, just add pose to message
             if len(self.trajectory_path_msg.poses) < self.max_poses_param:

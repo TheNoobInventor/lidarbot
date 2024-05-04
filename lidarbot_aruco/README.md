@@ -63,6 +63,11 @@ ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ~/dev_ws/src/lidarbot
 ros2 run lidarbot_aruco aruco_trajectory_visualizer_node
 ```
 
+Launch file
+```bash
+ros2 launch lidarbot_aruco trajectory_visualizer_launch.py
+```
+
 TODO: add gif showing node in action
 
 Move this to main README

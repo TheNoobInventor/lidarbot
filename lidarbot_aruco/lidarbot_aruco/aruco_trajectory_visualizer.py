@@ -8,7 +8,6 @@
 # Import Python libraries
 import cv2
 import numpy as np
-import argparse
 
 # Import ROS2 libraries
 import rclpy
@@ -16,14 +15,6 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data  # Uses Best Effort reliability for camera
 from cv_bridge import CvBridge  # Package to convert between ROS and OpenCV Images
 from sensor_msgs.msg import Image  # Image is the message type
-
-# Construct argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument(
-    "-t", "--type", type=str, default="DICT_4X4_50", help="type of ArUco tag to detect"
-)
-
-args = vars(ap.parse_args())
 
 # The different ArUco dictionaries built into the OpenCV library
 ARUCO_DICT = {
@@ -49,7 +40,7 @@ ARUCO_DICT = {
 
 class ArucoNode(Node):
     def __init__(self):
-        super().__init__("aruco_node")
+        super().__init__("aruco_visualizer_node")
 
         # Declare parameters
         self.declare_parameter("aruco_dictionary_name", "DICT_4X4_50")
@@ -83,7 +74,9 @@ class ArucoNode(Node):
         # Check that we have a valid ArUco marker
         if ARUCO_DICT.get(aruco_dictionary_name, None) is None:
             self.get_logger().info(
-                "[INFO] ArUCo tag of '{}' is not supported".format(args["type"])
+                "[INFO] ArUCo tag of '{}' is not supported".format(
+                    aruco_dictionary_name
+                )
             )
 
         # Load the camera parameters from the saved file
@@ -98,7 +91,9 @@ class ArucoNode(Node):
         self.get_logger().info(
             "[INFO] detecting '{}' markers...".format(aruco_dictionary_name)
         )
-        self.arucoDict = cv2.aruco.getPredefinedDictionary(ARUCO_DICT[args["type"]])
+        self.arucoDict = cv2.aruco.getPredefinedDictionary(
+            ARUCO_DICT[aruco_dictionary_name]
+        )
         self.arucoParams = cv2.aruco.DetectorParameters()
 
         # Create the subscriber. This subscriber will receive an Image
@@ -184,15 +179,15 @@ def main(args=None):
     rclpy.init(args=args)
 
     # Create the node
-    aruco_node = ArucoNode()
+    aruco_visualizer_node = ArucoNode()
 
     # Spin the node so the callback function is called
-    rclpy.spin(aruco_node)
+    rclpy.spin(aruco_visualizer_node)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    aruco_node.destroy_node()
+    aruco_visualizer_node.destroy_node()
 
     # Shutdown the ROS client library for Python
     rclpy.shutdown()
