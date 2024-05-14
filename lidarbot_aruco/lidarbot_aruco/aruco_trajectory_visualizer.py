@@ -151,6 +151,12 @@ class ArucoNode(Node):
                 bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
                 topLeft = (int(topLeft[0]), int(topLeft[1]))
 
+                # Draw the bounding box of the ArUCo detection
+                cv2.line(current_frame, topLeft, topRight, (0, 255, 0), 2)
+                cv2.line(current_frame, topRight, bottomRight, (0, 255, 0), 2)
+                cv2.line(current_frame, bottomRight, bottomLeft, (0, 255, 0), 2)
+                cv2.line(current_frame, bottomLeft, topLeft, (0, 255, 0), 2)
+
                 # Compute and draw the center (x, y)-coordinates of the ArUco
                 # marker
                 cX = int((topLeft[0] + bottomRight[0]) / 2.0)

@@ -42,6 +42,10 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
   - [Mapping](#mapping)
     - [Gazebo](#gazebo-2)
     - [Lidarbot](#lidarbot-2)
+  - [Aruco package](#aruco-package)
+    - [Generate ArUco marker](#generate-aruco-marker)
+    - [Webcam calibration](#webcam-calibration)
+  - [Aruco trajectory visualizer node](#aruco-trajectory-visualizer-node)
   - [Navigation](#navigation)
     - [Gazebo](#gazebo-3)
     - [Lidarbot](#lidarbot-3)
@@ -70,18 +74,19 @@ The following components were used in this project:
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
 |5| 2 x [Motors with encoders](https://www.aliexpress.com/item/1005006363532248.html?spm=a2g0o.detail.pcDetailTopMoreOtherSeller.6.5fdeSplESplEAo&gps-id=pcDetailTopMoreOtherSeller&scm=1007.40050.354490.0&scm_id=1007.40050.354490.0&scm-url=1007.40050.354490.0&pvid=1fbd5a28-56b9-49ff-ad51-948875853e0c&_t=gps-id:pcDetailTopMoreOtherSeller,scm-url:1007.40050.354490.0,pvid:1fbd5a28-56b9-49ff-ad51-948875853e0c,tpp_buckets:668%232846%238109%231935&utparam-url=scene%3ApcDetailTopMoreOtherSeller%7Cquery_from%3A)|
 |6| 2 x [PH 2.0 Motor pin connectors](https://s.click.aliexpress.com/e/_Dl669tn)
-|6| MPU6050 board|
-|7| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
-|8| Raspberry Pi camera v1.3|
-|9| [3D printed stands for RPlidar A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
-|10| Mount for Raspberry Pi camera|
-|11| Powerbank for RPi 4 (minimum output: 5V 3A)|
-|12| Gamepad|
-|13| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
-|14| 3 Slot 18650 battery holder|
-|15| 3 x 18650 batteries to power Motor Driver HAT|
-|16| Female to Female Dupont jumper cables|
-|17| Spare wires|
+|7| MPU6050 board|
+|8| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
+|9| Raspberry Pi camera v1.3|
+|10| [3D printed stands for RPlidar A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
+|11| Mount for Raspberry Pi camera|
+|12| Powerbank for RPi 4 (minimum output: 5V 3A)|
+|13| Gamepad|
+|14| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
+|15| 3 Slot 18650 battery holder|
+|16| 3 x 18650 batteries to power Motor Driver HAT|
+|17| Female to Female Dupont jumper cables|
+|18| Spare wires|
+|19| Logitech C270 webcam|
 
 Some other tools or parts used in the project are as follows:
 
@@ -769,6 +774,86 @@ Drive around the environment to generate a map:
 </p>
 
 Then save the generated map.
+
+
+## Aruco package
+
+### Generate ArUco marker
+
+The `opencv-contrib-python` module needs to be installed and not `opencv-python`: 
+
+```
+pip uninstall opencv-python
+pip install opencv-contrib-python
+```
+The computer might need to be restarted for the install to be effected.
+
+Next navigate to the path in the `lidarbot_aruco` directory:
+
+```
+cd ~/dev_ws/lidarbot_aruco/lidarbot_aruco
+```
+
+Then run the following script:
+
+```python
+python generate_aruco_marker.py --id 24 --type DICT_4X4_50 \
+	--output ../tags/DICT_4X4_50_id24.png
+```
+
+The script arguments:
+
+`--id` : The unique identifier of the ArUco tag — this is a required argument and ID must be a valid ID in the ArUco dictionary used to generate the tag
+    
+`--type` : The name of the ArUco dictionary used to generate the tag; the default type is `DICT_4X4_50`
+
+`--output` : The path to the output image where the generated ArUco tag will be saved; this is a required argument
+
+Running the previous script opens a window with the generated ArUco tag displayed,
+
+<p align='center'>
+    <img src=docs/images/generated_aruco_marker.png width="400">
+</p>
+
+To close the window, press the **q** key on the keyboard on the opened window.
+
+### Webcam calibration
+
+The Logitech webcam C270 HD is used in this project and needs to be calibrated.
+
+First install the [ROS usb camera driver](https://index.ros.org/r/usb_cam/#humble) package:
+
+```bash
+sudo apt install ros-humble-usb-cam
+```
+
+Camera calibration was done following the steps outlined this [guide](https://automaticaddison.com/how-to-perform-pose-estimation-using-an-aruco-marker/)
+
+Execute the command below to run the usb-cam driver node:
+
+```bash
+ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ~/dev_ws/src/lidarbot_aruco/config/params_1.yaml
+```
+
+## Aruco trajectory visualizer node
+
+```bash
+ros2 run lidarbot_aruco aruco_trajectory_visualizer_node
+```
+
+Launch file to bringup the usb driver and aruco trajectory visualizer node:
+
+```bash
+ros2 launch lidarbot_aruco trajectory_visualizer_launch.py
+```
+<p align='center'>
+    <img src=docs/images/lidarbot_aruco_marker.png width="600">
+</p>
+
+
+<p align='center'>
+    <img src=docs/images/lidarbot_aruco_test.gif width="800">
+</p>
 
 
 ## Navigation
