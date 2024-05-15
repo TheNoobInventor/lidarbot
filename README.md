@@ -835,7 +835,7 @@ Execute the command below to run the usb-cam driver node:
 ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ~/dev_ws/src/lidarbot_aruco/config/params_1.yaml
 ```
 
-## Aruco trajectory visualizer node
+### Aruco trajectory visualizer node
 
 ```bash
 ros2 run lidarbot_aruco aruco_trajectory_visualizer_node
