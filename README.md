@@ -58,6 +58,7 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
 - [`lidarbot_bringup`](./lidarbot_bringup/) : Contains hardware component for the MPU6050 module, launch files to bring up the camera, lidar and the real lidarbot.
 - [`lidarbot_description`](./lidarbot_description/) : Contains the URDF description files for lidarbot, sensors and `ros2 control`.
 - [`lidarbot_gazebo`](./lidarbot_gazebo/) : Contains configuration, launch and world files needed to simulate lidarbot in Gazebo Classic.
+- [`lidarbot_gz`](./lidarbot_gz/) : Contains urdf, launch and world files needed to simulate lidarbot in Gazebo Fortress.
 - [`lidarbot_navigation`](./lidarbot_navigation/) : Contains launch, configuration and map files used for lidarbot navigation.
 - [`lidarbot_slam`](./lidarbot_slam/) : Contains configuration files for the slam toolbox and RViz, launch file to generate maps using SLAM.
 - [`lidarbot_teleop`](./lidarbot_teleop/) : Contains configuration and launch files used to enable joystick control of the lidarbot in simulation and physically.
@@ -72,21 +73,21 @@ The following components were used in this project:
 |2| SanDisk 32 GB SD Card (minimum)|
 |3| [Two wheel drive robot chassis kit](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
-|5| 2 x [Motors with encoders](https://www.aliexpress.com/item/1005006363532248.html?spm=a2g0o.detail.pcDetailTopMoreOtherSeller.6.5fdeSplESplEAo&gps-id=pcDetailTopMoreOtherSeller&scm=1007.40050.354490.0&scm_id=1007.40050.354490.0&scm-url=1007.40050.354490.0&pvid=1fbd5a28-56b9-49ff-ad51-948875853e0c&_t=gps-id:pcDetailTopMoreOtherSeller,scm-url:1007.40050.354490.0,pvid:1fbd5a28-56b9-49ff-ad51-948875853e0c,tpp_buckets:668%232846%238109%231935&utparam-url=scene%3ApcDetailTopMoreOtherSeller%7Cquery_from%3A)|
-|6| 2 x [PH 2.0 Motor pin connectors](https://s.click.aliexpress.com/e/_Dl669tn)
-|7| MPU6050 board|
-|8| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
-|9| Raspberry Pi camera v1.3|
-|10| [3D printed stands for RPlidar A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
-|11| Mount for Raspberry Pi camera|
-|12| Powerbank for RPi 4 (minimum output: 5V 3A)|
-|13| Gamepad|
-|14| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
-|15| 3 Slot 18650 battery holder|
-|16| 3 x 18650 batteries to power Motor Driver HAT|
-|17| Female to Female Dupont jumper cables|
-|18| Spare wires|
-|19| Logitech C270 webcam|
+|5| 2 x [Motors with encoders and wire harness](https://s.click.aliexpress.com/e/_DBL19Mr|
+<!-- |6| 2 x [PH 2.0 Motor pin connectors](https://s.click.aliexpress.com/e/_Dl669tn) -->
+|6| MPU6050 board|
+|7| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
+|8| Raspberry Pi camera v1.3|
+|9| [3D printed stands for RPlidar A1 and RPi 4](https://www.thingiverse.com/thing:3970110)|
+|10| Mount for Raspberry Pi camera|
+|11| Powerbank for RPi 4 (minimum output: 5V 3A)|
+|12| Gamepad|
+|13| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
+|14| 3 Slot 18650 battery holder|
+|15| 3 x 18650 batteries to power Motor Driver HAT|
+|16| Female to Female Dupont jumper cables|
+|17| Spare wires|
+|18| Logitech C270 webcam|
 
 Some other tools or parts used in the project are as follows:
 
@@ -118,7 +119,7 @@ The MPU6050 board pins were connected to the Raspberry Pi 4 GPIO pins as follows
 
 In a previous hardware version of lidarbot, photo interrupters were used with encoder disks with 20 slots (included in the robot chassis kit). However, this setup proved restrictive in yielding satisfactory results in navigation due to the low number of encoder ticks, 20. Therefore, the robot chassis kit motors were replaced with the ones below with built-in encoders --- which have encoder ticks of approximately 1084, calculated using this [guide](https://automaticaddison.com/calculate-pulses-per-revolution-for-a-dc-motor-with-encoder/) from Automatic Addison.
 
-These are new motors used for lidarbot:
+These are the new motors used for lidarbot:
 
 <p align="center">
   <img title='Motors' src=docs/images/motors.jpg width="400">
@@ -291,7 +292,10 @@ colcon build --symlink-install
 The `--symlink-install` argument uses symlinks instead of copies which saves you from having to rebuild every time you [tweak certain files](https://articulatedrobotics.xyz/ready-for-ros-5-packages/).
 
 
-#### Gazebo
+#### Gazebo Classic
+
+TODO: Add update on using Gazebo Fortress
+
 Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). 
 
 #### Display lidarbot model in RViz

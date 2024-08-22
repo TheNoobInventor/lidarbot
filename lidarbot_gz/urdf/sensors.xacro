@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Imu sensor -->
+  <link name="imu_link">
+    <visual name="imu_visual">
+      <geometry>
+        <mesh filename="file://$(find lidarbot_description)/meshes/MPU6050.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.045 0 0.0175" rpy="0 0 0"/> 
+    </joint>
+
+  <gazebo reference="imu_link">
+    <sensor name="mpu6050_imu" type="imu">
+    <always_on>true</always_on>
+    <update_rate>200</update_rate>
+    <topic>imu_broadcaster/imu</topic>
+    <imu>
+      <angular_velocity>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+          </noise>
+        </z>
+      </angular_velocity>
+      <linear_acceleration>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+          </noise>
+        </z>
+      </linear_acceleration>
+      <orientation>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-3</stddev>
+           </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-3</stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-3</stddev>
+          </noise>
+        </z>
+      </orientation>
+     </imu>
+   </sensor>
+  </gazebo>
+
+  <!-- Camera -->
+  <link name="camera_link">
+    <visual>
+      <origin xyz="-0.0115 0.0125 0.0052" rpy="1.8745 ${pi} ${pi/2}"/>
+      <geometry>
+        <mesh filename="file://$(find lidarbot_description)/meshes/rpi_camera.dae"/>
+      </geometry>
+    </visual> 
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.205 0 0.0425" rpy="0 0 0"/> 
+  </joint>
+
+  <link name="camera_link_optical"></link>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>30</update_rate>
+      <topic>camera/image_raw</topic>
+      <gz_frame_id>camera_rgb_frame</gz_frame_id>
+      <camera name="camera">
+        <camera_info_topic>camera/camera_info</camera_info_topic>
+          <horizontal_fov>0.934</horizontal_fov>
+          <image>
+            <format>R8G8B8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>8.0</far>
+          </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <!-- Lidar -->
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 -0.0009 -0.011" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find lidarbot_description)/meshes/rplidar_top.dae"/>
+      </geometry>
+    </visual> 
+    <collision>
+      <origin xyz="0 -0.0028 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.037" length="0.021"/>
+      </geometry>
+    </collision>
+
+    <xacro:cylinder_inertia mass="0.07" length="0.021" radius="0.037">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cylinder_inertia>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.1385 0.0095 0.08" rpy="0 0 ${-pi/2}"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <topic>scan</topic>
+      <gz_frame_id>base_scan</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <min_angle>-3.14</min_angle>
+            <max_angle>3.14</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.15</min>
+          <max>6.0</max>
+          <!-- <max>12.0</max> -->
+          <resolution>0.01500</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+</robot>

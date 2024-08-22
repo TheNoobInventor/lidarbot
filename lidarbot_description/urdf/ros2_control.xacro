@@ -76,6 +76,11 @@
     </ros2_control>
   </xacro:if>
 
+  <!-- ADD FLAG FOR FORTRESS -->
+  <!-- WHAT ABOUT THE LIDAR SENSOR FOR FORTRESS? -->
+  <!-- DO WE HAVE TO CREATE A NEW BRANCH INSTEAD -->
+  <!-- OR MAYBE HAVE OUR OWN URDF DIRECTORY LIKE ANDINO DID -->
+
   <gazebo>
     <plugin name='gazebo_ros2_control' filename='libgazebo_ros2_control.so'>
       <parameters>$(find lidarbot_bringup)/config/controllers.yaml</parameters>

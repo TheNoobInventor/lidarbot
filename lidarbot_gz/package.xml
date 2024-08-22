@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>lidarbot_gz</name>
+  <version>0.0.0</version>
+  <description>Lidarbot Gazebo Fortress package</description>
+  <maintainer email="noobinventor@tutamail.com">Chinedu Amadi</maintainer>
+  <license>BSD 3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <depend>lidarbot_description</depend>
+  <depend>lidarbot_bringup</depend>
+
+  <!-- <depend>gz_ros2_control</depend> -->
+  <depend>ign_ros2_control</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_image</depend>
+  <depend>ros_gz_sim</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
