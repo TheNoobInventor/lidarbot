@@ -27,7 +27,9 @@ def generate_launch_description():
         "lidarbot_description"
     )
     pkg_teleop = FindPackageShare(package="lidarbot_teleop").find("lidarbot_teleop")
-    pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
+    pkg_ros_ign_gazebo = FindPackageShare(package="ros_ign_gazebo").find(
+        "ros_ign_gazebo"
+    )
     pkg_navigation = FindPackageShare(package="lidarbot_navigation").find(
         "lidarbot_navigation"
     )
@@ -95,7 +97,7 @@ def generate_launch_description():
     # Launch Gazebo
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")]
+            [os.path.join(pkg_ros_ign_gazebo, "launch", "ign_gazebo.launch.py")]
         ),
         launch_arguments={
             "gz_args": ["-r -v4 ", world],
@@ -131,6 +133,7 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Start joint_state_broadcaster
     load_joint_state_broadcaster = ExecuteProcess(
         cmd=[
             "ros2",
@@ -140,10 +143,10 @@ def generate_launch_description():
             "active",
             "joint_broadcaster",
         ],
-        # 'joint_state_broadcaster'],
         output="screen",
     )
 
+    # Start diff_drive_controller
     load_diff_drive_controller = ExecuteProcess(
         cmd=[
             "ros2",
@@ -153,24 +156,7 @@ def generate_launch_description():
             "active",
             "diff_controller",
         ],
-        # 'diff_drive_base_controller'],
         output="screen",
-    )
-
-    # Spawn diff_controller
-    start_diff_controller_cmd = Node(
-        condition=IfCondition(use_ros2_control),
-        package="controller_manager",
-        executable="spawner",
-        arguments=["diff_controller", "--controller-manager", "/controller_manager"],
-    )
-
-    # Spawn joint_state_broadcaser
-    start_joint_broadcaster_cmd = Node(
-        condition=IfCondition(use_ros2_control),
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Start robot localization using an Extended Kalman Filter
@@ -213,14 +199,15 @@ def generate_launch_description():
     ld.add_action(start_spawner_cmd)
     ld.add_action(start_gazebo_ros_bridge_cmd)
     ld.add_action(start_gazebo_ros_image_bridge_cmd)
-    # ld.add_action(start_diff_controller_cmd)
-    # ld.add_action(start_joint_broadcaster_cmd)
     ld.add_action(start_robot_localization_cmd)
     ld.add_action(load_diff_drive_controller)
     ld.add_action(load_joint_state_broadcaster)
-    # ld.add_action(start_joystick_cmd)
-    # ld.add_action(start_twist_mux_cmd)
+    ld.add_action(start_joystick_cmd)
+    ld.add_action(start_twist_mux_cmd)
 
+    # TODO:
+    # Sort out colors in simulation
     # Bring up rviz2 and mapping/localization stuff too (?)
+    # Launch processes after previous ones have started (?)
 
     return ld

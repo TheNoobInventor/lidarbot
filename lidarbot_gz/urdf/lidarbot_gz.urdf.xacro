@@ -5,9 +5,9 @@
   <xacro:include filename="sensors.xacro"/>
 
   <!-- ros2control -->
-  <ros2_control name="GazeboSimSystem" type="system">
+  <ros2_control name="IgnitionSystem" type="system">
     <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
     </hardware>
     <joint name="left_wheel_joint">
       <command_interface name="velocity">
@@ -28,10 +28,9 @@
   </ros2_control>
 
   <gazebo>
-    <!-- Joint state publisher -->
-    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+    <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find lidarbot_bringup)/config/controllers.yaml</parameters>
-      <!-- <parameters>$(find lidarbot_gz)/config/diff_drive_controller_velocity.yaml</parameters> -->
     </plugin>
   </gazebo>
+
 </robot>

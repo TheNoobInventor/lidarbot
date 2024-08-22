@@ -15,7 +15,6 @@
   <depend>lidarbot_description</depend>
   <depend>lidarbot_bringup</depend>
 
-  <!-- <depend>gz_ros2_control</depend> -->
   <depend>ign_ros2_control</depend>
   <depend>ros_gz_bridge</depend>
   <depend>ros_gz_image</depend>
