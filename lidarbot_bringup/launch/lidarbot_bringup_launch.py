@@ -1,8 +1,15 @@
+# This launch file brings up the physical lidarbot, the raspberry pi camera v1.3,
+# RPLIDAR A1 and also integrates ros2_control, twist_mux, robot_localization and joystick
+# control
+
+# File adapted from https://automaticaddison.com
+
 import os
 
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
+    ExecuteProcess,
     IncludeLaunchDescription,
     TimerAction,
     RegisterEventHandler,
@@ -78,53 +85,71 @@ def generate_launch_description():
         parameters=[{"robot_description": robot_description}, controller_params_file],
     )
 
+    # Start joint_state_broadcaster
+    load_joint_state_broadcaster = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "control",
+            "load_controller",
+            "--set-state",
+            "active",
+            "joint_broadcaster",
+        ],
+        output="screen",
+    )
+
+    # Start diff_drive_controller
+    load_diff_drive_controller = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "control",
+            "load_controller",
+            "--set-state",
+            "active",
+            "diff_controller",
+        ],
+        output="screen",
+    )
+
+    # Start imu_sensor_broadcaster
+    load_imu_sensor_broadcaster = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "control",
+            "load_controller",
+            "--set-state",
+            "active",
+            "imu_broadcaster",
+        ],
+        output="screen",
+    )
+
     # Delayed controller manager action
     start_delayed_controller_manager = TimerAction(
         period=2.0, actions=[start_controller_manager_cmd]
-    )
-
-    # Spawn diff_controller
-    start_diff_controller_cmd = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["diff_controller", "--controller-manager", "/controller_manager"],
     )
 
     # Delayed diff_drive_spawner action
     start_delayed_diff_drive_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[start_diff_controller_cmd],
+            on_start=[load_diff_drive_controller],
         )
-    )
-
-    # Spawn joint_state_broadcaser
-    start_joint_broadcaster_cmd = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Delayed joint_broadcaster_spawner action
     start_delayed_joint_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[start_joint_broadcaster_cmd],
+            on_start=[load_joint_state_broadcaster],
         )
-    )
-
-    # Spawn imu_sensor_broadcaster
-    start_imu_broadcaster_cmd = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["imu_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Delayed imu_broadcaster_spawner action
     start_delayed_imu_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[start_imu_broadcaster_cmd],
+            on_start=[load_imu_sensor_broadcaster],
         )
     )
 
@@ -186,5 +211,3 @@ def generate_launch_description():
     ld.add_action(start_twist_mux_cmd)
 
     return ld
-
-    # TODO: Launch file summary
