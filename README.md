@@ -298,6 +298,9 @@ TODO: Add update on using Gazebo Fortress
 
 Gazebo classic, version 11, is the robot simulator used in the project and can be installed [here](https://classic.gazebosim.org/tutorials?tut=install_ubuntu&cat=install). 
 
+#### Gazebo Fortress
+TODO:
+
 #### Display lidarbot model in RViz
 
 The installed [xacro](https://index.ros.org/p/xacro/github-ros-xacro/#humble) tool dependency is used to process the lidarbot URDF files and combine them into a single complete URDF file.
@@ -867,6 +870,12 @@ TODO: Brief overview
 ### Gazebo
 
 Nav2's `amcl` package is used for localization with the map generated from ``slam_toolbox`. 
+
+Bring up lidarbot in Gazebo Fortress:
+
+```
+ros2 launch lidarbot_gz gz_launch.py
+```
 
 Bring up lidarbot in Gazebo classic:
 

@@ -1,6 +1,6 @@
-# This launch file brings up the physical lidarbot, the raspberry pi camera v1.3,
-# RPLIDAR A1 and also integrates ros2_control, twist_mux, robot_localization and joystick
-# control
+# This launch file brings up the physical lidarbot, raspberry pi camera v1.3,
+# RPLIDAR A1 and also integrates ros2_control, twist_mux, robot_localization
+# and joystick control
 
 # File adapted from https://automaticaddison.com
 
