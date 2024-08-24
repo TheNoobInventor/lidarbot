@@ -87,7 +87,7 @@ The following components were used in this project:
 |15| 3 x 18650 batteries to power Motor Driver HAT|
 |16| Female to Female Dupont jumper cables|
 |17| Spare wires|
-|18| Logitech C270 webcam|
+|18| Logitech C270 webcam (optional)|
 
 Some other tools or parts used in the project are as follows:
 
@@ -909,14 +909,13 @@ In rviz, set the initial pose using the `2D Pose Estimate` button in the toolbar
     <img src=docs/images/gazebo_navigation.gif width="800">
 </p>
 
+TODO: add gif of navigation in Gazebo Fortress
 
 Note about the pixels not part of the map
 
 The blue arrow shows unfiltered odometry, while green shows the filtered odometry. 
 
 ### Lidarbot
-
-TODO: Prop robot and show different odometry movements in rviz. Then show the robot response when on the 'ground'
 
 ```
 ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
@@ -936,8 +935,6 @@ map_subscribe_transient_local:=true
 ```
 
 Using navigation goal button from nav2 plugin
-
-Use waypoint mode here
 
 ## Acknowledgment
 
