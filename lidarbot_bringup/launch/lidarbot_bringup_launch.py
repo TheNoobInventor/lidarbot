@@ -9,7 +9,6 @@ import os
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    ExecuteProcess,
     IncludeLaunchDescription,
     TimerAction,
     RegisterEventHandler,
@@ -85,43 +84,25 @@ def generate_launch_description():
         parameters=[{"robot_description": robot_description}, controller_params_file],
     )
 
-    # Start joint_state_broadcaster
-    load_joint_state_broadcaster = ExecuteProcess(
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state",
-            "active",
-            "joint_broadcaster",
-        ],
-        output="screen",
+    # Spawn diff_controller
+    start_diff_controller_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_controller", "--controller-manager", "/controller_manager"],
     )
 
-    # Start diff_drive_controller
-    load_diff_drive_controller = ExecuteProcess(
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state",
-            "active",
-            "diff_controller",
-        ],
-        output="screen",
+    # Spawn joint_state_broadcaser
+    start_joint_broadcaster_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    # Start imu_sensor_broadcaster
-    load_imu_sensor_broadcaster = ExecuteProcess(
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state",
-            "active",
-            "imu_broadcaster",
-        ],
-        output="screen",
+    # Spawn imu_sensor_broadcaster
+    start_imu_broadcaster_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["imu_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Delayed controller manager action
@@ -133,7 +114,7 @@ def generate_launch_description():
     start_delayed_diff_drive_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[load_diff_drive_controller],
+            on_start=[start_diff_controller_cmd],
         )
     )
 
@@ -141,7 +122,7 @@ def generate_launch_description():
     start_delayed_joint_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[load_joint_state_broadcaster],
+            on_start=[start_joint_broadcaster_cmd],
         )
     )
 
@@ -149,7 +130,7 @@ def generate_launch_description():
     start_delayed_imu_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=start_controller_manager_cmd,
-            on_start=[load_imu_sensor_broadcaster],
+            on_start=[start_imu_broadcaster_cmd],
         )
     )
 

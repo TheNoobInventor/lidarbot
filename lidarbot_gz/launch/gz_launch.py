@@ -133,30 +133,18 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Start joint_state_broadcaster
-    load_joint_state_broadcaster = ExecuteProcess(
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state",
-            "active",
-            "joint_broadcaster",
-        ],
-        output="screen",
+    # Spawn diff_controller
+    start_diff_controller_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_controller", "--controller-manager", "/controller_manager"],
     )
 
-    # Start diff_drive_controller
-    load_diff_drive_controller = ExecuteProcess(
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state",
-            "active",
-            "diff_controller",
-        ],
-        output="screen",
+    # Spawn joint_state_broadcaser
+    start_joint_broadcaster_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
     # Start robot localization using an Extended Kalman Filter
@@ -200,8 +188,8 @@ def generate_launch_description():
     ld.add_action(start_gazebo_ros_bridge_cmd)
     ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(start_robot_localization_cmd)
-    ld.add_action(load_diff_drive_controller)
-    ld.add_action(load_joint_state_broadcaster)
+    ld.add_action(start_diff_controller_cmd)
+    ld.add_action(start_joint_broadcaster_cmd)
     ld.add_action(start_joystick_cmd)
     ld.add_action(start_twist_mux_cmd)
 
