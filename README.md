@@ -77,7 +77,6 @@ The following components were used in this project:
 |3| [Two wheel drive robot chassis kit](https://www.amazon.com/perseids-Chassis-Encoder-Wheels-Battery/dp/B07DNYQ3PX/ref=sr_1_9?crid=3T8FVRRMPFCIX&keywords=two+wheeled+drive+robot+chassis&qid=1674141374&sprefix=two+wheeled+drive+robot+chas%2Caps%2C397&sr=8-9)|
 |4| [Waveshare Motor Driver HAT](https://www.waveshare.com/wiki/Motor_Driver_HAT)|
 |5| 2 x [Motors with encoders and wire harness](https://s.click.aliexpress.com/e/_DBL19Mr|
-<!-- |6| 2 x [PH 2.0 Motor pin connectors](https://s.click.aliexpress.com/e/_Dl669tn) -->
 |6| MPU6050 board|
 |7| [RPlidar A1](https://s.click.aliexpress.com/e/_DdPdRS7)|
 |8| Raspberry Pi camera v1.3|
@@ -85,7 +84,7 @@ The following components were used in this project:
 |10| Mount for Raspberry Pi camera|
 |11| Powerbank for RPi 4 (minimum output: 5V 3A)|
 |12| Gamepad|
-|13| [Mini Travel Router](https://s.click.aliexpress.com/e/_DcgfT61)|
+|13| [Mini Travel Router (optional)](https://s.click.aliexpress.com/e/_DcgfT61)|
 |14| 3 Slot 18650 battery holder|
 |15| 3 x 18650 batteries to power Motor Driver HAT|
 |16| Female to Female Dupont jumper cables|
