@@ -22,7 +22,8 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
       - [WiringPi](#wiringpi)
       - [MPU6050 library](#mpu6050-library)
       - [Sourcing ROS Installation](#sourcing-ros-installation)
-      - [Gazebo](#gazebo)
+      - [Gazebo Classic](#gazebo-classic)
+      - [Gazebo Fortress](#gazebo-fortress)
       - [Display lidarbot model in RViz](#display-lidarbot-model-in-rviz)
       - [Teleoperation](#teleoperation)
       - [Twist mux](#twist-mux)
@@ -32,22 +33,24 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
       - [Raspberry Pi Camera](#raspberry-pi-camera)
       - [MPU6050 offsets](#mpu6050-offsets)
       - [MPU6050 covariances](#mpu6050-covariances)
-  - [📡	Network Configuration](#network-configuration)
-  - [Differential Drive Controller](#differential-drive-controller)
-  - [IMU Sensor Broadcaster](#imu-sensor-broadcaster)
+  - [Network Configuration](#network-configuration)
+  - [ros2 control Framework](#ros2-control-framework)
+    - [Differential Drive Controller](#differential-drive-controller)
+    - [Joint State Broadcaster](#joint-state-broadcaster)
+    - [IMU Sensor Broadcaster](#imu-sensor-broadcaster)
   - [Test Drive](#test-drive)
-    - [Gazebo](#gazebo-1)
+    - [Gazebo](#gazebo)
     - [Lidarbot](#lidarbot-1)
     - [Motor Connection Checks](#motor-connection-checks)
   - [Mapping](#mapping)
-    - [Gazebo](#gazebo-2)
+    - [Gazebo](#gazebo-1)
     - [Lidarbot](#lidarbot-2)
   - [Aruco package](#aruco-package)
     - [Generate ArUco marker](#generate-aruco-marker)
     - [Webcam calibration](#webcam-calibration)
-  - [Aruco trajectory visualizer node](#aruco-trajectory-visualizer-node)
+    - [Aruco trajectory visualizer node](#aruco-trajectory-visualizer-node)
   - [Navigation](#navigation)
-    - [Gazebo](#gazebo-3)
+    - [Gazebo](#gazebo-2)
     - [Lidarbot](#lidarbot-3)
   - [Acknowledgment](#acknowledgment)
 
@@ -594,7 +597,7 @@ Paste covariance arrays in the imu_broadcaster ros__parameters section in lidarb
 ```
 
 
-## 📡	Network Configuration
+## Network Configuration
 
 TODO: update with Mini Router setup
 
@@ -624,10 +627,20 @@ A static IP address was assigned to lidarbot on the router for easy discoverabil
 ***NOTE:*** 
 Best practices might not have been employed in establishing communication between the two systems. The approach proposed [here](https://docs.ros.org/en/humble/How-To-Guides/Installation-Troubleshooting.html) was unable to be replicated in this project but others might find better success.
 
-## Differential Drive Controller
+## ros2 control Framework
 
+<p align="center">
+  <img title='ros2 control architecture' src=docs/images/ros2_control_arch.png width="800">
+</p>
 
-## IMU Sensor Broadcaster
+Image adapted from [Denis Štogl](https://vimeo.com/649651707) (CC-BY)
+
+### Differential Drive Controller
+
+### Joint State Broadcaster
+
+### IMU Sensor Broadcaster
+
 
 
 ## Test Drive
@@ -864,6 +877,12 @@ ros2 launch lidarbot_aruco trajectory_visualizer_launch.py
 
 
 ## Navigation
+
+<p align='center'>
+    <img src=docs/images/nav2_topics.png width="800">
+</p>
+
+Image adapted from [Linorobot2](https://github.com/linorobot/linorobot2) 
 
 TODO: Brief overview
 
