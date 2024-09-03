@@ -1,5 +1,11 @@
+<?xml version="1.0" ?>
 <sdf version='1.7'>
-  <world name='default'>
+  <world name='obstacles'>
+
+    <physics name="1ms" type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
 
     <plugin
       filename="gz-sim-physics-system"
@@ -39,18 +45,13 @@
       </uri>
     </include>
 
-    <gravity>0 0 -9.8</gravity>
+    <gravity>0.0 0.0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
-    <physics type='ode'>
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1</real_time_factor>
-      <real_time_update_rate>1000</real_time_update_rate>
-    </physics>
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
       <background>0.7 0.7 0.7 1</background>
-      <shadows>1</shadows>
+      <shadows>false</shadows>
     </scene>
     <wind/>
     <spherical_coordinates>
@@ -897,6 +898,8 @@
         <pose>0 0 10 0 -0 0</pose>
       </light>
     </state>
+
+    <!-- GUI -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <pose>-15.5892 0.392985 21.6628 0 0.851642 0.028194</pose>
