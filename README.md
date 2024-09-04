@@ -10,6 +10,8 @@ Hardware components are written for the Waveshare Motor Driver HAT and MPU6050 s
     <img src=docs/images/real_mapping.gif width="600">
 </p>
 
+A preprint of this work is available [here](http://dx.doi.org/10.13140/RG.2.2.15748.54408).
+
 🚧	***(Work in Progress)*** 
 
 - [Lidarbot](#lidarbot)
