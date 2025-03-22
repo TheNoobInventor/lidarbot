@@ -343,7 +343,7 @@ A [wireless gamepad](https://www.aliexpress.com/item/1005005354226710.html), lik
   <img src=docs/images/wireless_gamepad.jpg width="400">
 </p>
 
-The [joy_tester](https://index.ros.org/p/joy_tester/github-joshnewans-joy_tester/#humble) package is used to test and map the gamepad (joystick) keys to control lidarbot. To use it, plug in the USB dongle in the PC, then run:
+The [joy_tester](https://index.ros.org/p/joy_tester/#humble) package is used to test and map the gamepad (joystick) keys to control lidarbot. To use it, plug in the USB dongle in the PC, then run:
 
 ```
 ros2 run joy joy_node
