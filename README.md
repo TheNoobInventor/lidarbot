@@ -52,7 +52,7 @@ A preprint of this work is available [here](http://dx.doi.org/10.13140/RG.2.2.15
   - [Navigation](#navigation)
     - [Gazebo](#gazebo-2)
     - [Physical](#physical-2)
-  - [Aruco package](#aruco-package)
+  - [ArUco package](#aruco-package)
     - [Generate ArUco marker](#generate-aruco-marker)
     - [Webcam calibration](#webcam-calibration)
     - [Aruco trajectory visualizer node](#aruco-trajectory-visualizer-node)
@@ -1065,11 +1065,9 @@ In `RViz`, set the initial pose using the `2D Pose Estimate` button in the toolb
 
 The blue arrows indicate unfiltered odometry, while the green ones are the filtered odometry. 
 
-TODO: add gif of navigation in Gazebo Fortress
-
 ### Physical
 
-Run a similar set on commands on the physical lidarbot for localization and navigation. Bring up lidarbot:
+Run a similar set of commands on the physical lidarbot for localization and navigation. Bring up lidarbot:
 
 ```
 ros2 launch lidarbot_bringup lidarbot_bringup_launch.py
@@ -1102,28 +1100,28 @@ To save time, all of these commands can be called from one launch file and addin
 
 An ArUco marker was placed on top of lidarbot to track its trajectory during navigation, a Logitech C270 webcam was utilized in tracking the marker.
 
-## Aruco package
+## ArUco package
 
-<!-- Pose estimation is of great importance in many computer vision applications: robot navigation, augmented reality, and many more. This process is based on finding correspondences between points in the real environment and their 2d image projection. This is usually a difficult step, and thus it is common to use synthetic or fiducial markers to make it easier.
+To track the trajectory of lidarbot during navigation, an ArUco marker, a binary synthetic square marker, was placed on top of it. Synthetic or fiducial markers are used in [computer vision applications](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html) for pose estimation in robot navigation, augmented reality and more. 
 
-One of the most popular approaches is the use of binary square fiducial markers. The main benefit of these markers is that a single marker provides enough correspondences (its four corners) to obtain the camera pose. Also, the inner binary codification makes them specially robust, allowing the possibility of applying error detection and correction techniques.
+The four corners of fiducial markers provide enough correspondence between points in the real world and their 2D image projection to obtain the camera pose estimate.
 
-The aruco module is based on the ArUco library, a popular library for detection of square fiducial markers developed by Rafael Muñoz and Sergio Garrido [98](https://docs.opencv.org/4.x/d0/de3/citelist.html#CITEREF_aruco2014).
-
-An ArUco marker is a synthetic square marker composed by a wide black border and an inner binary matrix which determines its identifier (id). The black border facilitates its fast detection in the image and the binary codification allows its identification and the application of error detection and correction techniques. The marker size determines the size of the internal matrix. For instance a marker size of 4x4 is composed by 16 bits. -->
-
+More information about ArUco markers can be found in [this](https://docs.opencv.org/4.x/d5/dae/tutorial_aruco_detection.html) OpenCV tutorial.
 
 ### Generate ArUco marker
 
-The `opencv-contrib-python` module needs to be installed and not `opencv-python`: 
+The open source computer vision library, [OpenCV](https://docs.opencv.org/4.x/d1/dfb/intro.html), contains an ArUco module based on the [ArUco library](https://www.uco.es/investiga/grupos/ava/portfolio/aruco/), a popular library for detection of square fiducial markers developed by Rafael Muñoz and Sergio Garrido.
+
+Firstly, the `opencv-contrib-python` module needs to be installed and not `opencv-python`: 
 
 ```
 pip uninstall opencv-python
 pip install opencv-contrib-python
 ```
+
 The computer might need to be restarted for the install to be effected.
 
-Next navigate to the path in the `lidarbot_aruco` directory:
+Next navigate to the path in the `lidarbot_aruco` pacakge directory:
 
 ```
 cd ~/dev_ws/lidarbot_aruco/lidarbot_aruco
@@ -1199,6 +1197,8 @@ The following images show the start and end positions of navigation with lidarbo
 <p align='center'>
     <img src=docs/images/nav_end.png width="400">
 </p>
+
+An alternative to using AruCo markers to visualize the robot's trajectory is to use [this](https://github.com/MOGI-ROS/mogi_trajectory_server) ROS2 trajectory visualization server by MOGI-ROS.
 
 ## Acknowledgment
 
