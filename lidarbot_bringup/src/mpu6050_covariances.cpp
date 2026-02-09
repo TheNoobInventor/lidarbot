@@ -97,12 +97,13 @@ int main() {
     lin_accel_var[2] = variance(lin_accel_z_array, sample_size);
 
     // Output variance	
-    std::cout << "static_covariance_orientation: [" << orient_var[0] << ", 0.0, 0.0, "
-            << orient_var[1] << ", 0.0, 0.0, " << orient_var[2] << ", 0.0, 0.0]\n";
-    std::cout << "static_covariance_angular_velocity: [" << ang_vel_var[0] << ", 0.0, 0.0, " 
-            << ang_vel_var[1] << ", 0.0, 0.0, " << ang_vel_var[2] << ", 0.0, 0.0]\n";
-    std::cout << "static_covariance_linear_acceleration: [" << lin_accel_var[0] << ", 0.0, 0.0, " 
-            << lin_accel_var[1] << ", 0.0, 0.0, " << lin_accel_var[2] << ", 0.0, 0.0]\n\n";
+    std::cout << "static_covariance_orientation: [" << orient_var[0] << ", 0.0, 0.0, 0.0, "
+            << orient_var[1] << ", 0.0, 0.0, 0.0, " << orient_var[2] << "]\n";
+    std::cout << "static_covariance_angular_velocity: [" << ang_vel_var[0] << ", 0.0, 0.0, 0.0, "
+            << ang_vel_var[1] << ", 0.0, 0.0, 0.0, " << ang_vel_var[2] << "]\n";
+    std::cout << "static_covariance_linear_acceleration: [" << lin_accel_var[0] << ", 0.0, 0.0, 0.0, "
+            << lin_accel_var[1] << ", 0.0, 0.0, 0.0, " << lin_accel_var[2] << "]\n\n";
+
 
     std::cout << "Paste covariance arrays in the imu_broadcaster ros__parameters section in lidarbot_bringup/config/controllers.yaml.\n";
 
