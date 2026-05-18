@@ -796,9 +796,9 @@ Reading and appending 500 sensor data points to respective arrays, it may take a
 
 Calculating variances ...
 
-static_covariance_orientation: [5.46409e-06, 0.0, 0.0, 5.72254e-06, 0.0, 0.0, 4.22433e-07, 0.0, 0.0]
-static_covariance_angular_velocity: [2.01015e-06, 0.0, 0.0, 1.9657e-06, 0.0, 0.0, 8.13776e-07, 0.0, 0.0]
-static_covariance_linear_acceleration: [0.000632951, 0.0, 0.0, 0.000801987, 0.0, 0.0, 0.00117363, 0.0, 0.0]
+static_covariance_orientation: [5.46409e-06, 0.0, 0.0, 0.0, 5.72254e-06, 0.0, 0.0, 0.0, 4.22433e-07]
+static_covariance_angular_velocity: [2.01015e-06, 0.0, 0.0, 0.0, 1.9657e-06, 0.0, 0.0, 0.0, 8.13776e-07]
+static_covariance_linear_acceleration: [0.000632951, 0.0, 0.0, 0.0, 0.000801987, 0.0, 0.0, 0.0, 0.00117363]
 
 Paste covariance arrays in the imu_broadcaster ros__parameters section in lidarbot_bringup/config/controllers.yaml.
 
@@ -973,7 +973,7 @@ After generating the map, in the **SlamToolboxPlugin** in RViz, type in a name f
     <img src=docs/images/save_map.png width="400">
 </p>
 
-The saved map can be found in the workspace directory and will be used by [Nav2 stack](https://navigation.ros.org/) for navigation. 
+The saved map can be found in the workspace directory and will be used by [Nav2 stack](https://docs.nav2.org/) for navigation. 
 
 ### Physical
 
