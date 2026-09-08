@@ -698,7 +698,7 @@ A system component has reading and writing capabilities, these are expressed as 
 </ros2_control>
 ```
 
-A similar system hardware component is configured for Gazebo Fortress in this [URDF](./lidarbot_gz/urdf/lidarbot_gz.urdf.xacro) file.
+A similar system hardware component is configured for Gazebo Harmonic in this [URDF](./lidarbot_gz/urdf/lidarbot_gz.urdf.xacro) file.
 
 #### Sensor
 
@@ -923,7 +923,7 @@ This launch file brings up the physical lidarbot, raspberry pi camera, RPLIDAR A
 
 ## Mapping
 
-The Nav2 stack uses laser scan data to build a map of an environment and to localize the robot in the map while in motion. The SLAM package, [`slam_toolbox`](https://joss.theoj.org/papers/10.21105/joss.02783.pdf), is used to generate a map of Lidarbot’s surroundings with the RPLIDAR A1 by driving the robot around using the [`teleop_twist_joy`](https://index.ros.org/r/teleop_twist_joy/) package with the [gamepad](./lidarbot_teleop/launch/joystick_launch.py).
+The Nav2 stack uses laser scan data to build a map of an environment and to localize the robot in the map while in motion. The SLAM package, [`slam_toolbox`](https://joss.theoj.org/papers/10.21105/joss.02783.pdf), is used to generate a map of Lidarbot’s surroundings with the RPLIDAR A1 by driving the robot around using the [`teleop_twist_joy`](https://index.ros.org/p/teleop_twist_joy/#jazzy) package with the [gamepad](./lidarbot_teleop/launch/joystick_launch.py).
 
 ### Gazebo
 
