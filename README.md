@@ -211,7 +211,7 @@ After the ROS2 Humble installation, create a workspace on the PC/development mac
 ```
 mkdir -p ~/dev_ws/src
 cd ~/dev_ws/src
-git clone https://github.com/TheNoobInventor/lidarbot.git .
+git clone -b humble https://github.com/TheNoobInventor/lidarbot.git .
 ```
 
 Next install all the [ROS dependencies](https://docs.ros.org/en/humble/Tutorials/Intermediate/Rosdep.html) for the lidarbot packages:
